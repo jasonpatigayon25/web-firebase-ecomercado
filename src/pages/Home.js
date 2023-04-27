@@ -17,9 +17,6 @@ function Home() {
             <li>
               <Button variant="secondary" as={Link} to="/register">Register</Button>
             </li>
-            <li>
-              <Button variant="light" as={Link} to="/about">About Us</Button>
-            </li>
           </ul>
         </Col>
       </Row>
