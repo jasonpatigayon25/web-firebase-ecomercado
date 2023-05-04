@@ -9,24 +9,23 @@ export default class NavBar extends Component {
     return (
       <Navbar collapseOnSelect expand="lg" style={{ backgroundImage: 'linear-gradient(to left, #05652D, #9DC88D)' }} variant="dark">
         <Container>
-          <Navbar.Brand as={Link} to="/" style={{ color: 'black' }}>
+          <Link to="/home">
             <img
               src={process.env.PUBLIC_URL + '/AppLogo.png'}
-              width="200"
+              width="240"
               height="60"
               className="d-inline-block align-top"
               alt="Logo"
             />
-          </Navbar.Brand>
+          </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to={"/home"} style={{ color: 'black', fontWeight: 'bold' }}>Home</Nav.Link>
-              <Nav.Link as={Link} to={"/form"} style={{ color: 'black', fontWeight: 'bold' }}>Form</Nav.Link>
-            </Nav>
+            <Nav className="me-auto"></Nav>
             <Nav>
-              <Nav.Link as={Link} to={"/login"} style={{ color: 'black', fontWeight: 'bold' }}>Login</Nav.Link>
-              <Nav.Link as={Link} to={"/register"} style={{ color: 'black', fontWeight: 'bold' }}>Register</Nav.Link>
+              <Nav.Link as={Link} to={"/home"} className="nav-link custom-nav-link">HOME</Nav.Link>
+              <Nav.Link as={Link} to={"/testingpage"} className="nav-link custom-nav-link">TESTING</Nav.Link>
+              <Nav.Link as={Link} to={"/login"} className="nav-link custom-nav-link">LOGIN</Nav.Link>
+              <Nav.Link as={Link} to={"/register"} className="nav-link custom-nav-link">REGISTER</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
