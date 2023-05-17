@@ -1,31 +1,45 @@
 import React from 'react';
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-  MDBCheckbox
-}
-from 'mdb-react-ui-kit';
+import { Button, Container, Card, Form, Col } from 'react-bootstrap';
 
 function Registration() {
   return (
-    <MDBContainer fluid className='d-flex align-items-center justify-content-center' style={{backgroundColor: '#E3FCE9'}}>
-      <MDBCard className='m-5' style={{maxWidth: '600px'}}>
-        <MDBCardBody className='px-5'>
+    <Container fluid className='d-flex align-items-center justify-content-center' style={{ backgroundColor: '#E3FCE9' }}>
+      <Card className='m-5' style={{ maxWidth: '600px' }}>
+        <Card.Body className='px-5'>
           <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-          <MDBInput wrapperClass='mb-4' label='Username' size='lg' id='form1' type='text'/>
-          <MDBInput wrapperClass='mb-4' label='Email' size='lg' id='form2' type='email'/>
-          <MDBInput wrapperClass='mb-4' label='Password' size='lg' id='form3' type='password'/>
-          <MDBInput wrapperClass='mb-4' label='Repeat your password' size='lg' id='form4' type='password'/>
-          <div className='d-flex flex-row justify-content-center mb-4'>
-            <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
-          </div>
-          <MDBBtn className='mb-4 w-100' style={{backgroundColor: '#05652D', color: 'white'}} size='lg'>Register</MDBBtn>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+          <Form>
+            <Form.Group className="mb-4" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control type="text" size="lg" />
+            </Form.Group>
+
+            <Form.Group className="mb-4" controlId="formEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" size="lg" />
+            </Form.Group>
+
+            <Form.Group className="mb-4" controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" size="lg" />
+            </Form.Group>
+
+            <Form.Group className="mb-4" controlId="formRepeatPassword">
+              <Form.Label>Repeat your password</Form.Label>
+              <Form.Control type="password" size="lg" />
+            </Form.Group>
+
+            <Form.Group className="mb-4" controlId="formTermsCheck">
+              <Form.Check
+                type="checkbox"
+                label="I agree all statements in Terms of service"
+              />
+            </Form.Group>
+
+            <Button className="mb-4 w-100" variant="success" size="lg" style={{ backgroundColor: '#05652D', color: 'white' }}>Register</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }
 
