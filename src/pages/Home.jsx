@@ -27,16 +27,16 @@ function Home() {
           <Col md={6} className="text-end">
             <Carousel infiniteLoop autoPlay showThumbs={false}>
               <div>
-                <img src="/ECO.png" alt="ECO" style={{ height: '600px', width: '600px' }} />
+                <img src="/ECO.gif" alt="ECO" style={{ height: '400px', width: '600px' }} />
               </div>
               <div>
-                <img src="/ECO2.jpg" alt="ECO2" style={{ height: '600px', width: '600px' }} />
+                <img src="/ECO2.png" alt="ECO2" style={{ height: '400px', width: '600px' }} />
               </div>
               <div>
-                <img src="/ECO3.jpg" alt="ECO3" style={{ height: '600px', width: '600px' }} />
+                <img src="/ECO3.png" alt="ECO3" style={{ height: '400px', width: '600px' }} />
               </div>
               <div>
-                <img src="/ECO4.jpg" alt="ECO4" style={{ height: '600px', width: '600px' }} />
+                <img src="/ECO4.gif" alt="ECO4" style={{ height: '400px', width: '600px' }} />
               </div>
             </Carousel>
           </Col>
