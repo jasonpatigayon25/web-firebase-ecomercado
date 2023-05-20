@@ -19,7 +19,25 @@ class Registration extends React.Component {
     const { username, email, password, repassword } = this.state;
     console.log(username, email, password, repassword);
 
-    // Save the registered user's data in the state
+    fetch("http://localhost:5000/Registration",{
+      method:"POST",
+      crossDomain:true,
+      headers:{
+        "Content-Type":"application/json",
+        Accept:"application.json",
+        "Access-Control-Allow-Origin":"*",
+      },
+      body:JSON.stringify({
+        username, 
+        email, 
+        password, 
+        repassword
+      }),
+    }).then((res)=>res.json())
+    .then((data)=>{
+      console.log(data, "userRegister");
+    });
+
     this.setState({ registeredUser: { username, email, password } });
   }
 
@@ -37,6 +55,7 @@ class Registration extends React.Component {
     } else {
       return null;
     }
+    
   }
 
   render() {
