@@ -1,29 +1,51 @@
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const exercisesRouter = require('./routes/exercises');
-const usersRouter = require('./routes/users');
-
-require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = 'mongodb+srv://jasonpatigayon25:password12345@cluster0.qgadfaa.mongodb.net/ecomercadodb';
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
+const registrationSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+});
+
+const Registration = mongoose.model('Registration', registrationSchema);
 
 app.use(cors());
 app.use(express.json());
 
-const connection_string = process.env.ATLAS_URI;
-mongoose.connect(connection_string, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+app.post('/registration', (req, res) => {
+  const { username, email, password, repassword } = req.body;
 
-})
-.then(() => console.log('MongoDB connection established.'))
-.catch((error) => console.error("MongoDB connection failed:", error.message))
+  if (password !== repassword) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
 
-app.use('/exercises', exercisesRouter);
-app.use('/users', usersRouter);
+  const registration = new Registration({ username, email, password });
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+  registration.save()
+    .then(() => {
+      res.status(201).json({ message: 'Registration successful' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Registration failed' });
+    });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
