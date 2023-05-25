@@ -1,51 +1,51 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = 'mongodb+srv://jasonpatigayon25:password12345@cluster0.qgadfaa.mongodb.net/ecomercadodb';
+const port = process.env.PORT || 5000;
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => {
-    console.log('Connected to MongoDB');
+app.use(cors());
+app.use(express.json());
+
+const connectionUri = process.env.ATLAS_URI;
+
+mongoose
+  .connect(connectionUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+  .then(() => console.log('MongoDB connection established.'))
+  .catch((error) => console.error('MongoDB connection failed:', error.message));
 
-const registrationSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
 });
 
-const Registration = mongoose.model('Registration', registrationSchema);
+const UserRegistration = mongoose.model('UserRegistration', userSchema);
 
-app.use(cors());
-app.use(express.json());
+app.post('/insert', async (req, res) => {
+  const { username, email, password } = req.body;
 
-app.post('/registration', (req, res) => {
-  const { username, email, password, repassword } = req.body;
+  const user = new UserRegistration({
+    username: username,
+    email: email,
+    password: password,
+  });
 
-  if (password !== repassword) {
-    return res.status(400).json({ error: 'Passwords do not match' });
+  try {
+    await user.save();
+    res.send('Data inserted successfully');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error inserting data');
   }
-
-  const registration = new Registration({ username, email, password });
-
-  registration.save()
-    .then(() => {
-      res.status(201).json({ message: 'Registration successful' });
-    })
-    .catch((error) => {
-      res.status(500).json({ error: 'Registration failed' });
-    });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`);
 });
