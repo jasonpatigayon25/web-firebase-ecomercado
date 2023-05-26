@@ -28,7 +28,10 @@ function Login() {
           history("/home", { state: { id: email } });
         } else if (res.data === "notexist") {
           alert("User has not signed up");
+        }else if (res.data === "passwordIncorrect") {
+          alert("Incorrect password");
         }
+        
       })
       .catch(e => {
         alert("Wrong details");
