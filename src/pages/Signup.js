@@ -21,6 +21,7 @@ function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [termsChecked, setTermsChecked] = useState(false);
 
   async function submit(e) {
@@ -28,6 +29,11 @@ function Login() {
 
     if (!termsChecked) {
       alert("Please accept the terms and conditions.");
+      return;
+    }
+
+    if (password !== repeatPassword) {
+      alert("Passwords do not match. Please re-enter the password.");
       return;
     }
 
@@ -72,7 +78,7 @@ function Login() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/login">
                 Login
               </Link>
             </li>
@@ -96,8 +102,7 @@ function Login() {
                         <FormControl
                           placeholder="Your Email"
                           aria-label="Your Email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          value={email} onChange={(e) => setEmail(e.target.value)}
                           style={{ borderColor: '#05652D', borderRadius: 0 }}
                         />
                       </InputGroup>
@@ -107,7 +112,6 @@ function Login() {
                         <InputGroup.Text
                         style={{ borderColor: '#05652D', borderRadius: 0 }}>
                         <img src={process.env.PUBLIC_URL + '/password.png'} alt="Account" className="me-3" />
-                        
                         </InputGroup.Text>
                         <FormControl
                           placeholder="Password"
@@ -129,6 +133,8 @@ function Login() {
                           placeholder="Repeat your password"
                           aria-label="Repeat your password"
                           type="password"
+                          value={repeatPassword}
+                          onChange={(e) => setRepeatPassword(e.target.value)}
                           style={{ borderColor: '#05652D', borderRadius: 0 }}
                         />
                       </InputGroup>

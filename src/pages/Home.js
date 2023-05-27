@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 function Home() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const isLoggedIn = Boolean(location.state?.id);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -45,33 +44,16 @@ function Home() {
 
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
-              {isLoggedIn ? (
-                <>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/logout">
-                      Logout
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/settings">
-                      Settings
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/signup">
-                      Registration
+                    <Link className="nav-link" to="/Profile">
+                      Change Password
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link" to="/">
-                      Login
+                      Logout
                     </Link>
                   </li>
-                </>
-              )}
             </ul>
           </div>
         </div>
