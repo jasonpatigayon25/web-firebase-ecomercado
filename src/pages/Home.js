@@ -44,7 +44,7 @@ function Home() {
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
                   <li className="nav-item">
-                  <Link className="nav-link" to="/Profile">
+                  <Link className="nav-link">
                       Change Password
                     </Link>
                   </li>

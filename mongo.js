@@ -1,10 +1,10 @@
 const mongoose=require("mongoose")
 mongoose.connect("mongodb+srv://jasonpatigayon25:%40JasonPatz236@cluster0.qgadfaa.mongodb.net/ecomercadousers")
 .then(()=>{
-    console.log("mongodb connected");
+    console.log("MongoDB is connected");
 })
 .catch(()=>{
-    console.log('failed');
+    console.log('MongoDB connection failed');
 })
 
 
