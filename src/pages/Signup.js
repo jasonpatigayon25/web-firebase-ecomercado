@@ -145,10 +145,15 @@ function Login() {
                       className="mb-4"
                       size="lg"
                       onClick={submit}
-                      style={{ backgroundColor: '#05652D' }}
+                      style={{ backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
                     >
                       Register
                     </Button>
+                    <div className="text-center">
+                    <p>
+                      Already have an account? <Link to="/login" style={{ color: '#05652D', textDecoration: 'none' }}>Log In</Link>
+                    </p>
+                  </div>
                   </Col>
                 </Row>
               </Form>
