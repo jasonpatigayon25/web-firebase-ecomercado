@@ -16,7 +16,7 @@ import {
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-function Login() {
+function Signup() {
   const history = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -192,4 +192,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

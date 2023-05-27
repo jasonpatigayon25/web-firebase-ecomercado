@@ -17,7 +17,6 @@ function Home() {
         className="navbar navbar-expand-lg navbar-dark"
         style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}
       >
-        <Link className="navbar-brand" to="/">
           <img
             src={process.env.PUBLIC_URL + "/AppLogo.png"}
             width="240"
@@ -26,7 +25,7 @@ function Home() {
             alt="Logo"
             style={{ marginLeft: "50px" }}
           />
-        </Link>
+        
         <div className="container">
           <form className="d-flex justify-content-center" onSubmit={handleSearch}>
             <input
@@ -45,7 +44,7 @@ function Home() {
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
                   <li className="nav-item">
-                    <Link className="nav-link" to="/Profile">
+                  <Link className="nav-link" to="/Profile">
                       Change Password
                     </Link>
                   </li>
