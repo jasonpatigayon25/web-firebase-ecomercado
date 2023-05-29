@@ -78,7 +78,7 @@ function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
+                placeholder="Email/Username"
                 style={{ borderColor: '#05652D', borderRadius: 0}}
               />
             </InputGroup>

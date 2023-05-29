@@ -41,7 +41,6 @@ async function getData() {
   }
 }
 
-// Route to render the page with the data
 app.get("/", async (req, res) => {
   const data = await getData();
   res.render("index", { data });
@@ -66,6 +65,62 @@ app.post("/signup", async (req, res) => {
     }
   } catch (e) {
     res.json("fail");
+  }
+});
+
+app.put("/changepassword", async (req, res) => {
+  const { email, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await collection.findOne({ email: email });
+
+    if (user && user.password === currentPassword) {
+      
+      user.password = newPassword;
+      await user.save();
+
+      res.json("Password successfully updated.");
+    } else if (!user) {
+      res.json("User not found.");
+    } else {
+      res.json("Invalid current password.");
+    }
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete('/deleterecord', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const deletedRecord = await collection.findOneAndDelete({ email: email });
+
+    if (deletedRecord) {
+      res.json('Record successfully deleted.');
+    } else {
+      res.json('Record not found.');
+    }
+  } catch (error) {
+    console.error('Error deleting record:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.delete("/delete/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const deletedRecord = await collection.findOneAndDelete({ email: email });
+
+    if (!deletedRecord) {
+      return res.status(404).send("Record not found");
+    }
+
+    res.send(deletedRecord);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
