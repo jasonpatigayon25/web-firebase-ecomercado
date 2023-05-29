@@ -68,50 +68,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.put("/changepassword", async (req, res) => {
-  const { email, currentPassword, newPassword } = req.body;
-
-  try {
-    const user = await collection.findOne({ email: email });
-
-    if (user && user.password === currentPassword) {
-      
-      user.password = newPassword;
-      await user.save();
-
-      res.json("Password successfully updated.");
-    } else if (!user) {
-      res.json("User not found.");
-    } else {
-      res.json("Invalid current password.");
-    }
-  } catch (error) {
-    console.error("Error updating password:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.put("/update/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-    const { newPassword } = req.body;
-
-    const updatedRecord = await collection.findOneAndUpdate(
-      { email: email },
-      { $set: { password: newPassword } },
-      { returnOriginal: false }
-    );
-
-    if (!updatedRecord) {
-      return res.status(404).send("Record not found");
-    }
-
-    res.send(updatedRecord);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
 app.put("/update/:id", async (req, res) => {
   try {
     const post = await Post.findByIdAndUpdate(
