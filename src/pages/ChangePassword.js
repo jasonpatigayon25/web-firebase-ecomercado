@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function ChangePassword() {
-  const [email, setEmail] = useState('');
+  const [emailOrUsername, setEmailOrUsername] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,8 +14,8 @@ function ChangePassword() {
     e.preventDefault();
 
     // Validate the form inputs
-    if (email === '') {
-      setErrorMessage('Please enter your email.');
+    if (emailOrUsername === '') {
+      setErrorMessage('Please enter your email or username.');
       return;
     }
 
@@ -41,13 +42,13 @@ function ChangePassword() {
     try {
       // Call the API to update the password
       const response = await axios.put('http://localhost:8000/changepassword', {
-        email: email,
+        emailOrUsername: emailOrUsername,
         currentPassword: currentPassword,
         newPassword: newPassword,
       });
 
       // Reset the form fields
-      setEmail('');
+      setEmailOrUsername('');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -63,63 +64,82 @@ function ChangePassword() {
   };
 
   return (
-    <Container>
-      <div className="row">
-        <div className="col-sm-4">
-          <h2>CHANGE PASSWORD</h2>
-          {errorMessage && <div className="error">{errorMessage}</div>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-              />
-            </Form.Group>
+    <div className="div1">
+      <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}>
+        <img src={process.env.PUBLIC_URL + "/AppLogo.png"} width="240" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
 
-            <Form.Group controlId="currentPassword">
-              <Form.Label>Current Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Current Password"
-              />
-            </Form.Group>
-
-            <Form.Group controlId="newPassword">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="New Password"
-              />
-            </Form.Group>
-
-            <Form.Group controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm Password"
-              />
-            </Form.Group>
-
-            <Button
-              variant="primary"
-              type="submit"
-              style={{ backgroundColor: '#05652D' }}
-            >
-              Change Password
-            </Button>
-          </Form>
+        <div className="container">
+          <div className="d-flex justify-content-end align-items-center w-100">
+            <ul className="navbar-nav flex-row">
+              <li className="nav-item">
+                <Link className="nav-link" to="/home">
+                  Home
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </Container>
+      </nav>
+
+      <Container className="d-flex justify-content-center align-items-center mt-5">
+        <div className="col-sm-4">
+          <Card style={{ background: 'linear-gradient(#05652D, #1F7A3E, #37AF4E)', padding: '20px', borderRadius: '10px' }}>
+            <h2 style={{ color: 'white', textAlign: 'center' }}>CHANGE PASSWORD</h2>
+            {errorMessage && <div className="error">{errorMessage}</div>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="emailOrUsername">
+                <Form.Label>Email/Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={emailOrUsername}
+                  onChange={(e) => setEmailOrUsername(e.target.value)}
+                  placeholder="Email or Username"
+                />
+              </Form.Group>
+              <Form.Group controlId="currentPassword">
+                <Form.Label>Current Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Current Password"
+                />
+              </Form.Group>
+
+              <Form.Group controlId="newPassword">
+                <Form.Label>New Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="New Password"
+                />
+              </Form.Group>
+
+              <Form.Group controlId="confirmPassword">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                />
+              </Form.Group>
+
+              <div className="d-flex justify-content-center mt-4">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  style={{ backgroundColor: 'white', color: '#05652D', width: '300px' }}
+                >
+                  Change Password
+                </Button>
+              </div>
+            </Form>
+          </Card>
+        </div>
+      </Container>
+    </div>
   );
 }
 
