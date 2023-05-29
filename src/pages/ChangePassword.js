@@ -41,9 +41,7 @@ function ChangePassword() {
 
     try {
       // Call the API to update the password
-      const response = await axios.put('http://localhost:8000/changepassword', {
-        emailOrUsername: emailOrUsername,
-        currentPassword: currentPassword,
+      const response = await axios.put(`http://localhost:8000/update/${emailOrUsername}`, {
         newPassword: newPassword,
       });
 
