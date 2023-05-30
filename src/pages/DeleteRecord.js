@@ -6,6 +6,7 @@ import axios from 'axios';
 function DeleteRecord() {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +21,10 @@ function DeleteRecord() {
       // Call the API to delete the record
       const response = await axios.delete(`http://localhost:8000/delete/${email}`);
 
-      // Reset the form field
+      // Reset the form field and messages
       setEmail('');
       setErrorMessage('');
+      setSuccessMessage(`${email} is deleted permanently.`);
 
       // Show a success message
       alert(response.data);
@@ -37,7 +39,9 @@ function DeleteRecord() {
     <div className="div1">
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}>
         <img src={process.env.PUBLIC_URL + "/AppLogo.png"} width="240" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
-
+        <span className="navbar-text" style={{ marginLeft: "20px", color: "white" }}>
+          WELCOME ADMIN
+        </span>
         <div className="container">
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
@@ -53,8 +57,9 @@ function DeleteRecord() {
 
       <Container className="d-flex justify-content-center mt-5">
         <Card style={{ background: 'linear-gradient(rgba(255, 255, 255, 0.7), rgba(5, 101, 45, 0.7))', padding: '20px' }}>
-          <h2>DELETE RECORD</h2>
+          <h2 style={{ textAlign: 'center' }}>DELETE RECORD</h2>
           {errorMessage && <div className="error">{errorMessage}</div>}
+          {successMessage && <div className="success" style={{ color: 'red', marginBottom: '10px' }}>{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="email">
               <Form.Label>Email/Username</Form.Label>
