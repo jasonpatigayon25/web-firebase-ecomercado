@@ -11,25 +11,21 @@ function DeleteRecord() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate the form input
     if (email === '') {
       setErrorMessage('Please enter the email of the record to delete.');
       return;
     }
 
     try {
-      // Call the API to delete the record
       const response = await axios.delete(`http://localhost:8000/delete/${email}`);
 
-      // Reset the form field and messages
       setEmail('');
       setErrorMessage('');
       setSuccessMessage(`${email} is deleted permanently.`);
 
-      // Show a success message
       alert(response.data);
     } catch (error) {
-      // Handle the error
+
       console.error('Error deleting record:', error);
       setErrorMessage('Failed to delete record. Please try again.');
     }
@@ -46,7 +42,7 @@ function DeleteRecord() {
       </div>
         <div className="container">
           <div className="d-flex justify-content-end align-items-center w-100">
-            <ul className="navbar-nav flex-row">
+            <ul className="navbar-nav flex-row" style={{ marginRight: '200px' }}>
               <li className="nav-item">
                 <Link className="nav-link" to="/home">
                   Home
