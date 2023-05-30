@@ -4,9 +4,9 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-function Home() {
+function Welcome() {
   return (
-    <div>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: 'linear-gradient(to right, #9DC88D, #05652D)' }}>
         <div className="container">
           <Link className="navbar-brand" to="/">
@@ -70,11 +70,10 @@ function Home() {
                 <img src="/ECO5.gif" alt="ECO5" style={{ height: '400px', width: '600px' }} />
               </div>
             </Carousel>
-          </Col>
+            </Col>
         </Row>
       </Container>
     </div>
   );
 }
-
-export default Home;
+export default Welcome;
