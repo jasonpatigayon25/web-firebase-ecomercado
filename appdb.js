@@ -68,20 +68,23 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.put("/update/:id", async (req, res) => {
+app.put("/update/:email", async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(
-      req.params.id,
-      { password: req.body.newPassword },
-      { new: true }
+    const { email } = req.params;
+    const { newPassword } = req.body;
+
+    const updatedRecord = await collection.findOneAndUpdate(
+      { email: email },
+      { $set: { password: newPassword } },
+      { returnOriginal: false }
     );
-    if (!post) return res.status(404).send("Post not found");
-    res.send(post);
+
+    res.send(updatedRecord);
   } catch (error) {
-    res.status(500).send(error);
+    console.error(error);
+    res.status(500).send("An error occurred while updating the record.");
   }
 });
-
 
 app.delete("/delete/:email", async (req, res) => {
   try {
