@@ -36,7 +36,7 @@ function DeleteRecord() {
   };
 
   return (
-    <div className="div1">
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}>
         <img src={process.env.PUBLIC_URL + "/AppLogo.png"} width="240" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
         <span className="navbar-text" style={{ marginLeft: "20px", color: "white" }}>
@@ -56,13 +56,13 @@ function DeleteRecord() {
       </nav>
 
       <Container className="d-flex justify-content-center mt-5">
-        <Card style={{ background: 'linear-gradient(rgba(255, 255, 255, 0.7), rgba(5, 101, 45, 0.7))', padding: '20px' }}>
+      <Card style={{ background: 'linear-gradient(#05652D, #1F7A3E, #37AF4E)', padding: '20px', borderRadius: '10px' }}>
           <h2 style={{ textAlign: 'center' }}>DELETE RECORD</h2>
           {errorMessage && <div className="error">{errorMessage}</div>}
           {successMessage && <div className="success" style={{ color: 'red', marginBottom: '10px' }}>{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="email">
-              <Form.Label>Email/Username</Form.Label>
+              <Form.Label style={{ color: "white" }}>Email/Username</Form.Label>
               <Form.Control
                 type="text"
                 value={email}
@@ -72,13 +72,20 @@ function DeleteRecord() {
             </Form.Group>
 
             <div className="d-flex justify-content-center mt-4">
-              <Button
-                variant="danger"
-                type="submit"
-                style={{ backgroundColor: '#FF0000', width: '300px' }}
-              >
-                Delete Record
-              </Button>
+            <Button
+              variant="danger"
+              type="submit"
+              style={{
+                backgroundColor: '#FF0000',
+                width: '300px',
+                borderRadius: '8px',
+                border: 'none',
+                boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+                transform: 'translateY(2px)',
+              }}
+            >
+              Delete Record
+            </Button>
             </div>
           </Form>
         </Card>

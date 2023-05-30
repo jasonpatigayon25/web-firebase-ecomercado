@@ -62,7 +62,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="div1">
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}>
         <img src={process.env.PUBLIC_URL + "/AppLogo.png"} width="240" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
 
@@ -86,7 +86,7 @@ function ChangePassword() {
             {errorMessage && <div className="error">{errorMessage}</div>}
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="emailOrUsername">
-                <Form.Label>Email/Username</Form.Label>
+                <Form.Label style={{ color: "white" }}>Email/Username</Form.Label>
                 <Form.Control
                   type="text"
                   value={emailOrUsername}
@@ -95,7 +95,7 @@ function ChangePassword() {
                 />
               </Form.Group>
               <Form.Group controlId="currentPassword">
-                <Form.Label>Current Password</Form.Label>
+                <Form.Label style={{ color: "white" }}>Current Password</Form.Label>
                 <Form.Control
                   type="password"
                   value={currentPassword}
@@ -105,7 +105,7 @@ function ChangePassword() {
               </Form.Group>
 
               <Form.Group controlId="newPassword">
-                <Form.Label>New Password</Form.Label>
+                <Form.Label style={{ color: "white" }}>New Password</Form.Label>
                 <Form.Control
                   type="password"
                   value={newPassword}
@@ -115,7 +115,7 @@ function ChangePassword() {
               </Form.Group>
 
               <Form.Group controlId="confirmPassword">
-                <Form.Label>Confirm Password</Form.Label>
+                <Form.Label style={{ color: "white" }}>Confirm Password</Form.Label>
                 <Form.Control
                   type="password"
                   value={confirmPassword}

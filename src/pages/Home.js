@@ -43,45 +43,56 @@ function Home() {
 
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
-           
               <li className="nav-item">
-                <Link className="nav-link" to= "/changepassword">
+                <Link className="nav-link" to="/changepassword">
                   Change Password
-                  </Link>
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to= "/deleterecord">
+                <Link className="nav-link" to="/deleterecord">
                   Delete Record
-                  </Link>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/">
                   Logout
                 </Link>
-                </li>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      {showWelcomeMessage && <h1 className="welcome-message" style={{ color: '#05652D' }}>Hello {location.state?.id} and welcome to ECOMercado!</h1>}
+      {showWelcomeMessage && (
+        <p className="welcome-message" style={{ color: "#05652D", fontSize: "21px"  }}>
+          Hello {location.state?.id} and welcome to ECOMercado!
+        </p>
+      )}
 
       <div className="card">
         <div className="card-body">
           <div className="carousel-wrapper">
-            <h2 className="sale-alert" style={{ color: '#05652D' , textAlign: "center"}}>HUGE SALE ALERT</h2>
+            <h2 className="sale-alert" style={{ color: "#05652D", textAlign: "center" }}>
+              HUGE SALE ALERT
+            </h2>
             <Carousel showThumbs={false} autoPlay>
               <div>
                 <img src="Sale1.jpg" alt="Sale 1" height="600" width="800" />
-                <p className="sale-label" style={{ color: '#05652D' }}>It is 60% off than the original</p>
+                <p className="sale-label" style={{ color: "#05652D" }}>
+                  It is 60% off than the original
+                </p>
               </div>
               <div>
                 <img src="Sale2.jpg" alt="Sale 2" height="600" width="800" />
-                <p className="sale-label" style={{ color: '#05652D' }}>It is 70% off than the original</p>
+                <p className="sale-label" style={{ color: "#05652D" }}>
+                  It is 70% off than the original
+                </p>
               </div>
               <div>
-                <img src="Sale3.jpg" alt="Sale 3" height="600" width="800" />
-                <p className="sale-label" style={{ color: '#05652D' }}>It is 50% off than the original</p>
+              <img src="Sale3.jpg" alt="Sale 3" height="600" width="800" />
+                <p className="sale-label" style={{ color: "#05652D" }}>
+                  It is 50% off than the original
+                </p>
               </div>
             </Carousel>
           </div>
@@ -89,36 +100,44 @@ function Home() {
       </div>
 
       <div className="recommendation-wrapper">
-      <h2 className="recommendation-title" style={{ color: "#05652D", textAlign: "center" }}>
-      RECOMMENDED FOR YOU
-      </h2>
-      <div className="recommendation-images" style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <div className="recommendation-images" style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-  <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
-    <img src="shoes.png" alt="Shoes" style={{ width: "180px", height: "120px" }} />
-    <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>Shoes</p>
-  </div>
-  <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
-    <img src="artworks.png" alt="Artworks" style={{ width: "180px", height: "120px" }} />
-    <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>Artworks</p>
-  </div>
-  <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
-    <img src="homedecors.png" alt="Home Decors" style={{ width: "180px", height: "120px" }} />
-    <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>Home Decors</p>
-  </div>
-  <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
-    <img src="collectibles.png" alt="Collectibles" style={{ width: "180px", height: "120px" }} />
-    <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>Collectibles</p>
-  </div>
-  <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
-    <img src="furnitures.png" alt="Furnitures" style={{ width: "180px", height: "120px" }} />
-    <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>Furnitures</p>
-  </div>
-</div>
+        <h2 className="recommendation-title" style={{ color: "#05652D", textAlign: "center" }}>
+          RECOMMENDED FOR YOU
+        </h2>
+        <div className="recommendation-images" style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+          <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
+            <img src="shoes.png" alt="Shoes" style={{ width: "180px", height: "120px" }} />
+            <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
+              Shoes
+            </p>
           </div>
+          <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
+            <img src="artworks.png" alt="Artworks" style={{ width: "180px", height: "120px" }} />
+            <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
+              Artworks
+            </p>
+          </div>
+          <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
+            <img src="homedecors.png" alt="Home Decors" style={{ width: "180px", height: "120px" }} />
+            <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
+              Home Decors
+            </p>
+          </div>
+          <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
+            <img src="collectibles.png" alt="Collectibles" style={{ width: "180px", height: "120px" }} />
+            <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
+              Collectibles
+            </p>
+          </div>
+          <div className="recommendation-item" style={{ margin: "10px", textAlign: "center" }}>
+            <img src="furnitures.png" alt="Furnitures" style={{ width: "180px", height: "120px" }} />
+            <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
+              Furnitures
+            </p>
           </div>
         </div>
-      );
-    }
-    
-    export default Home;
+      </div>
+    </div>
+  );
+}
+
+export default Home;

@@ -44,7 +44,7 @@ function Login() {
   }
 
   return (
-    <div className="bg-blend-lighten" style={{ backgroundImage: 'url("/bg.png")', minHeight: '100vh', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+    <div className="bg-blend-lighten" style={{ backgroundImage: 'url("/bglogin.jpg")', minHeight: '100vh', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: 'linear-gradient(to right, #9DC88D, #05652D)' }}>
         <div className="container">
           <Link className="navbar-brand" to="/">
