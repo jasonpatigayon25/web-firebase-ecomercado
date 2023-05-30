@@ -50,12 +50,12 @@ function Home() {
             <Link to="/login" className="mx-2 text-decoration-none" style={{ color: '#05652D' }}>I Already Have An Account</Link>
           </Col>
           <Col md={6} className="text-end">
-            <Carousel infiniteLoop autoPlay showThumbs={false}>
-            <div>
-                <img src="/ECOX.gif" alt="ECOX" style={{ height: '400px', width: '600px' }} />
-              </div>
+            <Carousel infiniteLoop autoPlay showThumbs={false}>     
               <div>
                 <img src="/ECO.gif" alt="ECO" style={{ height: '400px', width: '600px' }} />
+              </div>
+              <div>
+                <img src="/ECOX.gif" alt="ECOX" style={{ height: '400px', width: '600px' }} />
               </div>
               <div>
                 <img src="/ECO2.png" alt="ECO2" style={{ height: '400px', width: '600px' }} />
