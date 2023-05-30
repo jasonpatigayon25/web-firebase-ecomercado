@@ -9,6 +9,7 @@ function ChangePassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ function ChangePassword() {
       setNewPassword('');
       setConfirmPassword('');
       setErrorMessage('');
+      setSuccessMessage('Password updated successfully.'); // Set success message
 
       // Show a success message
       alert(response.data);
@@ -83,7 +85,8 @@ function ChangePassword() {
         <div className="col-sm-4">
           <Card style={{ background: 'linear-gradient(#05652D, #1F7A3E, #37AF4E)', padding: '20px', borderRadius: '10px' }}>
             <h2 style={{ color: 'white', textAlign: 'center' }}>CHANGE PASSWORD</h2>
-            {errorMessage && <div className="error">{errorMessage}</div>}
+            {errorMessage && <div style={{ color: 'red'}} className="error">{errorMessage}</div>}
+            {successMessage && <div  style={{ color: 'orange'}} className="success">{successMessage}</div>}
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="emailOrUsername">
                 <Form.Label style={{ color: "white" }}>Email/Username</Form.Label>

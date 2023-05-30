@@ -58,8 +58,8 @@ function DeleteRecord() {
       <Container className="d-flex justify-content-center mt-5">
       <Card style={{ background: 'linear-gradient(#05652D, #1F7A3E, #37AF4E)', padding: '20px', borderRadius: '10px' }}>
           <h2 style={{ textAlign: 'center' }}>DELETE RECORD</h2>
-          {errorMessage && <div className="error">{errorMessage}</div>}
-          {successMessage && <div className="success" style={{ color: 'red', marginBottom: '10px' }}>{successMessage}</div>}
+          {errorMessage && <div style={{ color: 'red' }} className="error">{errorMessage}</div>}
+          {successMessage && <div className="success" style={{ color: 'orange', marginBottom: '10px' }}>{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="email">
               <Form.Label style={{ color: "white" }}>Email/Username</Form.Label>
