@@ -51,6 +51,9 @@ function Home() {
           </Col>
           <Col md={6} className="text-end">
             <Carousel infiniteLoop autoPlay showThumbs={false}>
+            <div>
+                <img src="/ECOX.gif" alt="ECOX" style={{ height: '400px', width: '600px' }} />
+              </div>
               <div>
                 <img src="/ECO.gif" alt="ECO" style={{ height: '400px', width: '600px' }} />
               </div>
@@ -62,6 +65,9 @@ function Home() {
               </div>
               <div>
                 <img src="/ECO4.gif" alt="ECO4" style={{ height: '400px', width: '600px' }} />
+              </div>
+              <div>
+                <img src="/ECO5.gif" alt="ECO5" style={{ height: '400px', width: '600px' }} />
               </div>
             </Carousel>
           </Col>

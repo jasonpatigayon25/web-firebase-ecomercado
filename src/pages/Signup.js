@@ -100,7 +100,7 @@ function Signup() {
                             <img src={process.env.PUBLIC_URL + '/account.png'} alt="Account" className="me-3" />
                         </InputGroup.Text>
                         <FormControl
-                          placeholder="Your Email"
+                          placeholder="Your Email/Username"
                           aria-label="Your Email"
                           value={email} onChange={(e) => setEmail(e.target.value)}
                           style={{ borderColor: '#05652D', borderRadius: 0 }}

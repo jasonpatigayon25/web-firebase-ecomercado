@@ -50,15 +50,15 @@ function Home() {
                   </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Logout
-                </Link>
-                <li className="nav-item">
                 <Link className="nav-link" to= "/deleterecord">
                   Delete Record
                   </Link>
               </li>
-              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  Logout
+                </Link>
+                </li>
             </ul>
           </div>
         </div>
