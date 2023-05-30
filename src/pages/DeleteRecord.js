@@ -39,9 +39,11 @@ function DeleteRecord() {
     <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(to right, #9DC88D, #05652D)" }}>
         <img src={process.env.PUBLIC_URL + "/AppLogo.png"} width="240" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
-        <span className="navbar-text" style={{ marginLeft: "20px", color: "white" }}>
+        <div className="d-flex justify-content-center align-items-center w-100">
+        <span className="navbar-text" style={{ color: "white", fontSize: "24px", position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           WELCOME ADMIN
         </span>
+      </div>
         <div className="container">
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">
@@ -57,7 +59,7 @@ function DeleteRecord() {
 
       <Container className="d-flex justify-content-center mt-5">
       <Card style={{ background: 'linear-gradient(#05652D, #1F7A3E, #37AF4E)', padding: '20px', borderRadius: '10px' }}>
-          <h2 style={{ textAlign: 'center' }}>DELETE RECORD</h2>
+          <h2 style={{ textAlign: 'center', color: 'white' }}>DELETE RECORD</h2>
           {errorMessage && <div style={{ color: 'red' }} className="error">{errorMessage}</div>}
           {successMessage && <div className="success" style={{ color: 'orange', marginBottom: '10px' }}>{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
