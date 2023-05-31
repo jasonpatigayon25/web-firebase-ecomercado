@@ -47,6 +47,7 @@ function Signup() {
             alert("User already exists");
           } else if (res.data === "notexist") {
             history("/home", { state: { id: email } });
+            alert("Congratulations! You are now officially registered with ECOMercado. Start exploring a world of sustainable shopping and join our community today!");
           }
         })
         .catch(e => {
