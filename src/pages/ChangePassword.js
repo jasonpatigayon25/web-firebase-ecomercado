@@ -14,7 +14,6 @@ function ChangePassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate the form inputs
     if (emailOrUsername === '') {
       setErrorMessage('Please enter your email or username.');
       return;
@@ -41,23 +40,21 @@ function ChangePassword() {
     }
 
     try {
-      // Call the API to update the password
+
       const response = await axios.put(`http://localhost:8000/update/${emailOrUsername}`, {
         newPassword: newPassword,
       });
 
-      // Reset the form fields
       setEmailOrUsername('');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setErrorMessage('');
-      setSuccessMessage('Password updated successfully.'); // Set success message
+      setSuccessMessage('Password updated successfully.'); 
 
-      // Show a success message
-      alert(response.data);
+      alert('Password updated Successfully', response.data);
     } catch (error) {
-      // Handle the error
+
       console.error('Error updating password:', error);
       setErrorMessage('Failed to update password. Please try again.');
     }
@@ -70,7 +67,7 @@ function ChangePassword() {
 
         <div className="container">
           <div className="d-flex justify-content-end align-items-center w-100">
-            <ul className="navbar-nav flex-row">
+            <ul className="navbar-nav flex-row" >
               <li className="nav-item">
                 <Link className="nav-link" to="/home">
                   Home

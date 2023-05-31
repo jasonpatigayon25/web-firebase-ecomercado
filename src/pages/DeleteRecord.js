@@ -23,7 +23,7 @@ function DeleteRecord() {
       setErrorMessage('');
       setSuccessMessage(`${email} is deleted permanently.`);
 
-      alert(response.data);
+      alert(`${email} is deleted permanently.`, response.data);
     } catch (error) {
 
       console.error('Error deleting record:', error);
