@@ -13,8 +13,6 @@ import {
   FormCheck,
   Button
 } from 'react-bootstrap';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 function Signup() {
   const history = useNavigate();
@@ -47,7 +45,7 @@ function Signup() {
             alert("User already exists");
           } else if (res.data === "notexist") {
             history("/home", { state: { id: email } });
-            alert("Congratulations! You are now officially registered with ECOMercado. Start exploring a world of sustainable shopping and join our community today!");
+            alert("Congratulations! You are now officially registered with ParentPathIN.");
           }
         })
         .catch(e => {
@@ -58,85 +56,67 @@ function Signup() {
       console.log(e);
     }
   }
-
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: 'linear-gradient(to right, #9DC88D, #05652D)' }}>
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            <img
-              src={process.env.PUBLIC_URL + '/AppLogo.png'}
-              width="240"
-              height="60"
-              className="d-inline-block align-top"
-              alt="Logo" 
-            />       
-          </Link>
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/signup">
-                Registration
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Login
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7)', height: '100vh' }}>
+      <div className="d-flex align-items-center">
+            <Link className="navbar-brand" to="/" style={{ marginLeft: "50px" }}>
+              <img
+                src={process.env.PUBLIC_URL + '/AppLogo2.png'}
+                width="240"
+                height="60"
+                className="d-inline-block align-top"
+                alt="Logo"
+              />
+            </Link>
+            </div>
       <Container fluid>
         <Row className="justify-content-center">
           <Col md="6">
-            <Card className="text-black m-5" style={{ borderRadius: '25px', background: 'linear-gradient(to bottom, #BEF7CC, #E3FCE9, #FFFFFF)' }}>
+            <Card className="text-black m-5" style={{ borderRadius: '25px',}}>
               <Form>
                 <Row>
                   <Col md="12" className="order-lg-1 d-flex flex-column align-items-center">
                     <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
                     <div className="d-flex flex-row align-items-center mb-4">
                       <InputGroup>
-                        <InputGroup.Text
-                        style={{ borderColor: '#05652D', borderRadius: 0 }}>
-                            <img src={process.env.PUBLIC_URL + '/account.png'} alt="Account" className="me-3" />
-                        </InputGroup.Text>
+                        <div>
+                            <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
+                        </div>
                         <FormControl
                           placeholder="Your Email/Username"
                           aria-label="Your Email"
                           value={email} onChange={(e) => setEmail(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#726A8A', borderRadius: 0 }}
                         />
                       </InputGroup>
                     </div>
                     <div className="d-flex flex-row align-items-center mb-4">
                       <InputGroup>
-                        <InputGroup.Text
-                        style={{ borderColor: '#05652D', borderRadius: 0 }}>
-                        <img src={process.env.PUBLIC_URL + '/password.png'} alt="Account" className="me-3" />
-                        </InputGroup.Text>
+                        <div>
+                        <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
+                        </div>
                         <FormControl
                           placeholder="Password"
                           aria-label="Password"
                           type="password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#726A8A', borderRadius: 0 }}
                         />
                       </InputGroup>
                     </div>
                     <div className="d-flex flex-row align-items-center mb-4">
                       <InputGroup>
-                        <InputGroup.Text
-                        style={{ borderColor: '#05652D', borderRadius: 0 }}>
-                        <img src={process.env.PUBLIC_URL + '/password.png'} alt="Account" className="me-3" />
-                        </InputGroup.Text>
+                        <div>
+                        <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
+                        </div>
                         <FormControl
                           placeholder="Repeat your password"
                           aria-label="Repeat your password"
                           type="password"
                           value={repeatPassword}
                           onChange={(e) => setRepeatPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#726A8A', borderRadius: 0 }}
                         />
                       </InputGroup>
                     </div>
@@ -152,40 +132,22 @@ function Signup() {
                       className="mb-4"
                       size="lg"
                       onClick={submit}
-                      style={{ backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
+                      style={{ backgroundColor: '#726A8A', 
+                      width: '300px', 
+                      margin: 'auto', 
+                      display: 'block' }}
                     >
                       Register
                     </Button>
                     <div className="text-center">
                     <p>
-                      Already have an account? <Link to="/login" style={{ color: '#05652D', textDecoration: 'none' }}>Log In</Link>
+                      Already have an account? <Link to="/login" style={{ color: '#726A8A', textDecoration: 'none' }}>Log In</Link>
                     </p>
                   </div>
                   </Col>
                 </Row>
               </Form>
             </Card>
-          </Col>
-          <Col md="6" className="text-center">
-            <Carousel
-              infiniteLoop
-              autoPlay
-              showThumbs={false}
-              style={{ marginTop: '100px' }}
-            >
-              <div>
-                <img src={process.env.PUBLIC_URL + '/ECO.gif'} alt="ECO" style={{ height: '400px', width: '600px' }} />
-              </div>
-              <div>
-                <img src={process.env.PUBLIC_URL + '/ECO2.png'} alt="ECO2" style={{ height: '400px', width: '600px' }} />
-              </div>
-              <div>
-                <img src={process.env.PUBLIC_URL + '/ECO3.png'} alt="ECO3" style={{ height: '400px', width: '600px' }} />
-              </div>
-              <div>
-                <img src={process.env.PUBLIC_URL + '/ECO4.gif'} alt="ECO4" style={{ height: '400px', width: '600px' }} />
-              </div>
-            </Carousel>
           </Col>
         </Row>
       </Container>
