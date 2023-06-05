@@ -18,6 +18,14 @@ function Home() {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
+  const user = {
+    quote: "All is well",
+    email: "example@gmail.com",
+    age: 28,
+    country: "Philippines",
+    skills: "Good English Speaker, Cooking, Photo Editing,",
+    image: process.env.PUBLIC_URL + "/user-image.png" 
+  };
 
   const socialMediaPosts = [
     {
@@ -59,7 +67,7 @@ function Home() {
 
   return (
     <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7' }}>
-      <nav className="navbar navbar-expand-lg navbar-light" style={{ background: '#FFFFFF' }}>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#FFFFFF' }}>
         <img src={process.env.PUBLIC_URL + "/Logo.png"} width="60" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
         <div className="container">
           <form className="d-flex justify-content-center" onSubmit={handleSearch}>
@@ -69,7 +77,7 @@ function Home() {
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ width: "400px" }}
+              style={{ width: "400px", borderColor: "#726A8A" }}
             />
             <button className="btn btn-outline-purple" type="submit" style={{ borderColor: "#726A8A" }}>
             <img src={process.env.PUBLIC_URL + "/search.png"} alt="Home" className="nav-icon" />
@@ -142,8 +150,20 @@ function Home() {
                 <div className="col-lg-4" style={{ maxWidth: "calc(33.333% - 100px)" }}>
                   <div className="card">
                     <div className="card-body">
-                      <h5 className="card-title">{location.state?.id}</h5>
-                      
+                    <img src={user.image} alt="User" className="user-image" />
+                      <h5 className="card-title">{location.state?.id}</h5> 
+                      <p>
+                        <strong>Email:</strong> {user.email}
+                      </p>
+                      <p>
+                        <strong>Age:</strong> {user.age}
+                      </p>
+                      <p>
+                        <strong>Country:</strong> {user.country}
+                      </p>
+                      <p>
+                        <strong>Skills:</strong> {user.skills}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -169,6 +189,78 @@ function Home() {
                   <div className="card">
                     <div className="card-body">
                   <h5 className="card-title">Work Suggestions</h5>   
+                  <div className="work-suggestions">
+                  <div className="work-suggestion">
+                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                    <button
+                    className="btn btn-primary muted-purple"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#726A8A',
+                      marginLeft: '10px',
+                    }}
+                  >
+                    Apply Now
+                  </button>
+                  </div>
+                  <div className="work-suggestion">
+                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                    <button
+                    className="btn btn-primary muted-purple"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#726A8A',
+                      marginLeft: '10px',
+                    }}
+                  >
+                    Apply Now
+                  </button>
+                  </div>
+                  <div className="work-suggestion">
+                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                    <button
+                    className="btn btn-primary muted-purple"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#726A8A',
+                      marginLeft: '10px',
+                    }}
+                  >
+                    Apply Now
+                  </button>
+                  </div>
+                  <div className="work-suggestion">
+                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                    <button
+                    className="btn btn-primary muted-purple"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#726A8A',
+                      marginLeft: '10px',
+                    }}
+                  >
+                    Apply Now
+                  </button>
+                  </div>
+                  <div className="work-suggestion">
+                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                    <button
+                    className="btn btn-primary muted-purple"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: '#726A8A',
+                      marginLeft: '10px',
+                    }}
+                  >
+                    Apply Now
+                  </button>
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
