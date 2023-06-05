@@ -65,7 +65,7 @@ const CareerGuidance = () => {
               <li className="nav-item dropdown">
               <Link className="nav-link" to="/">
                 <div className="d-flex flex-column align-items-center">
-                  <img src={process.env.PUBLIC_URL + "/settings.png"} alt="Option" className="nav-icon" />  
+                  <img src={process.env.PUBLIC_URL + "/logout.png"} alt="Option" className="nav-icon" />  
                     Logout
                 </div>
                 </Link>
