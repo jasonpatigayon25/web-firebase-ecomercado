@@ -68,40 +68,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.put("/update/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-    const { newPassword } = req.body;
-
-    const updatedRecord = await collection.findOneAndUpdate(
-      { email: email },
-      { $set: { password: newPassword } },
-      { returnOriginal: false }
-    );
-
-    res.send(updatedRecord);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred while updating the record.");
-  }
-});
-
-app.delete("/delete/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-
-    const deletedRecord = await collection.findOneAndDelete({ email: email });
-
-    if (!deletedRecord) {
-      return res.status(404).send("Record not found");
-    }
-
-    res.send(deletedRecord);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
 app.get("/", cors(), async (req, res) => {
   try {
     const data = await collection.find();

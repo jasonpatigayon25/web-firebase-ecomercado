@@ -23,7 +23,7 @@ function Home() {
     email: "example@gmail.com",
     age: 28,
     country: "Philippines",
-    skills: "Good English Speaker, Cooking, Photo Editing,",
+    skills: "Good English Speaker, Cooking, Photo Editing",
     image: process.env.PUBLIC_URL + "/user-image.png" 
   };
 
@@ -74,7 +74,7 @@ function Home() {
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Search"
+              placeholder="Search Job Opportunities"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ width: "400px", borderColor: "#726A8A" }}
@@ -177,79 +177,135 @@ function Home() {
                 </div>
                 <div className="col-lg-4" style={{ maxWidth: "calc(33.333% - 100px)" }}>
                   <div className="card">
-                    <div className="card-body">
-                  <h5 className="card-title">Work Suggestions</h5>   
-                  <div className="work-suggestions">
-                  <div className="work-suggestion">
-                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                      <div className="card-body">
+                    <h5 className="card-title">Work Suggestions</h5>   
+                    <div className="work-suggestions">
+                    <div className="work-suggestion-card">
+                    <img src="/suitcase.png" alt="Work 1" />
+                    <h6>Freelance Writer</h6>
+                    <p>123 Company</p>
                     <button
-                    className="btn btn-primary muted-purple"
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: '#726A8A',
-                      marginLeft: '10px',
-                    }}
-                  >
-                    Apply Now
-                  </button>
+                      className="btn btn-primary muted-purple"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderColor: '#726A8A',
+                        color: '#726A8A',
+                        display: 'block',
+                        margin: '0 auto',
+                        marginTop: '10px',
+                      }}
+                    >
+                      Apply Now
+                    </button>
                   </div>
-                  <div className="work-suggestion">
-                    <img src="https://example.com/image1.jpg" alt="Work 1" />
+                  <div className="work-suggestion-card">
+                  <img src="/suitcase.png" alt="Work 1" />
+                    <h6>Virtual Assistant</h6>
+                    <p>ABC Company</p>
                     <button
-                    className="btn btn-primary muted-purple"
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: '#726A8A',
-                      marginLeft: '10px',
-                    }}
-                  >
-                    Apply Now
-                  </button>
-                  </div>
-                  <div className="work-suggestion">
-                    <img src="https://example.com/image1.jpg" alt="Work 1" />
-                    <button
-                    className="btn btn-primary muted-purple"
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: '#726A8A',
-                      marginLeft: '10px',
-                    }}
-                  >
-                    Apply Now
-                  </button>
-                  </div>
-                  <div className="work-suggestion">
-                    <img src="https://example.com/image1.jpg" alt="Work 1" />
-                    <button
-                    className="btn btn-primary muted-purple"
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: '#726A8A',
-                      marginLeft: '10px',
-                    }}
-                  >
-                    Apply Now
-                  </button>
-                  </div>
-                  <div className="work-suggestion">
-                    <img src="https://example.com/image1.jpg" alt="Work 1" />
-                    <button
-                    className="btn btn-primary muted-purple"
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: '#726A8A',
-                      marginLeft: '10px',
-                    }}
-                  >
-                    Apply Now
-                  </button>
-                  </div>
+                      className="btn btn-primary muted-purple"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderColor: '#726A8A',
+                        color: '#726A8A',
+                        display: 'block',
+                        margin: '0 auto',
+                        marginTop: '10px',
+                      }}
+                    >
+                      Apply Now
+                    </button>
+                    </div>
+                    <div className="work-suggestion-card">
+                    <img src="/suitcase.png" alt="Work 1" />
+                        <h6>Graphic Designer</h6>
+                        <p>Itsa Company</p>
+                        <button
+                          className="btn btn-primary muted-purple"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: '#726A8A',
+                            color: '#726A8A',
+                            display: 'block',
+                            margin: '0 auto',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Apply Now
+                        </button>
+                    </div>
+                    <div className="work-suggestion-card">
+                    <img src="/suitcase.png" alt="Work 1" />
+                        <h6>Social Media Manager</h6>
+                        <p>SCM Company</p>
+                        <button
+                          className="btn btn-primary muted-purple"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: '#726A8A',
+                            color: '#726A8A',
+                            display: 'block',
+                            margin: '0 auto',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Apply Now
+                        </button>
+                    </div>
+                    <div className="work-suggestion-card">
+                    <img src="/suitcase.png" alt="Work 1" />
+                        <h6>Fitness Instructor</h6>
+                        <p>FIT Company</p>
+                        <button
+                          className="btn btn-primary muted-purple"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: '#726A8A',
+                            color: '#726A8A',
+                            display: 'block',
+                            margin: '0 auto',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Apply Now
+                        </button>
+                    </div>
+                    <div className="work-suggestion-card">
+                      <img src="/suitcase.png" alt="Work 1" />
+                        <h6>Web Developer</h6>
+                        <p>WWWS Company</p>
+                        <button
+                          className="btn btn-primary muted-purple"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: '#726A8A',
+                            color: '#726A8A',
+                            display: 'block',
+                            margin: '0 auto',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Apply Now
+                        </button>
+                    </div>
+                    <div className="work-suggestion-card">
+                      <img src="/suitcase.png" alt="Work 1" />
+                        <h6>Customer Service Representative</h6>
+                        <p>HELLOW Company</p>
+                        <button
+                          className="btn btn-primary muted-purple"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: '#726A8A',
+                            color: '#726A8A',
+                            display: 'block',
+                            margin: '0 auto',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Apply Now
+                        </button>
+                    </div>
                   </div>
                 </div>
               </div>
