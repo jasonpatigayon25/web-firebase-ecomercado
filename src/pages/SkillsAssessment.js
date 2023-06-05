@@ -66,20 +66,12 @@ const SkillsAssessment = () => {
                 </Link>
               </li>
               <li className="nav-item dropdown">
+              <Link className="nav-link" to="/">
                 <div className="d-flex flex-column align-items-center">
-                <img src={process.env.PUBLIC_URL + "/settings.png"} alt="Option" className="nav-icon" />  
-                  <Link className="nav-link dropdown-toggle" to="/" id="optionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Settings
-                  </Link>
-                  <ul className="dropdown-menu" aria-labelledby="optionDropdown">
-                    <li>
-                      <Link className="dropdown-item" to="/changepassword">Change Password</Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/">Logout</Link>
-                    </li>
-                  </ul>
+                  <img src={process.env.PUBLIC_URL + "/settings.png"} alt="Option" className="nav-icon" />  
+                    Logout
                 </div>
+                </Link>
               </li>
             </ul>
           </div>
