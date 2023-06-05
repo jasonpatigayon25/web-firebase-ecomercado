@@ -102,7 +102,7 @@ function Home() {
                   </Link>
               </li>
               <li className="nav-item">
-              <Link className="nav-link" to="/skills-assessment">
+              <Link className="nav-link" to="/skill-development">
                 <div className="d-flex flex-column align-items-center">
                   <img src={process.env.PUBLIC_URL + "/skill-development.png"} alt="Skill-D" className="nav-icon" />
                     Skill Development  
@@ -170,7 +170,6 @@ function Home() {
                 <div className="col-lg-4" style={{ width: "calc(33.333% + 200px)" }}>
                   <div className="card">
                     <div className="card-body">
-                      <h5 className="card-title">Social Media Post</h5>
                       <div className="scrollable-card">
                         {socialMediaPosts.map((post) => (
                           <div className="post" key={post.id}>
