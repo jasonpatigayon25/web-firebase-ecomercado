@@ -1,9 +1,67 @@
 import React from "react";
 import { Container, Row, Col, Form, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function SkillDevelopment() {
   return (
     <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7)', minHeight: '100vh' }}>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#FFFFFF' }}>
+        <img src={process.env.PUBLIC_URL + "/Logo.png"} width="60" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
+        <div className="container">
+          <div className="d-flex justify-content-end align-items-center w-100">
+            <ul className="navbar-nav flex-row">
+              <li className="nav-item">
+                <Link className="nav-link" to="/home">
+                  <div className="d-flex flex-column align-items-center">
+                    <img src={process.env.PUBLIC_URL + "/home.png"} alt="Home" className="nav-icon" />
+                    Home
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/skills-assessment">
+                  <div className="d-flex flex-column align-items-center">
+                    <img src={process.env.PUBLIC_URL + "/skills-assessment.png"} alt="Skills-a" className="nav-icon" />
+                    Skills Assessment
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/skill-development">
+                  <div className="d-flex flex-column align-items-center">
+                    <img src={process.env.PUBLIC_URL + "/skill-development.png"} alt="Skill-D" className="nav-icon" />
+                    Skill Development  
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/career-guidance">
+                  <div className="d-flex flex-column align-items-center">
+                    <img src={process.env.PUBLIC_URL + "/career-guidance.png"} alt="Career" className="nav-icon" />
+                    Career Guidance
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item dropdown">
+                <div className="d-flex flex-column align-items-center">
+                  <img src={process.env.PUBLIC_URL + "/settings.png"} alt="Option" className="nav-icon" />  
+                  <Link className="nav-link dropdown-toggle" to="/" id="optionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Settings
+                  </Link>
+                  <ul className="dropdown-menu" aria-labelledby="optionDropdown">
+                    <li>
+                      <Link className="dropdown-item" to="/changepassword">Change Password</Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/">Logout</Link>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
 
     <div>
       <Container className="py-5 d-flex justify-content-center align-items-center">
@@ -31,8 +89,15 @@ function SkillDevelopment() {
                   direction and motivation.
                   <br />
                   <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/BQbufwSqxpU?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Engage in Interactive Courses:</strong> Explore our wide
@@ -41,9 +106,16 @@ function SkillDevelopment() {
                   cover various topics, including effective communication,
                   positive discipline, and emotional intelligence.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=DokPxMOXxVs" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/DokPxMOXxVs?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Join Supportive Communities:</strong> Connect with other
@@ -51,9 +123,16 @@ function SkillDevelopment() {
                   community provides a supportive environment where you can share
                   experiences, seek advice, and celebrate each other's successes.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=MjY6aRQkdSI" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/MjY6aRQkdSI?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Track Your Progress:</strong> Keep a record of your
@@ -61,9 +140,16 @@ function SkillDevelopment() {
                   real-life situations. Reflecting on your achievements will boost
                   your confidence and inspire you to continue growing as a parent.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=wFDMRFJeyN0" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/wFDMRFJeyN0?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Attend Webinars and Workshops:</strong> Stay updated
@@ -72,9 +158,16 @@ function SkillDevelopment() {
                   sessions offer valuable insights and practical tips from
                   industry experts.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=qKHXQtvY6Fc" target="_blank" rel="noopener noreferrer" className="tip-link">
+                    <iframe
+                      width="560"
+                      height="315"
+                      src="https://www.youtube.com/embed/qKHXQtvY6Fc?autoplay=1"
+                      title="YouTube Video"
+                      frameBorder="0"
+                      allowFullScreen
+                    ></iframe>
+                  </a>
                   </li>
                 <li>
                   <strong>Practice Self-Care:</strong> Remember to prioritize
@@ -83,9 +176,16 @@ function SkillDevelopment() {
                   for being an effective parent. Explore our resources on
                   self-care to maintain a healthy work-life balance.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=MjY6aRQkdSI" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/MjY6aRQkdSI?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Celebrate Milestones:</strong> Celebrate your
@@ -94,9 +194,16 @@ function SkillDevelopment() {
                   witnessing positive changes in your family dynamics,
                   acknowledging these milestones will keep you motivated.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=9HE9BAr9iI0" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/9HE9BAr9iI0?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Seek Guidance and Support:</strong> If you face
@@ -104,9 +211,16 @@ function SkillDevelopment() {
                   team of experts. We're here to support you and provide
                   personalized advice based on your unique circumstances.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=kBTMGryV2q4" target="_blank" rel="noopener noreferrer" className="tip-link">
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/kBTMGryV2q4?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
                 <li>
                   <strong>Share Your Journey:</strong> Share your skill
@@ -115,9 +229,16 @@ function SkillDevelopment() {
                   who are also on the path to becoming confident and effective
                   parents.
                   <br />
-                  <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <a href="https://www.youtube.com/watch?v=xO0Y06zq-bM" target="_blank" rel="noopener noreferrer" className="tip-link">
+                    <iframe
+                      width="560"
+                      height="315"
+                      src="https://www.youtube.com/embed/xO0Y06zq-bM?autoplay=1"
+                      title="YouTube Video"
+                      frameBorder="0"
+                      allowFullScreen
+                    ></iframe>
+                  </a>
                 </li>
                 <li>
                   <strong>Embrace Lifelong Learning:</strong> Remember that skill
@@ -128,8 +249,15 @@ function SkillDevelopment() {
                   your children grow and develop.
                   <br />
                   <a href="https://www.youtube.com/watch?v=BQbufwSqxpU" target="_blank" rel="noopener noreferrer" className="tip-link">
-                    <img src={process.env.PUBLIC_URL + '/thumbnail1.jpg'} alt="Video Thumbnail" width="430" height="270" style={{ display: 'block', margin: '0 auto' }}/>
-                    </a>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/BQbufwSqxpU?autoplay=1"
+                    title="YouTube Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </a>
                 </li>
               </ol>
               <p>
@@ -140,14 +268,6 @@ function SkillDevelopment() {
                 skill development experience.
               </p>
               <Form className="mt-5">
-                <Form.Group controlId="name">
-                  <Form.Label>Your Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your name" />
-                </Form.Group>
-                <Form.Group controlId="email">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter your email" />
-                </Form.Group>
                 <Form.Group controlId="message">
                   <Form.Label>Message</Form.Label>
                   <Form.Control as="textarea" rows={3} placeholder="Enter your message" />

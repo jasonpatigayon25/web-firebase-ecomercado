@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 const ContactUs = () => {
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7)', height: '100vh' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7)'}}>
       <nav className="navbar navbar-expand-lg navbar-light" style={{ background: '#FFFFFF' }}>
         <div className="container d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
@@ -65,9 +65,9 @@ const ContactUs = () => {
 
         <h2 style={{ color: '#726A8A'}}>Contact Information</h2>
         <ul>
-          <li>Email: info@example.com</li>
+          <li>Email: parentpathin@gmail.com</li>
           <li>Phone: 123-456-7890</li>
-          <li>Address: 123 Example Street, City, State, ZIP</li>
+          <li>Address: 123 My Street, City, State, ZIP</li>
         </ul>
 
         <h2 style={{ color: '#726A8A'}}>Contact Form</h2>
