@@ -66,20 +66,27 @@ function Home() {
   ];
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7' }}>
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#FFFFFF' }}>
-        <img src={process.env.PUBLIC_URL + "/Logo.png"} width="60" height="60" className="d-inline-block align-top" alt="Logo" style={{ marginLeft: "50px" }} />
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC' }}>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
+      <img
+            src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
+            width="240"
+            height="60"
+            className="d-inline-block align-top"
+            alt="Logo"
+            style={{ marginLeft: "50px" }} 
+          />
         <div className="container">
           <form className="d-flex justify-content-center" onSubmit={handleSearch}>
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Search Job Opportunities"
+              placeholder="Search Products"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ width: "400px", borderColor: "#726A8A" }}
+              style={{ width: "400px", borderColor: "#05652D" }}
             />
-            <button className="btn btn-outline-purple" type="submit" style={{ borderColor: "#726A8A" }}>
+            <button className="btn btn-outline-purple" type="submit" style={{ borderColor: "#05652D" }}>
             <img src={process.env.PUBLIC_URL + "/search.png"} alt="Home" className="nav-icon" />
           </button>
           </form>
@@ -129,7 +136,7 @@ function Home() {
           </div>
         </div>
       </nav>
-      <hr style={{ backgroundColor: '#726A8A', height: '2px', margin: '0' }} />
+      <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
       
       {showWelcomeMessage && (
         <p className="welcome-message" style={{ color: "#726A8A", fontSize: "21px"  }}>
