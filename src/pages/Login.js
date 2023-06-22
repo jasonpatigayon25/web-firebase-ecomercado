@@ -36,7 +36,7 @@ function Login() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #98FF98)', height: '100vh' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
@@ -50,7 +50,7 @@ function Login() {
       </div>
 
       <Container className="my-5" style={{ maxWidth: '400px' }}>
-        <Card style={{ borderColor: '#05652D' }} className="p-4">
+        <Card style={{ borderRadius: '25px', borderColor: '#05652D' }} className="p-4">
           <Form>
             <h3 className="text-center">Log in to ECOMercado</h3>
             <InputGroup className="mb-4">

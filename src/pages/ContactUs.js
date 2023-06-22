@@ -74,7 +74,7 @@ const ContactUs = () => {
 
         <h2>Contact Information</h2>
         <ul>
-          <li>Email: parentpathin@gmail.com</li>
+          <li>Email: ecomercado@gmail.com</li>
           <li>Phone: 123-456-7890</li>
           <li>Address: 123 My Street, City, State, ZIP</li>
         </ul>

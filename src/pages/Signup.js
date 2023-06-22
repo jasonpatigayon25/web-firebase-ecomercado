@@ -36,7 +36,7 @@ function Signup() {
             alert('User already exists');
           } else if (res.data === 'notexist') {
             history('/home', { state: { id: email } });
-            alert('Congratulations! You are now officially registered with ParentPathIN.');
+            alert('Congratulations! You are now officially registered with ECOMercado.');
           }
         })
         .catch((e) => {
@@ -49,7 +49,7 @@ function Signup() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #FFFFFF, #E3FCE9, #98FF98)', height: '100vh' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh' }}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
