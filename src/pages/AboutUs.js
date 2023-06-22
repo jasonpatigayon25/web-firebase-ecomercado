@@ -1,11 +1,13 @@
+
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 const Container = styled.div`
-  background: linear-gradient(to bottom, #FFFFFF, #FFFFFF, #D6D1E1, #C1B9D7);
+  background: linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC);
   height: 100vh;
-  color: #726A8A;
+  color: #05652D;
 `;
 
 const AboutUs = () => {
@@ -25,12 +27,12 @@ const AboutUs = () => {
             </Link>
             <ul className="navbar-nav ml-2 d-flex align-items-center">
               <li className="nav-item">
-                <Link className="nav-link" to="/about-us">
+                <Link className="nav-link" to="/about-us" style={{ color: '#05652D' }}>
                   About Us
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contact-us">
+                <Link className="nav-link" to="/contact-us" style={{ color: '#05652D' }}>
                   Contact Us
                 </Link>
               </li>
@@ -39,52 +41,54 @@ const AboutUs = () => {
           <div>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/login">
+                <Link className="nav-link" to="/login" style={{ color: '#05652D' }}>
                   Login
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  className="btn btn-primary rounded-pill animated-button"
+                <Button
+                  as={Link}
                   to="/signup"
+                  className="btn btn-primary rounded-pill animated-button"
                   style={{
-                    backgroundColor: '#726A8A',
-                    borderColor: '#726A8A',
+                    backgroundColor: '#05652D',
+                    borderColor: '#05652D',
+                    color: '#E3FCE9',
                     marginLeft: '10px',
                   }}
                 >
                   Sign Up
-                </Link>
+                </Button>
               </li>
             </ul>
           </div>
         </div>
       </nav>
+      <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
 
       <div className="container">
         <h1>About Us</h1>
         <p>
-        ParentPathIN is a platform dedicated to empowering parents in their journey of raising children. We understand the
-        importance of continuous learning and personal growth, which is why we focus on enhancing the skills and knowledge
-        of parents to thrive both in their parenting roles and professional lives.
-      </p>
-      <p>
-        Our mission is to provide parents with resources, tools, and opportunities to develop new skills, discover career
-        paths that align with their passions, and connect with job opportunities that offer flexibility and work-life balance.
-        We believe that being a parent shouldn't limit your professional growth, and we're here to support you in finding
-        the right job that fits your lifestyle and aspirations.
-      </p>
-      <p>
-        At ParentPathIN, we also value the power of shared experiences. We provide a platform where parents can come together,
-        exchange insights, and learn from one another's journeys. Our community-driven approach encourages parents to share
-        their experiences, challenges, and successes, fostering a supportive network where everyone can find inspiration,
-        advice, and encouragement.
-      </p>
-      <p>
-        Whether you're looking to enhance your skills, explore new career opportunities, or connect with fellow parents, ParentPathIN
-        is your destination. Join us today and unlock the full potential of parenthood while pursuing personal and professional
-        fulfillment.
-      </p>
+        Welcome to ECOMercado. A one-stop shop for all your online shopping needs. Our app is designed to make your shopping experience fast, 
+        easy and hassle-free. We have a wide range of products in various categories such as fashion, electronics, home appliances, beauty products and more.
+        </p>
+        <p>
+        At ECOMercado, we strive to provide the highest quality products at affordable prices. Our team strives to ensure a seamless and safe shopping experience
+         with fast and reliable shipping services. We also offer a variety of payment options so you can choose the one that is most convenient for you. 
+         We believe that shopping should be fun and stress-free, and that's exactly what we aim for. Our easy-to-use app makes it easy to browse and shop for your favorite products, 
+         track your orders, and even receive exclusive offers and promotions.
+        </p>
+        <p>
+        At ECOMercado, we are dedicated to making a positive impact on our community and environment by promoting sustainable shopping practices. 
+        Our online marketplace offers a wide range of products, from reusable items to upcycled goods, to help reduce waste and protect our planet.
+        </p>
+        <p>
+        We believe in the power of small actions, and by choosing to shop with us, you are making a difference. 
+        Join our community today and discover the joy of conscious consumerism.
+        </p>
+        <p>
+        Thank you for choosing ECOMercado.
+        </p>
       </div>
     </Container>
   );
