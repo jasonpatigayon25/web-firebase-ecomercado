@@ -61,7 +61,7 @@ function Signup() {
       <div className="d-flex align-items-center">
             <Link className="navbar-brand" to="/" style={{ marginLeft: "50px" }}>
               <img
-                src={process.env.PUBLIC_URL + '/AppLogo2.png'}
+                src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
                 width="240"
                 height="60"
                 className="d-inline-block align-top"

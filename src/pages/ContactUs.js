@@ -10,9 +10,9 @@ const ContactUs = () => {
           <div className="d-flex align-items-center">
             <Link className="navbar-brand" to="/">
               <img
-                src={process.env.PUBLIC_URL + '/AppLogo2.png'}
-                width="240"
-                height="60"
+                src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
+                width="220"
+                height="55"
                 className="d-inline-block align-top"
                 alt="Logo"
               />
