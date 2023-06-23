@@ -5,9 +5,6 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import ContactUs from "./pages/ContactUs"
 import AboutUs from "./pages/AboutUs"
-import SkillsAssessment from "./pages/SkillsAssessment"
-import SkillDevelopment from "./pages/SkillDevelopment"
-import CareerGuidance from "./pages/CareerGuidance"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
@@ -22,9 +19,6 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/home" element={<Home/>}/>
-          <Route path="/skills-assessment" element={<SkillsAssessment/>}/>
-          <Route path="/skill-development" element={<SkillDevelopment/>}/>
-          <Route path="/career-guidance" element={<CareerGuidance/>}/>
         </Routes>
       </Router>
     </div>
