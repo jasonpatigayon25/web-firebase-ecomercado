@@ -39,7 +39,7 @@ function Home() {
           height="60"
           className="d-inline-block align-top"
           alt="Logo"
-          style={{ marginLeft: "50px" }} 
+          style={{ marginLeft: "50px" }}
         />
         <div className="container">
           <form className="d-flex justify-content-center" onSubmit={handleSearch}>
@@ -52,26 +52,28 @@ function Home() {
               style={{ width: "600px", borderColor: "#05652D" }}
             />
             <button className="btn" type="submit" style={{ borderColor: "#05652D" }}>
-              <img src={process.env.PUBLIC_URL + "/search-icon.png"} 
-              alt="Search" 
-              className="nav-icon" 
-              style={{
-                transform: hoveredIndex === 4 ? "scale(1.1)" : "scale(1)",
-              }}
-              onMouseEnter={() => handleMouseEnter(4)}
-              onMouseLeave={handleMouseLeave}
+              <img
+                src={process.env.PUBLIC_URL + "/search-icon.png"}
+                alt="Search"
+                className="nav-icon"
+                style={{
+                  transform: hoveredIndex === 4 ? "scale(1.1)" : "scale(1)",
+                }}
+                onMouseEnter={() => handleMouseEnter(4)}
+                onMouseLeave={handleMouseLeave}
               />
             </button>
           </form>
-          <button className="btn" type="submit" style={{ borderColor: "#05652D" }}>
-            <img src={process.env.PUBLIC_URL + "/shopping-cart.png"} 
-            alt="Cart" 
-            className="nav-icon" 
-            style={{
-              transform: hoveredIndex === 3 ? "scale(1.1)" : "scale(1)",
-            }}
-            onMouseEnter={() => handleMouseEnter(3)}
-            onMouseLeave={handleMouseLeave}
+          <button className="btn" type="submit" style={{ borderColor: "transparent" }}>
+            <img
+              src={process.env.PUBLIC_URL + "/shopping-cart.png"}
+              alt="Cart"
+              className="nav-icon"
+              style={{
+                transform: hoveredIndex === 3 ? "scale(1.1)" : "scale(1)",
+              }}
+              onMouseEnter={() => handleMouseEnter(3)}
+              onMouseLeave={handleMouseLeave}
             />
           </button>
           <div className="d-flex justify-content-end align-items-center w-100">
@@ -105,7 +107,7 @@ function Home() {
                       }}
                       onMouseEnter={() => handleMouseEnter(1)}
                       onMouseLeave={handleMouseLeave}
-                    />  
+                    />
                     Notification
                   </div>
                 </Link>
@@ -122,7 +124,7 @@ function Home() {
                       }}
                       onMouseEnter={() => handleMouseEnter(2)}
                       onMouseLeave={handleMouseLeave}
-                    />  
+                    />
                     Settings
                   </div>
                 </Link>
@@ -132,9 +134,9 @@ function Home() {
         </div>
       </nav>
       <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
-      
+
       {showWelcomeMessage && (
-        <p className="welcome-message" style={{ color: "#726A8A", fontSize: "21px"  }}>
+        <p className="welcome-message" style={{ color: "#726A8A", fontSize: "21px" }}>
           Hello {location.state?.id} and welcome to ECOMercado!
         </p>
       )}
@@ -148,7 +150,30 @@ function Home() {
                   <h2 className="sale-alert" style={{ color: "#05652D", textAlign: "center" }}>
                     HUGE SALE ALERT
                   </h2>
-                  <Carousel showThumbs={false} autoPlay>
+                  <Carousel showThumbs={false} autoPlay renderIndicator={(onClickHandler, isSelected, index, label) => {
+                    if (isSelected) {
+                      return (
+                        <li
+                          style={{ background: "#05652D", borderRadius: "50%", width: "10px", height: "10px", display: "inline-block", margin: "0 4px", cursor: "pointer" }}
+                          onClick={onClickHandler}
+                          key={index}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`${label} ${index + 1}`}
+                        />
+                      );
+                    }
+                    return (
+                      <li
+                        style={{ background: "#05652D", borderRadius: "50%", width: "6px", height: "6px", display: "inline-block", margin: "0 4px", cursor: "pointer" }}
+                        onClick={onClickHandler}
+                        key={index}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${label} ${index + 1}`}
+                      />
+                    );
+                  }}>
                     <div>
                       <img src="Sale1.jpg" alt="Sale 1" style={{ width: "100%", height: "auto" }} />
                       <p className="sale-label" style={{ color: "#05652D" }}>
@@ -174,8 +199,137 @@ function Home() {
           </div>
         </div>
       </div>
-
-      <div className="recommendation-wrapper">
+      <div className="recommendation-card" style={{ background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", marginTop: "10px", marginLeft: "400px", marginRight: "400px"}}>
+        <div className="recommendation-links" style={{ display: "flex", justifyContent: "center", padding: "10px" }}> 
+          <Link
+            className="nav-link"
+            to="/donate"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 11 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(11)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/donate.png"}
+              alt="Donate"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Donate
+          </Link>
+          <Link
+            className="nav-link"
+            to="/campaign"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 12 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(12)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/campaign.png"}
+              alt="Campaign"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Campaign
+          </Link>
+          <Link
+            className="nav-link"
+            to="/become-seller"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 13 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(13)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/become-seller.png"}
+              alt="Become a Seller"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Become a Seller
+          </Link>
+          <Link
+            className="nav-link"
+            to="/eco-lover-rewards"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 14 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(14)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/eco-lover-rewards.png"}
+              alt="ECO-lover Rewards"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            ECO-lover Rewards
+          </Link>
+          <Link
+            className="nav-link"
+            to="/wishlist"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 15 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(15)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/wishlist.png"}
+              alt="Wishlist"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Wishlist
+          </Link>
+          <Link
+            className="nav-link"
+            to="/order-history"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 16 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(16)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/order-history.png"}
+              alt="Order History"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Order History
+          </Link>
+        </div>
+      </div>
+      <div className="recommendation-wrapper" style={{ marginTop: "20px" }}>
         <h2 className="recommendation-title" style={{ color: "#05652D", textAlign: "center" }}>
           RECOMMENDED FOR YOU
         </h2>
@@ -187,6 +341,9 @@ function Home() {
               textAlign: "center",
               transition: "transform 0.3s",
               transform: hoveredIndex === 6 ? "scale(1.1)" : "scale(1)",
+              borderRadius: "50%",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
             onMouseEnter={() => handleMouseEnter(6)}
             onMouseLeave={handleMouseLeave}
@@ -203,6 +360,9 @@ function Home() {
               textAlign: "center",
               transition: "transform 0.3s",
               transform: hoveredIndex === 7 ? "scale(1.1)" : "scale(1)",
+              borderRadius: "50%",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
             onMouseEnter={() => handleMouseEnter(7)}
             onMouseLeave={handleMouseLeave}
@@ -219,6 +379,9 @@ function Home() {
               textAlign: "center",
               transition: "transform 0.3s",
               transform: hoveredIndex === 8 ? "scale(1.1)" : "scale(1)",
+              borderRadius: "50%",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
             onMouseEnter={() => handleMouseEnter(8)}
             onMouseLeave={handleMouseLeave}
@@ -235,6 +398,9 @@ function Home() {
               textAlign: "center",
               transition: "transform 0.3s",
               transform: hoveredIndex === 9 ? "scale(1.1)" : "scale(1)",
+              borderRadius: "50%",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
             onMouseEnter={() => handleMouseEnter(9)}
             onMouseLeave={handleMouseLeave}
@@ -251,6 +417,9 @@ function Home() {
               textAlign: "center",
               transition: "transform 0.3s",
               transform: hoveredIndex === 10 ? "scale(1.1)" : "scale(1)",
+              borderRadius: "50%",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
             onMouseEnter={() => handleMouseEnter(10)}
             onMouseLeave={handleMouseLeave}
