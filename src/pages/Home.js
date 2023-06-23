@@ -31,7 +31,7 @@ function Home() {
   };
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)' }}>
+    <div>
       <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
@@ -146,7 +146,7 @@ function Home() {
           <div className="col-lg-8">
             <div className="card" style={{ backgroundColor: "transparent", border: "none" }}>
               <div className="card-body">
-                <div className="carousel-wrapper">
+                <div className="carousel-wrapper" style={{ marginTop: "10px" }}>
                   <h2 className="sale-alert" style={{ color: "#05652D", textAlign: "center" }}>
                     HUGE SALE ALERT
                   </h2>
@@ -175,19 +175,19 @@ function Home() {
                     );
                   }}>
                     <div>
-                      <img src="Sale1.jpg" alt="Sale 1" style={{ width: "100%", height: "auto" }} />
+                      <img src="Sale1.jpg" alt="Sale 1" style={{ width: "600px", height: "360px" }} />
                       <p className="sale-label" style={{ color: "#05652D" }}>
                         It is 60% off than the original
                       </p>
                     </div>
                     <div>
-                      <img src="Sale2.jpg" alt="Sale 2" style={{ width: "100%", height: "auto" }} />
+                      <img src="Sale2.jpg" alt="Sale 2" style={{ width: "600px", height: "360px" }} />
                       <p className="sale-label" style={{ color: "#05652D" }}>
                         It is 70% off than the original
                       </p>
                     </div>
                     <div>
-                      <img src="Sale3.jpg" alt="Sale 3" style={{ width: "100%", height: "auto" }} />
+                      <img src="Sale3.jpg" alt="Sale 3" style={{ width: "600px", height: "360px" }} />
                       <p className="sale-label" style={{ color: "#05652D" }}>
                         It is 50% off than the original
                       </p>
@@ -199,7 +199,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="recommendation-card" style={{ background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", marginTop: "10px", marginLeft: "400px", marginRight: "400px"}}>
+      <div className="recommendation-card" style={{ background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", marginTop: "10px", marginLeft: "200px", marginRight: "200px"}}>
         <div className="recommendation-links" style={{ display: "flex", justifyContent: "center", padding: "10px" }}> 
           <Link
             className="nav-link"

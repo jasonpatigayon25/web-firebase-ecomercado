@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap';
 
 const Container = styled.div`
   background: linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC);
-  height: 100vh;
   color: #05652D;
 `;
 

@@ -80,22 +80,22 @@ function Welcome() {
           <Col md={6} className="text-end">
             <Carousel infiniteLoop autoPlay showThumbs={false}>
               <div>
-                <img src="/welcome1.png" alt="1" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-1.jpg" alt="1" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/welcome2.jpg" alt="2" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-2.jpg" alt="2" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/welcome3.webp" alt="3" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-3.png" alt="3" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/welcome4.jpg" alt="4" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-4.png" alt="4" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/welcome5.jpg" alt="5" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-5.gif" alt="5" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/welcome6.jpg" alt="6" style={{ height: '400px', width: '600px' }} />
+                <img src="/img-6.gif" alt="6" style={{ height: '360px', width: '600px' }} />
               </div>
             </Carousel>
           </Col>
