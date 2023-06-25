@@ -135,7 +135,6 @@ function Home() {
           </div>
         </div>
       </nav>
-      <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
 
       {showWelcomeMessage && (
         <p className="welcome-message" style={{ color: "#726A8A", fontSize: "21px" }}>
