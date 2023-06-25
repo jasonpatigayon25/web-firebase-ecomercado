@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown } from "react-bootstrap";
 
 function Home() {
   const location = useLocation();
@@ -31,11 +31,20 @@ function Home() {
     setHoveredIndex(null);
   };
 
+  const carouselLabels = [
+    { discount: "60% OFF"},
+    { discount: "70% OFF"},
+    { discount: "50% OFF"},
+    { discount: "50% OFF"},
+    { discount: "60% OFF"},
+    { discount: "50% OFF"},
+  ];
+
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: "#E3FCE9" }}>
         <img
-          src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
+          src={process.env.PUBLIC_URL + "/ecomercado-logo.png"}
           width="240"
           height="60"
           className="d-inline-block align-top"
@@ -66,17 +75,17 @@ function Home() {
             </button>
           </form>
           <button className="btn" type="submit" style={{ borderColor: "transparent" }}>
-          <Link to="/cart">
-            <img
-              src={process.env.PUBLIC_URL + "/shopping-cart.png"}
-              alt="Cart"
-              className="nav-icon"
-              style={{
-                transform: hoveredIndex === 3 ? "scale(1.1)" : "scale(1)",
-              }}
-              onMouseEnter={() => handleMouseEnter(3)}
-              onMouseLeave={handleMouseLeave}
-            />
+            <Link to="/cart">
+              <img
+                src={process.env.PUBLIC_URL + "/shopping-cart.png"}
+                alt="Cart"
+                className="nav-icon"
+                style={{
+                  transform: hoveredIndex === 3 ? "scale(1.1)" : "scale(1)",
+                }}
+                onMouseEnter={() => handleMouseEnter(3)}
+                onMouseLeave={handleMouseLeave}
+              />
             </Link>
           </button>
           <div className="d-flex justify-content-end align-items-center w-100">
@@ -115,39 +124,39 @@ function Home() {
                   </div>
                 </Link>
               </li>
-            <li className="nav-item dropdown">
-              <Dropdown>
-                <Dropdown.Toggle
-                  className="nav-link"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div className="d-flex flex-column align-items-center">
-                    <img
-                      src={process.env.PUBLIC_URL + '/settings.png'}
-                      alt="Option"
-                      className="nav-icon"
-                      style={{
-                        transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
-                      }}
-                      onMouseEnter={() => handleMouseEnter(2)}
-                      onMouseLeave={handleMouseLeave}
-                    />
-                  </div>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
-                  <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
-                  <Dropdown.Item href="/language">Language</Dropdown.Item>
-                  <Dropdown.Item href="/help">Help</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item href="/">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </li>
+              <li className="nav-item dropdown">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="nav-link"
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div className="d-flex flex-column align-items-center">
+                      <img
+                        src={process.env.PUBLIC_URL + "/settings.png"}
+                        alt="Option"
+                        className="nav-icon"
+                        style={{
+                          transform: hoveredIndex === 2 ? "scale(1.1)" : "scale(1)",
+                        }}
+                        onMouseEnter={() => handleMouseEnter(2)}
+                        onMouseLeave={handleMouseLeave}
+                      />
+                    </div>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
+                    <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
+                    <Dropdown.Item href="/language">Language</Dropdown.Item>
+                    <Dropdown.Item href="/help">Help</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href="/">Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </li>
             </ul>
           </div>
         </div>
@@ -165,14 +174,67 @@ function Home() {
             <div className="card" style={{ backgroundColor: "transparent", border: "none" }}>
               <div className="card-body">
                 <div className="carousel-wrapper" style={{ marginTop: "10px" }}>
-                  <h2 className="sale-alert" style={{ color: "#05652D", textAlign: "center" }}>
-                    HUGE SALE ALERT
-                  </h2>
-                  <Carousel showThumbs={false} autoPlay renderIndicator={(onClickHandler, isSelected, index, label) => {
-                    if (isSelected) {
+                  <div
+                    className="sale-alert"
+                    style={{
+                      backgroundColor: "#05652D",
+                      color: "#FFFFFF",
+                      textAlign: "left",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <h2 style={{ 
+                      fontSize: "24px", 
+                      margin: "0", 
+                      textAlign: "center" }}
+                      >
+                        HUGE SALE ALERT
+                        </h2>
+                    <p style={{ 
+                      fontSize: "16px", 
+                      margin: "0",  
+                      textAlign: "center"}}
+                      >
+                        Stock up now and save big on your anti-waste grocery shopping.
+                      </p>
+                  </div>
+                  <Carousel
+                    showThumbs={false}
+                    autoPlay
+                    renderIndicator={(onClickHandler, isSelected, index, label) => {
+                      if (isSelected) {
+                        return (
+                          <li
+                            style={{
+                              background: "#05652D",
+                              borderRadius: "50%",
+                              width: "10px",
+                              height: "10px",
+                              display: "inline-block",
+                              margin: "0 4px",
+                              cursor: "pointer",
+                            }}
+                            onClick={onClickHandler}
+                            key={index}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`${label} ${index + 1}`}
+                          />
+                        );
+                      }
                       return (
                         <li
-                          style={{ background: "#05652D", borderRadius: "50%", width: "10px", height: "10px", display: "inline-block", margin: "0 4px", cursor: "pointer" }}
+                          style={{
+                            background: "#BEF7CC",
+                            borderRadius: "50%",
+                            width: "6px",
+                            height: "6px",
+                            display: "inline-block",
+                            margin: "0 4px",
+                            cursor: "pointer",
+                          }}
                           onClick={onClickHandler}
                           key={index}
                           role="button"
@@ -180,36 +242,30 @@ function Home() {
                           aria-label={`${label} ${index + 1}`}
                         />
                       );
-                    }
-                    return (
-                      <li
-                        style={{ background: "#05652D", borderRadius: "50%", width: "6px", height: "6px", display: "inline-block", margin: "0 4px", cursor: "pointer" }}
-                        onClick={onClickHandler}
-                        key={index}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`${label} ${index + 1}`}
-                      />
-                    );
-                  }}>
-                    <div>
-                      <img src="Sale1.jpg" alt="Sale 1" style={{ width: "600px", height: "360px" }} />
-                      <p className="sale-label" style={{ color: "#05652D" }}>
-                        It is 60% off than the original
-                      </p>
-                    </div>
-                    <div>
-                      <img src="Sale2.jpg" alt="Sale 2" style={{ width: "600px", height: "360px" }} />
-                      <p className="sale-label" style={{ color: "#05652D" }}>
-                        It is 70% off than the original
-                      </p>
-                    </div>
-                    <div>
-                      <img src="Sale3.jpg" alt="Sale 3" style={{ width: "600px", height: "360px" }} />
-                      <p className="sale-label" style={{ color: "#05652D" }}>
-                        It is 50% off than the original
-                      </p>
-                    </div>
+                    }}
+                  >
+                    {carouselLabels.map((label, index) => (
+                      <div key={index}>
+                        <img src={`Sale${index + 1}.jpg`} alt={`Sale ${index + 1}`} style={{ width: "100%", height: "360px" }} />
+                        <p
+                          className="sale-label"
+                          style={{
+                            color: "#FFFFFF",
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            fontSize: "50px",
+                            fontWeight: "bold",
+                            padding: "5px",
+                            borderRadius: "20px",
+                            background: "#05652D",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                          }}
+                        >
+                          {label.discount}
+                        </p>
+                      </div>
+                    ))}
                   </Carousel>
                 </div>
               </div>
@@ -217,8 +273,18 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="recommendation-card" style={{ background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", marginTop: "10px", marginLeft: "200px", marginRight: "200px"}}>
-        <div className="recommendation-links" style={{ display: "flex", justifyContent: "center", padding: "10px" }}> 
+      <div
+        className="recommendation-card"
+        style={{
+          background: "#FFFFFF",
+          borderRadius: "20px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          marginTop: "10px",
+          marginLeft: "200px",
+          marginRight: "200px",
+        }}
+      >
+        <div className="recommendation-links" style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
           <Link
             className="nav-link"
             to="/donate"
@@ -442,7 +508,7 @@ function Home() {
             onMouseEnter={() => handleMouseEnter(10)}
             onMouseLeave={handleMouseLeave}
           >
-            <img src="furnitures.png" alt="Furnitures" style={{ width: "180px", height: "120px" }} />
+            <img src="furnitures.png" alt="furnitures" style={{ width: "180px", height: "120px" }} />
             <p className="recommendation-label" style={{ color: "#05652D", fontSize: "16px", marginTop: "10px" }}>
               Furnitures
             </p>
