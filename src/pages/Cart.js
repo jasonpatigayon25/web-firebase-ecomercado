@@ -215,7 +215,11 @@ const Cart = () => {
               <Card className="mb-3" key={item.id} style={{ borderColor: '#05652D', background: '#E3FCE9' }}>
                 <div className="row no-gutters">
                   <div className="col-md-4">
-                    <Card.Img src={`product${item.id}.jpg`} alt={`Product ${item.id}`} />
+                  <Card.Img
+                    src={`product${item.id}.jpg`}
+                    alt={`Product ${item.id}`}
+                    style={{ width: '175px', height: '175px' }}
+                  />
                   </div>
                   <div className="col-md-8">
                     <Card.Body>
