@@ -87,7 +87,7 @@ function Login() {
               variant="primary"
               className="mb-4"
               onClick={submit}
-              style={{ backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
+              style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
             >
               Log in
             </Button>

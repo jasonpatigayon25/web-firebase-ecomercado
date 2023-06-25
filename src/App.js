@@ -9,6 +9,7 @@ import Campaign from "./pages/Campaign"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart"
 import Donate from "./pages/Donate"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 

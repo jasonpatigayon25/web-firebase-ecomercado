@@ -120,7 +120,7 @@ function Signup() {
                       className="mb-4"
                       size="lg"
                       onClick={submit}
-                      style={{ backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
+                      style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
                     >
                       Register
                     </Button>
