@@ -65,6 +65,7 @@ function Home() {
             </button>
           </form>
           <button className="btn" type="submit" style={{ borderColor: "transparent" }}>
+          <Link to="/cart">
             <img
               src={process.env.PUBLIC_URL + "/shopping-cart.png"}
               alt="Cart"
@@ -75,6 +76,7 @@ function Home() {
               onMouseEnter={() => handleMouseEnter(3)}
               onMouseLeave={handleMouseLeave}
             />
+            </Link>
           </button>
           <div className="d-flex justify-content-end align-items-center w-100">
             <ul className="navbar-nav flex-row">

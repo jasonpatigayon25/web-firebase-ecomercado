@@ -5,7 +5,11 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import ContactUs from "./pages/ContactUs"
 import AboutUs from "./pages/AboutUs"
+import Campaign from "./pages/Campaign"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Cart from "./pages/Cart"
+import Donate from "./pages/Donate"
+
 
 
 function App() {
@@ -19,6 +23,9 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/home" element={<Home/>}/>
+          <Route path="/donate" element={<Donate/>}/>
+          <Route path="/campaign" element={<Campaign/>}/>
+          <Route path="/cart" element={<Cart/>}/>
         </Routes>
       </Router>
     </div>
