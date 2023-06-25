@@ -96,7 +96,6 @@ const Campaign = () => {
                       onMouseEnter={() => handleMouseEnter(2)}
                       onMouseLeave={handleMouseLeave}
                     />
-                    Settings
                   </div>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>

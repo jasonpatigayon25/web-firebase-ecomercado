@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import { Card, Form, Button, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Donate = () => {
@@ -96,21 +96,37 @@ const Donate = () => {
               </Link>
             </li>
             <li className="nav-item dropdown">
-              <Link className="nav-link" to="/home">
-                <div className="d-flex flex-column align-items-center">
-                  <img
-                    src={process.env.PUBLIC_URL + '/settings.png'}
-                    alt="Option"
-                    className="nav-icon"
-                    style={{
-                      transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
-                    }}
-                    onMouseEnter={() => handleMouseEnter(2)}
-                    onMouseLeave={handleMouseLeave}
-                  />
-                  Settings
-                </div>
-              </Link>
+              <Dropdown>
+                <Dropdown.Toggle
+                  className="nav-link"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div className="d-flex flex-column align-items-center">
+                    <img
+                      src={process.env.PUBLIC_URL + '/settings.png'}
+                      alt="Option"
+                      className="nav-icon"
+                      style={{
+                        transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
+                      }}
+                      onMouseEnter={() => handleMouseEnter(2)}
+                      onMouseLeave={handleMouseLeave}
+                    />
+                  </div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
+                  <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
+                  <Dropdown.Item href="/language">Language</Dropdown.Item>
+                  <Dropdown.Item href="/help">Help</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item href="/">Logout</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </li>
           </ul>
         </div>

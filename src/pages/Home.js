@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Dropdown } from 'react-bootstrap';
 
 function Home() {
   const location = useLocation();
@@ -114,23 +115,39 @@ function Home() {
                   </div>
                 </Link>
               </li>
-              <li className="nav-item dropdown">
-                <Link className="nav-link" to="/home">
+            <li className="nav-item dropdown">
+              <Dropdown>
+                <Dropdown.Toggle
+                  className="nav-link"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={process.env.PUBLIC_URL + "/settings.png"}
+                      src={process.env.PUBLIC_URL + '/settings.png'}
                       alt="Option"
                       className="nav-icon"
                       style={{
-                        transform: hoveredIndex === 2 ? "scale(1.1)" : "scale(1)",
+                        transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
                       }}
                       onMouseEnter={() => handleMouseEnter(2)}
                       onMouseLeave={handleMouseLeave}
                     />
-                    Settings
                   </div>
-                </Link>
-              </li>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
+                  <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
+                  <Dropdown.Item href="/language">Language</Dropdown.Item>
+                  <Dropdown.Item href="/help">Help</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item href="/">Logout</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </li>
             </ul>
           </div>
         </div>
