@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Welcome.css';
+import Footer from './Footer';
 
 function Welcome() {
   return (
@@ -101,6 +102,7 @@ function Welcome() {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </div>
   );
 }

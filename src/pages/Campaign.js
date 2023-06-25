@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
+import Footer from './Footer';
 
 const Campaign = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -136,6 +137,7 @@ const Campaign = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

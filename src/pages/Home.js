@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Dropdown } from "react-bootstrap";
+import Footer from './Footer';
 
 function Home() {
   const location = useLocation();
@@ -515,6 +516,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

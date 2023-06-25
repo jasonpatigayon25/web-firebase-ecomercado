@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Footer from './Footer';
 
 const Checkout = ({ cartItems, clearCart }) => {
   const [shippingAddress, setShippingAddress] = useState('');

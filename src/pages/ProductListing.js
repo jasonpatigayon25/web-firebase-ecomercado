@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
+import Footer from './Footer';
 
 const ProductListing = ({ products }) => {
   return (
@@ -10,6 +11,7 @@ const ProductListing = ({ products }) => {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from './Footer';
 
 const ProductDetail = ({ product }) => {
   return (
@@ -10,6 +11,7 @@ const ProductDetail = ({ product }) => {
       <p>{product.description}</p>
       <p>Price: ${product.price}</p>
       <button>Add to Cart</button>
+      <Footer />
     </div>
   );
 };

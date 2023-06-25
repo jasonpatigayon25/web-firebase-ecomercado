@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 const Donate = () => {
   const [donorName, setDonorName] = useState('');
@@ -203,6 +204,7 @@ const Donate = () => {
           </Card.Body>
         </Card>
       </div>
+      <Footer />
     </div>
   );
 };
