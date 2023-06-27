@@ -75,7 +75,7 @@ const Cart = () => {
 
     let totalAmount = 0;
     selectedItems.forEach((item) => {
-      const price = parseFloat(item.price.substring(4)); // Extract the numerical value from price string
+      const price = parseFloat(item.price.substring(4));
       totalAmount += price * item.quantity;
     });
 
