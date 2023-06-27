@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Footer from './Footer';
+import Footer from '../footer/Footer';
 
 const Donate = () => {
   const [donorName, setDonorName] = useState('');

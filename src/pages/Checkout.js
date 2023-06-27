@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Footer from './Footer';
+import Footer from '../footer/Footer';
 
 const Checkout = ({ cartItems, clearCart }) => {
   const [shippingAddress, setShippingAddress] = useState('');
@@ -53,6 +53,7 @@ const Checkout = ({ cartItems, clearCart }) => {
         </ul>
       </div>
       <button onClick={handlePlaceOrder}>Place Order</button>
+      <Footer />
     </div>
   );
 };

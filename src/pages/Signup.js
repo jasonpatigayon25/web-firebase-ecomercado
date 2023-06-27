@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Row, Col, Card, Form, InputGroup, FormControl, FormCheck, Button } from 'react-bootstrap';
-import Footer from './Footer';
+import Footer from '../footer/Footer';
 
 function Signup() {
   const history = useNavigate();
@@ -50,7 +50,7 @@ function Signup() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh'}}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)'}}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img

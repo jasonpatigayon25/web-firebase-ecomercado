@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import Footer from './Footer';
+import Footer from '../footer/Footer';
 
 const ProductListing = ({ products }) => {
   return (

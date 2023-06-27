@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
-import Footer from './Footer';
+import Footer from '../footer/Footer';
 
 function Login() {
   const history = useNavigate();
