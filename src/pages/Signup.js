@@ -50,7 +50,7 @@ function Signup() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)'}}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)', height: '100vh'}}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
