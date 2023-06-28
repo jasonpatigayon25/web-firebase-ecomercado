@@ -9,8 +9,9 @@ import Campaign from "./pages/Campaign"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart"
 import Donate from "./pages/Donate"
+import Seller from "./pages/Seller"
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import VerifiedSeller from "./pages/VerifiedSeller"
 
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
           <Route path="/donate" element={<Donate/>}/>
           <Route path="/campaign" element={<Campaign/>}/>
           <Route path="/cart" element={<Cart/>}/>
+          <Route path="/seller" element={<Seller/>}/>
+          <Route path="/verified-seller" element={<VerifiedSeller/>}/>
         </Routes>
       </Router>
     </div>

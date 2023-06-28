@@ -132,9 +132,13 @@ const Donate = () => {
           </ul>
         </div>
       </nav>
-      <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', marginTop: '50px'}}>
+      
+      
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', marginTop: '60px'}}>
         <Card className="donate" style={{ width: '500px', borderColor: '#05652D'}}>
+          <Card.Header as="h2" className="text-center" style={{ color: "white", backgroundColor: "#05652D" }}>
+              Donate
+            </Card.Header>
           <Card.Body>
             <div className="align-form">
               <Form onSubmit={handleSubmit}>

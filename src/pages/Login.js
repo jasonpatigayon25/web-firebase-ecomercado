@@ -53,7 +53,7 @@ function Login() {
       <Container className="my-5" style={{ maxWidth: '400px' }}>
         <Card style={{ borderRadius: '25px', borderColor: '#05652D' }} className="p-4">
           <Form>
-            <h3 className="text-center">Log in to ECOMercado</h3>
+            <h3 className="text-center" style={{ color: '#05652D' }}>Log In</h3>
             <InputGroup className="mb-4">
               <div>
                 <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />

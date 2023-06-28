@@ -330,7 +330,7 @@ function Home() {
           </Link>
           <Link
             className="nav-link"
-            to="/become-seller"
+            to="/seller"
             style={{
               display: "flex",
               flexDirection: "column",
