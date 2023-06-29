@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Row, Col, Card, Form, InputGroup, FormControl, FormCheck, Button } from 'react-bootstrap';
 import Footer from '../footer/Footer';
+import '../css/Signup.css';
 
 function Signup() {
   const history = useNavigate();
@@ -129,6 +130,18 @@ function Signup() {
                       <p>
                         Already have an account? <Link to="/login" style={{ color: '#05652D', textDecoration: 'none' }}>Log In</Link>
                       </p>
+                      <div className="divider d-flex align-items-center my-4">
+                        <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                      </div>
+
+                      <div className="d-flex justify-content-center text-center mt-4 pt-1">
+                        <a href="#!" className="text-black icon-link me-3">
+                          <img src={process.env.PUBLIC_URL + '/facebook.png'} alt="Facebook" className="icon" />
+                        </a>
+                        <a href="#!" className="text-black icon-link mb-1">
+                          <img src={process.env.PUBLIC_URL + '/google.png'} alt="Google" className="icon" style={{ marginBottom: '3px' }} />
+                        </a>
+                      </div>
                     </div>
                   </Col>
                 </Row>

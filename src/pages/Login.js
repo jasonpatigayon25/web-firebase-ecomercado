@@ -3,9 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 import Footer from '../footer/Footer';
+import '../css/Login.css';
 
 function Login() {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,26 +14,21 @@ function Login() {
     e.preventDefault();
 
     try {
-      await axios
-        .post('http://localhost:8000/', {
-          email,
-          password,
-        })
-        .then((res) => {
-          if (res.data === 'exist') {
-            history('/home', { state: { id: email } });
-          } else if (res.data === 'notexist') {
-            alert('User has not signed up');
-          } else if (res.data === 'passwordIncorrect') {
-            alert('Incorrect password');
-          }
-        })
-        .catch((e) => {
-          alert('Wrong details');
-          console.log(e);
-        });
-    } catch (e) {
-      console.log(e);
+      const res = await axios.post('http://localhost:8000/', {
+        email,
+        password,
+      });
+
+      if (res.data === 'exist') {
+        navigate('/home', { state: { id: email } });
+      } else if (res.data === 'notexist') {
+        alert('User has not signed up');
+      } else if (res.data === 'passwordIncorrect') {
+        alert('Incorrect password');
+      }
+    } catch (error) {
+      console.log(error);
+      alert('Wrong details');
     }
   }
 
@@ -97,6 +93,20 @@ function Login() {
                 Don't have an account? <Link to="/signup" style={{ color: '#05652D', textDecoration: 'none' }}>Sign up</Link>
               </p>
             </div>
+
+            <div className="divider d-flex align-items-center my-4">
+              <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+            </div>
+
+            <div className="d-flex justify-content-center text-center mt-4 pt-1">
+            <a href="#!" className="text-black icon-link me-3">
+              <img src={process.env.PUBLIC_URL + '/facebook.png'} alt="Facebook" className="icon" />
+            </a>
+            <a href="#!" className="text-black icon-link">
+              <img src={process.env.PUBLIC_URL + '/google.png'} alt="Google" className="icon" />
+            </a>
+          </div>
+
           </Form>
         </Card>
       </Container>
