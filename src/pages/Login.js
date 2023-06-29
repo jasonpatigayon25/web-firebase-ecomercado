@@ -49,7 +49,7 @@ function Login() {
       <Container className="my-5" style={{ maxWidth: '400px' }}>
         <Card style={{ borderRadius: '25px', borderColor: '#05652D' }} className="p-4">
           <Form>
-            <h3 className="text-center" style={{ color: '#05652D' }}>Log In</h3>
+            <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-3 mt-2" style={{ color: '#05652D' }}>Log In</p>
             <InputGroup className="mb-4">
               <div>
                 <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
@@ -84,7 +84,7 @@ function Login() {
               variant="primary"
               className="mb-4"
               onClick={submit}
-              style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
+              style={{ fontWeight: 'bold', borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
             >
               Log in
             </Button>

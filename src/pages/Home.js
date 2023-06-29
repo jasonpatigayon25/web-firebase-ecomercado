@@ -4,6 +4,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Dropdown } from "react-bootstrap";
 import Footer from '../footer/Footer';
+import { BsPersonFill } from 'react-icons/bs';
 
 function Home() {
   const location = useLocation();
@@ -149,6 +150,10 @@ function Home() {
                     </div>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
+                    <Dropdown.Item disabled>
+                      <BsPersonFill size={16} color="#6c757d" style={{ marginRight: '5px' }} />
+                      {location.state?.id}
+                    </Dropdown.Item>
                     <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
                     <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
                     <Dropdown.Item href="/language">Language</Dropdown.Item>

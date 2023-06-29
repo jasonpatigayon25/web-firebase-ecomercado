@@ -70,7 +70,7 @@ function Signup() {
               <Form>
                 <Row>
                   <Col md="12" className="order-lg-1 d-flex flex-column align-items-center">
-                    <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{ color: '#05652D' }}>Sign up</p>
+                    <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-4 mt-3" style={{ color: '#05652D' }}>Sign up</p>
                     <div className="d-flex flex-row align-items-center mb-4">
                       <InputGroup>
                         <div>
