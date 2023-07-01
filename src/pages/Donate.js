@@ -33,7 +33,7 @@ const Donate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic for submitting the donation form
+    // Function for donation
     setDonorName('');
     setDonations('');
     setAddress('');
@@ -134,7 +134,7 @@ const Donate = () => {
       </nav>
       
       
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', marginTop: '60px'}}>
+      <div className="d-flex justify-content-center align-items-center" style={{ marginTop: '90px'}}>
         <Card className="donate" style={{ width: '500px', borderColor: '#05652D'}}>
           <Card.Header as="h2" className="text-center" style={{ color: "white", backgroundColor: "#05652D" }}>
               Donate

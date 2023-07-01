@@ -1,0 +1,33 @@
+/* VerifiedSeller.css */
+
+/* Container */
+.verified-seller {
+    padding-top: 80px; /* Adjust as needed */
+  }
+  
+  /* Profile Details Card */
+  .verified-seller .card {
+    margin-bottom: 30px;
+  }
+  
+  /* Seller Management Card */
+  .verified-seller .seller-management-card {
+    margin-bottom: 30px;
+  }
+  
+  /* Products List */
+  .verified-seller .products-list {
+    margin-bottom: 20px;
+  }
+  
+  /* Earnings Information */
+  .verified-seller .earnings-information {
+    margin-bottom: 20px;
+  }
+  
+  /* Trend Product Card */
+  .verified-seller .trend-product-card {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  

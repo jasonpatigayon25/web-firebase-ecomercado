@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
-import '../css/Cart.css';
+import '../css/Wishlist.css';
 
-
-const Cart = () => {
+const Wishlist = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectAll, setSelectAll] = useState(false);
-  const [voucherCode, setVoucherCode] = useState('');
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [discount, setDiscount] = useState(0);
+  const [wishlistItems, setWishlistItems] = useState([
+    {
+      id: 1,
+      name: 'Product 1',
+      price: 'Php 100.00',
+      description: 'Description of product sample.',
+    },
+    {
+      id: 2,
+      name: 'Product 2',
+      price: 'Php 75.50',
+      description: 'Description of product sample.',
+    },
+  ]); //Sample of wishlist items
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -27,64 +36,12 @@ const Cart = () => {
     setHoveredIndex(null);
   };
 
-  const handleCheckboxChange = (event, item) => {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      setSelectedItems((prevItems) => [...prevItems, item]);
-    } else {
-      setSelectedItems((prevItems) => prevItems.filter((selectedItem) => selectedItem.id !== item.id));
-    }
-    event.target.disabled = true;
-  };
-
-  const handleSelectAllChange = (event) => {
-    const isChecked = event.target.checked;
-    setSelectAll(isChecked);
-    if (isChecked) {
-      setSelectedItems(items);
-    } else {
-      setSelectedItems([]);
-    }
-  };
-
-  const handleVoucherCodeChange = (event) => {
-    setVoucherCode(event.target.value);
-    // function for vouchers
-    setDiscount("");
-  };
-
-
-  const items = [
-    {
-      id: 1,
-      name: 'Product 1',
-      price: 'Php 100.00',
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      price: 'Php 75.50',
-      quantity: 2,
-    }, //SAMPLE CART ITEMS
-  ];
-
-  const calculateAmount = () => {
-    if (selectedItems.length === 0) {
-      return 'Php 0.00';
-    }
-
-    let totalAmount = 0;
-    selectedItems.forEach((item) => {
-      const price = parseFloat(item.price.substring(4));
-      totalAmount += price * item.quantity;
-    });
-
-    return `Php ${totalAmount.toFixed(2)}`;
+  const handleRemoveItem = (itemId) => {
+    setWishlistItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
   return (
-    <div className="cart">
+    <div className="wishlist">
       <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
@@ -206,94 +163,58 @@ const Cart = () => {
       </nav>
 
       <div className="container mt-5">
-        <h2 className="text-center mb-4" style={{ marginTop: '100px' }}>
-          Shopping Cart
+        <h2 className="text-center mb-4" style={{ marginTop: '60px' }}>
+          Wishlist
         </h2>
 
-        {items.length > 0 ? (
-          <div>
-            {items.map((item) => (
-              <Card className="mb-3 shadow" key={item.id}>
-                <div className="row no-gutters">
-                  <div className="col-md-4">
-                    <Card.Img
-                      src={`product${item.id}.jpg`}
-                      alt={`Product ${item.id}`}
-                      className="cart-item-image"
-                    />
-                  </div>
-                  <div className="col-md-8">
-                    <Card.Body>
-                      <Card.Title>{item.name}</Card.Title>
-                      <Card.Text>Price: {item.price}</Card.Text>
-                      <Card.Text>Quantity: {item.quantity}</Card.Text>
-                      <Button variant="danger" className="remove-button">
-                        Remove
-                      </Button>
-                      <Form.Check
-                        type="checkbox"
-                        className="position-absolute top-50 start-50 translate-middle"
-                        checked={selectedItems.includes(item)}
-                        onChange={(e) => handleCheckboxChange(e, item)}
+        {wishlistItems.length > 0 ? (
+          <div className="wishlist-items">
+            {wishlistItems.map((item) => (
+              <Card className="mb-4 wishlist-item" key={item.id}>
+                <Card.Body>
+                  <div className="row">
+                    <div className="col-md-3">
+                      <Card.Img
+                        src={`product${item.id}.jpg`}
+                        alt={`Product ${item.id}`}
+                        className="wishlist-item-image"
                       />
-                    </Card.Body>
+                    </div>
+                    <div className="col-md-9">
+                      <Card.Title>{item.name}</Card.Title>
+                      <Card.Text>{item.price}</Card.Text>
+                      <Card.Text>{item.description}</Card.Text>
+                      <div className="button-container">
+                        <Button
+                          variant="primary"
+                          style={{ backgroundColor: '#05652D', borderColor: '#05652D' }}
+                        >
+                          Add to Cart
+                        </Button>
+                        <Button
+                            variant="danger"
+                            onClick={() => handleRemoveItem(item.id)}
+                            
+                            >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Card.Body>
               </Card>
             ))}
           </div>
         ) : (
-          <div className="empty-cart text-center">
-            <p>Your cart is empty.</p>
+          <div className="empty-wishlist text-center">
+            <p>Your wishlist is empty.</p>
           </div>
         )}
-
-        <div className="detail-form mt-4">
-          <Form.Group controlId="voucherCode">
-            <Form.Label>ECO-lover Voucher</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Code"
-              value={voucherCode}
-              onChange={handleVoucherCodeChange}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="selectedItems">
-            <Form.Label>Item/s Selected</Form.Label>
-            <Form.Control type="text" value={selectedItems.length} readOnly />
-          </Form.Group>
-
-          <Form.Group controlId="discount">
-            <Form.Label>Discounts</Form.Label>
-            <Form.Control type="text" value={discount} readOnly />
-          </Form.Group>
-
-          <Form.Group controlId="amount">
-            <Form.Label>Amount</Form.Label>
-            <Form.Control type="text" value={calculateAmount()} readOnly />
-          </Form.Group>
-        </div>
-
-        <Form.Group controlId="selectAll">
-          <Form.Check
-            type="checkbox"
-            label="Select All"
-            checked={selectAll}
-            onChange={handleSelectAllChange}
-          />
-        </Form.Group>
-
-        <Button
-          variant="primary"
-          style={{ backgroundColor: '#05652D', borderColor: '#05652D'}}
-          >
-          Check Out
-        </Button>
       </div>
+
       <Footer />
     </div>
   );
 };
 
-export default Cart;
+export default Wishlist;

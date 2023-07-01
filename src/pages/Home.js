@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -9,16 +9,7 @@ import { BsPersonFill } from 'react-icons/bs';
 function Home() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-
-  useEffect(() => {
-    const fadeOutTimeout = setTimeout(() => {
-      setShowWelcomeMessage(false);
-    }, 20000);
-
-    return () => clearTimeout(fadeOutTimeout);
-  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -43,7 +34,7 @@ function Home() {
   ];
 
   return (
-    <div>
+    <div style={{ marginTop: '60px'}}>
       <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: "#E3FCE9" }}>
         <img
           src={process.env.PUBLIC_URL + "/ecomercado-logo.png"}
@@ -168,12 +159,6 @@ function Home() {
         </div>
       </nav>
 
-      {showWelcomeMessage && (
-        <p className="welcome-message" style={{ color: "#726A8A", fontSize: "21px" }}>
-          Hello {location.state?.id} and welcome to ECOMercado!
-        </p>
-      )}
-
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-lg-8">
@@ -290,7 +275,7 @@ function Home() {
           marginRight: "200px",
         }}
       >
-        <div className="recommendation-links" style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
+        <div className="feature sections md-2 shadow" style={{ display: "flex", justifyContent: "center", padding: "10px", borderRadius: "25px" }}>
           <Link
             className="nav-link"
             to="/donate"

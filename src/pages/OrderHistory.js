@@ -1,14 +1,25 @@
 import React from 'react';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
-import '../css/VerifiedSeller.css';
 
-
-function VerifiedSeller() {
-  const products = []; // Array of products
-  const earnings = null; // Earnings information
+const OrderHistory = () => {
+  const orders = [
+    {
+      id: 1,
+      date: 'June 1, 2023',
+      total: 'Php 500.00',
+      status: 'Delivered',
+    },
+    {
+      id: 2,
+      date: 'May 20, 2023',
+      total: 'Php 250.00',
+      status: 'Processing',
+    },
+    // SAMPLES ONLY
+  ];
 
   const [hoveredIndex, setHoveredIndex] = React.useState(null);
 
@@ -21,7 +32,7 @@ function VerifiedSeller() {
   };
 
   return (
-    <div className="verified-seller">
+    <div className="order-history">
       <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
@@ -103,102 +114,43 @@ function VerifiedSeller() {
           </ul>
         </div>
       </nav>
-
+      
       <div className="container mt-5">
-        <Row>
-          <Col md={4}>
-            <Card>
-              <Card.Body>
-                <Card.Title style= {{ color: '#05652D'}}>Profile Details</Card.Title>
-                <Card.Img variant="top" src="user-image.jpg" />
-                <Card.Text>
-                  <strong>Shop/Seller Name:</strong> Shop Name
-                </Card.Text>
-                <Card.Text>
-                  <strong>Pick Up Address:</strong> 123 Main St, City, Country
-                </Card.Text>
-                <Card.Text>
-                  <strong>Phone Number:</strong> +1 123-456-7890
-                </Card.Text>
-                <Card.Text>
-                  <strong>Email Address:</strong> seller@example.com
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={8}>
-            <Card>
-              <Card.Body style={{ overflowY: 'auto', maxHeight: '400px' }}>
-                <Card.Title style= {{ color: '#05652D'}}>Seller Management</Card.Title>
-                <Row className="align-items-center">
-                  <Col xs={1}>
-                    <img
-                      src={process.env.PUBLIC_URL + '/products-icon.png'}
-                      alt="Products Icon"
-                      style={{ width: '30px', height: '30px' }}
-                    />
-                  </Col>
-                  <Col>
-                    <h3>My Products</h3>
-                  </Col>
-                </Row>
-
-                {products.length === 0 ? (
-                  <Card className="text-center">
-                    <Card.Body>No Products Yet</Card.Body>
-                  </Card>
-                ) : (
-                  // list of products
-                  <div>Products list</div>
-                )}
-
-                <Button
-                  variant="primary"
-                  className="mt-3"
-                  style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '100%' }}
-                  as={Link}
-                  to="/add-product"
-                >
-                  Add New Product
-                </Button>
-
-                <Row className="mt-4 align-items-center">
-                  <Col xs={1}>
-                    <img
-                      src={process.env.PUBLIC_URL + '/earnings-icon.png'}
-                      alt="Earnings Icon"
-                      style={{ width: '30px', height: '30px' }}
-                    />
-                  </Col>
-                  <Col>
-                    <h3>My Earnings</h3>
-                  </Col>
-                </Row>
-
-                {earnings === null ? (
-                  <Card className="text-center">
-                    <Card.Body>No Earnings Yet</Card.Body>
-                  </Card>
-                ) : (
-                  //earnings information 
-                  <div>Earnings information</div>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-        <Card className="mt-4">
-          <Card.Body>
-            <Card.Title style= {{ color: '#05652D'}}>Trend Product</Card.Title>
-            {/* Trend product content -Walay mahunaan*/}
-          </Card.Body>
-        </Card>
+        <h2 className="text-center mb-4">Order History</h2>
+        {orders.length > 0 ? (
+          <div className="order-list">
+            {orders.map((order) => (
+              <Card className="mb-3" key={order.id}>
+                <Card.Body>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5>Order Date: {order.date}</h5>
+                      <p>Total Amount: {order.total}</p>
+                      <p>Status: {order.status}</p>
+                    </div>
+                    <div>
+                      <Button variant="primary" className="view-button mr-2">
+                        View Details
+                      </Button>
+                      <Button variant="danger" className="remove-button">
+                        Cancel Order
+                      </Button>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-order-history text-center">
+            <p>You have no order history.</p>
+          </div>
+        )}
       </div>
-
+      
       <Footer />
     </div>
   );
-}
+};
 
-export default VerifiedSeller;
+export default OrderHistory;

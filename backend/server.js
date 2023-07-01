@@ -80,6 +80,40 @@ app.get("/", cors(), async (req, res) => {
   }
 });
 
+app.put("/update/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { newPassword } = req.body;
+
+    const updatedRecord = await collection.findOneAndUpdate(
+      { username: username },
+      { $set: { password: newPassword } },
+      { returnOriginal: false }
+    );
+
+    res.send(updatedRecord);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while updating the record.");
+  }
+});
+
+app.delete("/delete/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const deletedRecord = await collection.findOneAndDelete({ username: username });
+
+    if (!deletedRecord) {
+      return res.status(404).send("Record not found");
+    }
+
+    res.send(deletedRecord);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.listen(8000, () => {
   console.log("Server connected on port 8000");
 });

@@ -10,10 +10,7 @@ function Seller() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform seller registration logic here
-    // ...
-
-    // Reset form fields after submission
+    // function for product
     setShopName("");
     setPickupAddress("");
     setPhoneNumber("");

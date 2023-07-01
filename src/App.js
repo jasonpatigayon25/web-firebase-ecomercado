@@ -13,6 +13,10 @@ import Seller from "./pages/Seller"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VerifiedSeller from "./pages/VerifiedSeller"
 import EcoReward from "./pages/EcoReward"
+import Wishlist from "./pages/Wishlist"
+import DeleteRecord from "./pages/DeleteRecord"
+import ChangePassword from "./pages/ChangePassword"
+import OrderHistory from "./pages/OrderHistory"
 
 
 function App() {
@@ -32,6 +36,10 @@ function App() {
           <Route path="/seller" element={<Seller/>}/>
           <Route path="/verified-seller" element={<VerifiedSeller/>}/>
           <Route path="/eco-lover-rewards" element={<EcoReward/>}/>
+          <Route path="/wishlist" element={<Wishlist/>}/>
+          <Route path="/delete-record" element={<DeleteRecord/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
+          <Route path="/order-history" element={<OrderHistory/>}/>
         </Routes>
       </Router>
     </div>

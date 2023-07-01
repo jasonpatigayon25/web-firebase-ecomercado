@@ -14,9 +14,7 @@ const Checkout = ({ cartItems, clearCart }) => {
   };
 
   const handlePlaceOrder = () => {
-    // Logic for placing the order
-    // shippingAddress, paymentMethod, and cartItems 
-    // Clear the cart after placing the order
+    // function for order
     clearCart();
   };
 
