@@ -14,16 +14,24 @@ mongoose.connect(connection_string, {
     console.log('MongoDB connection failed:', error);
   });
 
-const newSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
-});
+  const newSchema = new mongoose.Schema({
+    username: {
+      type: String,
+      required: true
+    },
+    firstname: {
+      type: String,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
+  });
 
 const collection = mongoose.model("users", newSchema);
 

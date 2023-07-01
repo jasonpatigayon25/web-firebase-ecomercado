@@ -10,6 +10,8 @@ function Signup() {
   const history = useNavigate();
 
   const [username, setUsername] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [termsChecked, setTermsChecked] = useState(false);
@@ -31,6 +33,8 @@ function Signup() {
       await axios
         .post('http://localhost:8000/signup', {
           username,
+          firstname,
+          lastname,
           password,
         })
         .then((res) => {
@@ -51,7 +55,7 @@ function Signup() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #E3FCE9, #BEF7CC)' }}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
@@ -84,26 +88,54 @@ function Signup() {
                           <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          placeholder="Enter Your Username"
-                          aria-label="Enter Your Username"
+                          placeholder="Enter Username"
+                          aria-label="Enter Username"
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
                         />
                       </InputGroup>
                     </div>
+                    <div className="d-flex flex-row align-items-center mb-4">
+                    <InputGroup>
+                      <div>
+                        <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
+                      </div>
+                      <FormControl
+                        placeholder="Enter First Name"
+                        aria-label="Enter First Name"
+                        value={firstname}
+                        onChange={(e) => setFirstname(e.target.value)}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
+                      />
+                    </InputGroup>
+                  </div>
+                  <div className="d-flex flex-row align-items-center mb-4">
+                    <InputGroup>
+                      <div>
+                        <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
+                      </div>
+                      <FormControl
+                        placeholder="Enter Last Name"
+                        aria-label="Enter Last Name"
+                        value={lastname}
+                        onChange={(e) => setLastname(e.target.value)}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px'}}
+                      />
+                    </InputGroup>
+                  </div>
                     <div className="d-flex flex-row align-items-center mb-4">
                       <InputGroup>
                         <div>
                           <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          placeholder="Password"
-                          aria-label="Password"
+                          placeholder="Enter Password"
+                          aria-label="Enter Password"
                           type="password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
                         />
                       </InputGroup>
                     </div>
@@ -118,7 +150,7 @@ function Signup() {
                           type="password"
                           value={repeatPassword}
                           onChange={(e) => setRepeatPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: 0 }}
+                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
                         />
                       </InputGroup>
                     </div>

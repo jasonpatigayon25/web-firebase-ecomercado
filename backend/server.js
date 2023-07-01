@@ -47,10 +47,12 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, firstname, lastname, password } = req.body;
 
   const data = {
     username: username,
+    firstname: firstname,
+    lastname: lastname,
     password: password,
   };
 
