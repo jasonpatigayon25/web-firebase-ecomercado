@@ -425,7 +425,7 @@ function Home() {
         </h2>
         <div className="recommendation-images" style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
           <div
-            className="recommendation-item"
+            className="recommendation-item md-4 shadow"
             style={{
               margin: "10px",
               textAlign: "center",
@@ -444,7 +444,7 @@ function Home() {
             </p>
           </div>
           <div
-            className="recommendation-item"
+            className="recommendation-item md-4 shadow"
             style={{
               margin: "10px",
               textAlign: "center",
@@ -463,7 +463,7 @@ function Home() {
             </p>
           </div>
           <div
-            className="recommendation-item"
+            className="recommendation-item md-4 shadow"
             style={{
               margin: "10px",
               textAlign: "center",
@@ -482,7 +482,7 @@ function Home() {
             </p>
           </div>
           <div
-            className="recommendation-item"
+            className="recommendation-item md-4 shadow"
             style={{
               margin: "10px",
               textAlign: "center",
@@ -501,7 +501,7 @@ function Home() {
             </p>
           </div>
           <div
-            className="recommendation-item"
+            className="recommendation-item md-4 shadow"
             style={{
               margin: "10px",
               textAlign: "center",

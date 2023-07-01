@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
+import '../css/Campaign.css';
 
 const Campaign = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -112,17 +113,7 @@ const Campaign = () => {
           </ul>
         </div>
       </nav>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          marginTop: '20px',
-          flexDirection: 'column',
-          textAlign: 'center',
-        }}
-      >
+      <div className="campaign-content">
         <h2>Campaign</h2>
         <p>Join a campaign for promoting sustainability and saving the earth and environment.</p>
         <div className="campaign-list">

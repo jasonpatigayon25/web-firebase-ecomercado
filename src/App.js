@@ -12,6 +12,7 @@ import Donate from "./pages/Donate"
 import Seller from "./pages/Seller"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VerifiedSeller from "./pages/VerifiedSeller"
+import EcoReward from "./pages/EcoReward"
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/seller" element={<Seller/>}/>
           <Route path="/verified-seller" element={<VerifiedSeller/>}/>
+          <Route path="/eco-lover-rewards" element={<EcoReward/>}/>
         </Routes>
       </Router>
     </div>

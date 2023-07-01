@@ -3,6 +3,8 @@ import { Card, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
+import '../css/Cart.css';
+
 
 const Cart = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -212,14 +214,14 @@ const Cart = () => {
         {items.length > 0 ? (
           <div>
             {items.map((item) => (
-              <Card className="mb-3" key={item.id} style={{ borderColor: '#05652D', background: '#E3FCE9' }}>
+              <Card className="mb-3 shadow" key={item.id}>
                 <div className="row no-gutters">
                   <div className="col-md-4">
-                  <Card.Img
-                    src={`product${item.id}.jpg`}
-                    alt={`Product ${item.id}`}
-                    style={{ width: '175px', height: '175px' }}
-                  />
+                    <Card.Img
+                      src={`product${item.id}.jpg`}
+                      alt={`Product ${item.id}`}
+                      className="cart-item-image"
+                    />
                   </div>
                   <div className="col-md-8">
                     <Card.Body>
@@ -234,7 +236,6 @@ const Cart = () => {
                         className="position-absolute top-50 start-50 translate-middle"
                         checked={selectedItems.includes(item)}
                         onChange={(e) => handleCheckboxChange(e, item)}
-                        style={{ borderColor: '#05652D', width: '20px', height: '20px' }}
                       />
                     </Card.Body>
                   </div>
@@ -256,7 +257,6 @@ const Cart = () => {
               placeholder="Enter Code"
               value={voucherCode}
               onChange={handleVoucherCodeChange}
-              style={{ borderColor: '#05652D' }}
             />
           </Form.Group>
 
@@ -282,15 +282,13 @@ const Cart = () => {
             label="Select All"
             checked={selectAll}
             onChange={handleSelectAllChange}
-            style={{ borderColor: '#05652D' }}
           />
         </Form.Group>
 
         <Button
-              variant="primary"
-              className="mb-4"
-              style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
-            >
+          variant="primary"
+          style={{ backgroundColor: '#05652D', borderColor: '#05652D'}}
+          >
           Check Out
         </Button>
       </div>

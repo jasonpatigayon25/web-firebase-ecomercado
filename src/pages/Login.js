@@ -62,6 +62,7 @@ function Login() {
                 <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
               </div>
               <FormControl
+                className='username md-2 shadow'
                 type="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -74,6 +75,7 @@ function Login() {
                 <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
               </div>
               <FormControl
+                className='password md-2 shadow'
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
