@@ -9,7 +9,7 @@ import '../css/Signup.css';
 function Signup() {
   const history = useNavigate();
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [termsChecked, setTermsChecked] = useState(false);
@@ -30,14 +30,14 @@ function Signup() {
     try {
       await axios
         .post('http://localhost:8000/signup', {
-          email,
+          username,
           password,
         })
         .then((res) => {
           if (res.data === 'exist') {
             alert('User already exists');
           } else if (res.data === 'notexist') {
-            history('/home', { state: { id: email } });
+            history('/home', { state: { id: username } });
             alert('Congratulations! You are now officially registered with ECOMercado.');
           }
         })
@@ -51,7 +51,7 @@ function Signup() {
   }
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)'}}>
+    <div style={{ background: 'linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC)' }}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
@@ -66,7 +66,14 @@ function Signup() {
       <Container fluid>
         <Row className="justify-content-center">
           <Col md="6">
-            <Card className="text-black m-5" style={{ borderRadius: '25px', borderColor: '#05652D' }}>
+            <Card
+              style={{
+                borderRadius: '0',
+                border: 'none',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+              className="p-4"
+            >
               <Form>
                 <Row>
                   <Col md="12" className="order-lg-1 d-flex flex-column align-items-center">
@@ -77,10 +84,10 @@ function Signup() {
                           <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          placeholder="Your Email/Username"
-                          aria-label="Your Email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter Your Username"
+                          aria-label="Enter Your Username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
                           style={{ borderColor: '#05652D', borderRadius: 0 }}
                         />
                       </InputGroup>

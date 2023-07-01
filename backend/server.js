@@ -9,10 +9,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.post("/", async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await collection.findOne({ email: email });
+    const user = await collection.findOne({ username: username });
 
     if (user) {
       if (user.password === password) {
@@ -47,15 +47,15 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   const data = {
-    email: email,
+    username: username,
     password: password,
   };
 
   try {
-    const check = await collection.findOne({ email: email });
+    const check = await collection.findOne({ username: username });
 
     if (check) {
       res.json("exist");

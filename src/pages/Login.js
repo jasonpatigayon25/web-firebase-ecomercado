@@ -7,7 +7,7 @@ import '../css/Login.css';
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   async function submit(e) {
@@ -15,12 +15,12 @@ function Login() {
 
     try {
       const res = await axios.post('http://localhost:8000/', {
-        email,
+        username,
         password,
       });
 
       if (res.data === 'exist') {
-        navigate('/home', { state: { id: email } });
+        navigate('/home', { state: { id: username } });
       } else if (res.data === 'notexist') {
         alert('User has not signed up');
       } else if (res.data === 'passwordIncorrect') {
@@ -47,7 +47,14 @@ function Login() {
       </div>
 
       <Container className="my-5" style={{ maxWidth: '400px' }}>
-        <Card style={{ borderRadius: '25px', borderColor: '#05652D' }} className="p-4">
+        <Card
+            style={{
+              borderRadius: '0',
+              border: 'none',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            }}
+            className="p-4"
+          >
           <Form>
             <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-3 mt-2" style={{ color: '#05652D' }}>Log In</p>
             <InputGroup className="mb-4">
@@ -55,10 +62,10 @@ function Login() {
                 <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
               </div>
               <FormControl
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email/Username"
+                type="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
                 style={{ borderColor: '#05652D', borderRadius: 0 }}
               />
             </InputGroup>
