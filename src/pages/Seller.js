@@ -63,20 +63,20 @@ function Seller() {
               <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </Form.Group>
             <Button
-            variant="primary"
-            className="mb-4"
-            style={{
+              variant="primary"
+              className="mb-4"
+              style={{
                 borderColor: '#05652D',
                 backgroundColor: '#05652D',
                 width: '300px',
                 margin: 'auto',
                 display: 'block',
                 marginTop: '20px',
-            }}
-            as={Link}
-            to="/verified-seller"
+              }}
+              as={Link}
+              to="/verified-seller"
             >
-            Register as Seller
+              Register as Seller
             </Button>
           </Form>
         </Card.Body>

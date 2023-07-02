@@ -1,50 +1,67 @@
 import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
-import Footer from '../footer/Footer';
+import { Card, Button, Row, Col, Form, Image, Dropdown} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useLocation } from "react-router-dom";
+import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { BsPersonFill } from 'react-icons/bs';
+import '../css/ShoppingCart.css';
+import Footer from '../footer/Footer';
 
-const OrderHistory = () => {
-  const orders = [
+const ShoppingCart = () => {
+
+    const location = useLocation();
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        console.log('Searching for:', searchQuery);
+      };
+    
+      const handleMouseEnter = (index) => {
+        setHoveredIndex(index);
+      };
+    
+      const handleMouseLeave = () => {
+        setHoveredIndex(null);
+      };
+    
+  const items = [
     {
       id: 1,
-      date: 'June 1, 2023',
-      total: 'Php 500.00',
-      status: 'Delivered',
+      name: 'Product 1',
+      price: 'Php 100.00',
+      description: 'Second-hand, Affordable, Good Quality',
+      image: 'product1'
     },
     {
       id: 2,
-      date: 'May 20, 2023',
-      total: 'Php 250.00',
-      status: 'Processing',
+      name: 'Product 2',
+      price: 'Php 200.00',
+      description: 'Surplus stock, Affordable, Good Quality',
+      image: 'product2'
     },
-    // SAMPLES ONLY
   ];
+  
+  const [quantities, setQuantities] = useState(items.map(() => 1));
 
-  const location = useLocation();
-  const [searchQuery, setSearchQuery] = useState("");
+  const increaseQuantity = (index) => {
+    const newQuantities = [...quantities];
+    newQuantities[index] += 1;
+    setQuantities(newQuantities);
+  }
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Searching for:", searchQuery);
-  };
-
-  const [hoveredIndex, setHoveredIndex] = React.useState(null);
-
-
-
-  const handleMouseEnter = (index) => {
-    setHoveredIndex(index);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredIndex(null);
-  };
+  const decreaseQuantity = (index) => {
+    const newQuantities = [...quantities];
+    if (newQuantities[index] > 0) {
+      newQuantities[index] -= 1;
+    }
+    setQuantities(newQuantities);
+  }
 
   return (
-    <div className="order-history">
-     <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
+    <div className="container h-100 py-5">
+        <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
           width="240"
@@ -167,43 +184,85 @@ const OrderHistory = () => {
           </div>
         </div>
       </nav>
-      
-      <div className="container mt-5">
-        <h2 className="text-center mb-4">Order History</h2>
-        {orders.length > 0 ? (
-          <div className="order-list">
-            {orders.map((order) => (
-              <Card className="mb-3" key={order.id}>
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <h5>Order Date: {order.date}</h5>
-                      <p>Total Amount: {order.total}</p>
-                      <p>Status: {order.status}</p>
-                    </div>
-                    <div>
-                      <Button variant="primary" className="view-button mr-2">
-                        View Details
-                      </Button>
-                      <Button variant="danger" className="remove-button">
-                        Cancel Order
-                      </Button>
-                    </div>
-                  </div>
+      <div className="row d-flex justify-content-center align-items-center h-100" style={{ marginTop: "70px"    }}>
+        <div className="col-10"> 
+          {items.map((item, index) => (
+            <Card className="rounded-3 mb-4" key={item.id}>
+              <Card.Body className="p-4">
+                <Row className="d-flex justify-content-between align-items-center">
+                  <Col md={2}>
+                  <Image
+                    src={`${process.env.PUBLIC_URL}product${index + 1}.jpg`}
+                    className="img-fluid rounded-3"
+                    alt={item.name}
+                    />
+                  </Col>
+                  <Col md={3}>
+                    <p className="lead fw-normal mb-2">{item.name}</p>
+                    <p><span className="text-muted">{item.description}</span></p>
+                  </Col>
+                  <Col md={3} className="d-flex">
+                    <Button variant="link" className="px-2" onClick={() => decreaseQuantity(index)}>
+                      <FontAwesomeIcon icon={faMinus} />
+                    </Button>
+
+                    <Form.Control
+                      id={`form${item.id}`}
+                      min="0"
+                      name="quantity"
+                      value={quantities[index]}
+                      type="number"
+                      className="form-control form-control-sm"
+                      readOnly
+                    />
+
+                    <Button variant="link" className="px-2" onClick={() => increaseQuantity(index)}>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Button>
+                  </Col>
+                  <Col md={3}>
+                    <h5 className="mb-0">{item.price}</h5>
+                  </Col>
+                  <Col md={1} className="text-end">
+                    <Button variant="link" className="text-danger">
+                      <FontAwesomeIcon icon={faTrash} size="lg" />
+                    </Button>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          ))}
+
+                <Card className="mb-4">
+                    <Card.Body className="p-4 d-flex flex-row">
+                        <Form.Group className="flex-fill">
+                        <Form.Control 
+                            type="text" 
+                            id="form1" 
+                            placeholder= "Enter Code"
+                            className="form-control-lg" 
+                        />
+                        </Form.Group>
+                        <Button type="button" className="btn-lg ms-3 custom-btn">Apply</Button>
+                    </Card.Body>
+                    </Card>
+
+                    <Card>
+                    <Card.Body>
+                        <Button
+                        type="button"
+                        className="btn-block btn-lg custom-button"
+                        style={{ backgroundColor: "#05652D", border: "#05652D" }}
+                        >
+                        Proceed to Pay
+                    </Button>
                 </Card.Body>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="empty-order-history text-center">
-            <p>You have no order history.</p>
-          </div>
-        )}
+             </Card>
+        </div>
       </div>
-      
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default OrderHistory;
+export default ShoppingCart;

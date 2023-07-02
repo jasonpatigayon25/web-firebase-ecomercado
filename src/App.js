@@ -7,7 +7,6 @@ import ContactUs from "./pages/ContactUs"
 import AboutUs from "./pages/AboutUs"
 import Campaign from "./pages/Campaign"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Cart from "./pages/Cart"
 import Donate from "./pages/Donate"
 import Seller from "./pages/Seller"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +16,7 @@ import Wishlist from "./pages/Wishlist"
 import DeleteRecord from "./pages/DeleteRecord"
 import ChangePassword from "./pages/ChangePassword"
 import OrderHistory from "./pages/OrderHistory"
+import ShoppingCart from "./pages/ShoppingCart"
 
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/donate" element={<Donate/>}/>
           <Route path="/campaign" element={<Campaign/>}/>
-          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/shopping-cart" element={<ShoppingCart/>}/>
           <Route path="/seller" element={<Seller/>}/>
           <Route path="/verified-seller" element={<VerifiedSeller/>}/>
           <Route path="/eco-lover-rewards" element={<EcoReward/>}/>

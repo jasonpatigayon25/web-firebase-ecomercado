@@ -68,7 +68,7 @@ function Home() {
             </button>
           </form>
           <button className="btn" type="submit" style={{ borderColor: "transparent" }}>
-            <Link to="/cart">
+            <Link to="/shopping-cart">
               <img
                 src={process.env.PUBLIC_URL + "/shopping-cart.png"}
                 alt="Cart"

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Wishlist.css';
+import { BsPersonFill } from 'react-icons/bs';
 
 const Wishlist = () => {
+  const location = useLocation();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [wishlistItems, setWishlistItems] = useState([
@@ -75,7 +77,7 @@ const Wishlist = () => {
             </button>
           </form>
           <button className="btn" type="submit" style={{ borderColor: 'transparent' }}>
-            <Link to="/cart">
+            <Link to="/shopping-cart">
               <img
                 src={process.env.PUBLIC_URL + '/shopping-cart.png'}
                 alt="Cart"
@@ -148,6 +150,10 @@ const Wishlist = () => {
                     </div>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
+                    <Dropdown.Item disabled>
+                      <BsPersonFill size={16} color="#6c757d" style={{ marginRight: '5px' }} />
+                      {location.state?.id}
+                    </Dropdown.Item>
                     <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
                     <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
                     <Dropdown.Item href="/language">Language</Dropdown.Item>

@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Campaign.css';
+import { BsPersonFill } from 'react-icons/bs';
+
 
 const Campaign = () => {
+
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("Searching for:", searchQuery);
+  };
 
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
@@ -41,78 +52,121 @@ const Campaign = () => {
           alt="Logo"
           style={{ marginLeft: '50px' }}
         />
-        <div className="d-flex justify-content-end align-items-center w-100">
-          <ul className="navbar-nav flex-row">
-            <li className="nav-item">
-              <Link className="nav-link" to="/home">
-                <div className="d-flex flex-column align-items-center">
-                  <img
-                    src={process.env.PUBLIC_URL + '/home.png'}
-                    alt="Home"
-                    className="nav-icon"
-                    style={{
-                      transform: hoveredIndex === 0 ? 'scale(1.1)' : 'scale(1)',
-                    }}
-                    onMouseEnter={() => handleMouseEnter(0)}
-                    onMouseLeave={handleMouseLeave}
-                  />
-                  Home
-                </div>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/home">
-                <div className="d-flex flex-column align-items-center">
-                  <img
-                    src={process.env.PUBLIC_URL + '/notification.png'}
-                    alt="notif"
-                    className="nav-icon"
-                    style={{
-                      transform: hoveredIndex === 1 ? 'scale(1.1)' : 'scale(1)',
-                    }}
-                    onMouseEnter={() => handleMouseEnter(1)}
-                    onMouseLeave={handleMouseLeave}
-                  />
-                  Notification
-                </div>
-              </Link>
-            </li>
-            <li className="nav-item dropdown">
-              <Dropdown>
-                <Dropdown.Toggle
-                  className="nav-link"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
+        <div className="container">
+          <form className="d-flex justify-content-center" onSubmit={handleSearch}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search Products"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ width: '600px', borderColor: '#05652D' }}
+            />
+            <button className="btn" type="submit" style={{ borderColor: '#05652D' }}>
+              <img
+                src={process.env.PUBLIC_URL + '/search-icon.png'}
+                alt="Search"
+                className="nav-icon"
+                style={{
+                  transform: hoveredIndex === 4 ? 'scale(1.1)' : 'scale(1)',
+                }}
+                onMouseEnter={() => handleMouseEnter(4)}
+                onMouseLeave={handleMouseLeave}
+              />
+            </button>
+          </form>
+          <button className="btn" type="submit" style={{ borderColor: 'transparent' }}>
+            <Link to="/shopping-cart">
+              <img
+                src={process.env.PUBLIC_URL + '/shopping-cart.png'}
+                alt="Cart"
+                className="nav-icon"
+                style={{
+                  transform: hoveredIndex === 3 ? 'scale(1.1)' : 'scale(1)',
+                }}
+                onMouseEnter={() => handleMouseEnter(3)}
+                onMouseLeave={handleMouseLeave}
+              />
+            </Link>
+          </button>
+          <div className="d-flex justify-content-end align-items-center w-100">
+            <ul className="navbar-nav flex-row">
+              <li className="nav-item">
+                <Link className="nav-link" to="/home">
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={process.env.PUBLIC_URL + '/settings.png'}
-                      alt="Option"
+                      src={process.env.PUBLIC_URL + '/home.png'}
+                      alt="Home"
                       className="nav-icon"
                       style={{
-                        transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
+                        transform: hoveredIndex === 0 ? 'scale(1.1)' : 'scale(1)',
                       }}
-                      onMouseEnter={() => handleMouseEnter(2)}
+                      onMouseEnter={() => handleMouseEnter(0)}
                       onMouseLeave={handleMouseLeave}
                     />
+                    Home
                   </div>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
-                  <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
-                  <Dropdown.Item href="/language">Language</Dropdown.Item>
-                  <Dropdown.Item href="/help">Help</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item href="/">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </li>
-          </ul>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/home">
+                  <div className="d-flex flex-column align-items-center">
+                    <img
+                      src={process.env.PUBLIC_URL + '/notification.png'}
+                      alt="notif"
+                      className="nav-icon"
+                      style={{
+                        transform: hoveredIndex === 1 ? 'scale(1.1)' : 'scale(1)',
+                      }}
+                      onMouseEnter={() => handleMouseEnter(1)}
+                      onMouseLeave={handleMouseLeave}
+                    />
+                    Notification
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item dropdown">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="nav-link"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div className="d-flex flex-column align-items-center">
+                      <img
+                        src={process.env.PUBLIC_URL + '/settings.png'}
+                        alt="Option"
+                        className="nav-icon"
+                        style={{
+                          transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
+                        }}
+                        onMouseEnter={() => handleMouseEnter(2)}
+                        onMouseLeave={handleMouseLeave}
+                      />
+                    </div>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item disabled>
+                      <BsPersonFill size={16} color="#6c757d" style={{ marginRight: '5px' }} />
+                      {location.state?.id}
+                    </Dropdown.Item>
+                    <Dropdown.Item href="/change-account">Change Account</Dropdown.Item>
+                    <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
+                    <Dropdown.Item href="/language">Language</Dropdown.Item>
+                    <Dropdown.Item href="/help">Help</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href="/">Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
+      
       <div className="campaign-content">
         <h2>Campaign</h2>
         <p>Join a campaign for promoting sustainability and saving the earth and environment.</p>
