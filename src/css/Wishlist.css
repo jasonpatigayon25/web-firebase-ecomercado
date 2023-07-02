@@ -1,34 +1,25 @@
 .wishlist {
     padding-top: 80px;
   }
-  
-  .wishlist-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+  .out-of-stock-box {
+    color: red;
   }
   
-  .wishlist-item {
-    border: 1px solid #05652D;
-    background-color: #E3FCE9;
-    transition: box-shadow 0.3s ease;
+  .in-stock-box {
+    color: green;
+  }
+
+  .remove-button {
+    background-color: red;
+    color: white;
+    border: white;
+    cursor: pointer;
+    padding: 10;
+    font-weight: bold;
   }
   
-  .wishlist-item:hover {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  .remove-button:hover {
+    color: green;
   }
   
-  .wishlist-item-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  .empty-wishlist {
-    margin-top: 2rem;
-  }
-  
-  .empty-wishlist p {
-    font-size: 1.2rem;
-  }
   

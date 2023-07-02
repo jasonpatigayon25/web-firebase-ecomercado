@@ -187,13 +187,13 @@ const ShoppingCart = () => {
       <div className="row d-flex justify-content-center align-items-center h-100" style={{ marginTop: "70px"    }}>
         <div className="col-10"> 
           {items.map((item, index) => (
-            <Card className="rounded-3 mb-4" key={item.id}>
-              <Card.Body className="p-4">
+            <Card className="rounded-3 mb-4 shadow" key={item.id}>
+              <Card.Body className="p-4 ">
                 <Row className="d-flex justify-content-between align-items-center">
                   <Col md={2}>
                   <Image
                     src={`${process.env.PUBLIC_URL}product${index + 1}.jpg`}
-                    className="img-fluid rounded-3"
+                    className="img-fluid rounded-3 md-4 shadow"
                     alt={item.name}
                     />
                   </Col>
@@ -239,7 +239,7 @@ const ShoppingCart = () => {
                         <Form.Control 
                             type="text" 
                             id="form1" 
-                            placeholder= "Enter Code"
+                            placeholder= "Enter Eco-Lover Voucher Code"
                             className="form-control-lg" 
                         />
                         </Form.Group>

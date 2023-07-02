@@ -161,7 +161,7 @@ function VerifiedSeller() {
         <Row>
           <Col md={4}>
             <Card>
-              <Card.Body>
+              <Card.Body className='profile detail md-4 shadow'>
                 <Card.Title style= {{ color: '#05652D'}}>Profile Details</Card.Title>
                 <Card.Img variant="top" src="user-image.jpg" />
                 <Card.Text>
@@ -181,7 +181,7 @@ function VerifiedSeller() {
           </Col>
           <Col md={8}>
             <Card>
-              <Card.Body style={{ overflowY: 'auto', maxHeight: '400px' }}>
+              <Card.Body className='seller-management md-4 shadow' style={{ overflowY: 'auto', maxHeight: '400px' }}>
                 <Card.Title style= {{ color: '#05652D'}}>Seller Management</Card.Title>
                 <Row className="align-items-center">
                   <Col xs={1}>
@@ -242,7 +242,7 @@ function VerifiedSeller() {
         </Row>
 
         <Card className="mt-4">
-          <Card.Body>
+          <Card.Body className='trend-product md-4 shadow'>
             <Card.Title style= {{ color: '#05652D'}}>Trend Product</Card.Title>
             {/* Trend product content -Walay mahunaan*/}
           </Card.Body>

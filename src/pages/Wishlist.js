@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
@@ -13,17 +12,54 @@ const Wishlist = () => {
   const [wishlistItems, setWishlistItems] = useState([
     {
       id: 1,
-      name: 'Product 1',
-      price: 'Php 100.00',
-      description: 'Description of product sample.',
+      name: 'Wishlist 1',
+      price: 'Php 110.00',
+      image: 'wishlist1.jpg',
+      stockStatus: 'In Stock'
     },
     {
       id: 2,
-      name: 'Product 2',
-      price: 'Php 75.50',
-      description: 'Description of product sample.',
+      name: 'Wishlist 2',
+      price: 'Php 120.00',
+      image: 'wishlist2.jpg',
+      stockStatus: 'Out of Stock'
     },
-  ]); //Sample of wishlist items
+    {
+        id: 3,
+        name: 'Wishlist 3',
+        price: 'Php 120.00',
+        image: 'wishlist2.jpg',
+        stockStatus: 'Available'
+    },
+    {
+        id: 4,
+        name: 'Wishlist 4',
+        price: 'Php 120.00',
+        image: 'wishlist2.jpg',
+        stockStatus: 'Available'
+    },
+    {
+        id: 5,
+        name: 'Wishlist 5',
+        price: 'Php 120.00',
+        image: 'wishlist2.jpg',
+        stockStatus: 'Available'
+    },
+    {
+        id: 6,
+        name: 'Wishlist 6',
+        price: 'Php 120.00',
+        image: 'wishlist2.jpg',
+        stockStatus: 'Available'
+    },
+    // Sample Wishlists
+  ]);
+
+  const handleRemoveItem = (id) => {
+    const updatedWishlist = wishlistItems.filter((item) => item.id !== id);
+    setWishlistItems(updatedWishlist);
+  };
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -38,9 +74,6 @@ const Wishlist = () => {
     setHoveredIndex(null);
   };
 
-  const handleRemoveItem = (itemId) => {
-    setWishlistItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
 
   return (
     <div className="wishlist">
@@ -168,55 +201,78 @@ const Wishlist = () => {
         </div>
       </nav>
 
-      <div className="container mt-5">
-        <h2 className="text-center mb-4" style={{ marginTop: '60px' }}>
-          Wishlist
-        </h2>
-
-        {wishlistItems.length > 0 ? (
-          <div className="wishlist-items">
-            {wishlistItems.map((item) => (
-              <Card className="mb-4 wishlist-item" key={item.id}>
-                <Card.Body>
-                  <div className="row">
-                    <div className="col-md-3">
-                      <Card.Img
-                        src={`product${item.id}.jpg`}
-                        alt={`Product ${item.id}`}
-                        className="wishlist-item-image"
-                      />
-                    </div>
-                    <div className="col-md-9">
-                      <Card.Title>{item.name}</Card.Title>
-                      <Card.Text>{item.price}</Card.Text>
-                      <Card.Text>{item.description}</Card.Text>
-                      <div className="button-container">
-                        <Button
-                          variant="primary"
-                          style={{ backgroundColor: '#05652D', borderColor: '#05652D' }}
+      <div className="cart-wrap">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="main-heading mb-10">My Wishlist</div>
+            <div className="table-wishlist">
+              <table className="table" width="100%">
+                <thead>
+                  <tr>
+                    <th width="40%">Product Name</th>
+                    <th width="15%">Price</th>
+                    <th width="15%">Status</th>
+                    <th width="15%"></th>
+                    <th width="15%"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wishlistItems.map((item, index) => (
+                    <tr key={item.id}>
+                      <td width="40%">
+                        <div className="d-flex align-items-center">
+                          <div className="img-product">
+                            <img
+                              src={`${process.env.PUBLIC_URL}wishlist${index + 1}.jpg`}
+                              alt=""
+                              className="img-fluid md-4 shadow"
+                              style={{ width: '100px', height: '100px', borderRadius: '10px' }}
+                            />
+                          </div>
+                          <div className="name-product">
+                            {item.name}
+                          </div>
+                        </div>
+                      </td>
+                      <td width="15%" className="price">{item.price}</td>
+                      <td width="15%">
+                        <span
+                          className={
+                            item.stockStatus === 'Out of Stock' ? 'out-of-stock-box' : 'in-stock-box'
+                          }
+                        >
+                          {item.stockStatus}
+                        </span>
+                      </td>
+                      <td width="15%">
+                        <button
+                          className="btn btn-primary"
+                          style={{
+                            backgroundColor: '#05652D',
+                          }}
                         >
                           Add to Cart
-                        </Button>
-                        <Button
-                            variant="danger"
-                            onClick={() => handleRemoveItem(item.id)}
-                            
-                            >
-                          Remove
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-            ))}
+                        </button>
+                      </td>
+                      <td width="15%" className="text-right">
+                        <button
+                          className="remove-button"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          X
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        ) : (
-          <div className="empty-wishlist text-center">
-            <p>Your wishlist is empty.</p>
-          </div>
-        )}
+        </div>
       </div>
+    </div>
+
 
       <Footer />
     </div>

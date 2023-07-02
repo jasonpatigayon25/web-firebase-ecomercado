@@ -9,7 +9,6 @@ import Campaign from "./pages/Campaign"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Donate from "./pages/Donate"
 import Seller from "./pages/Seller"
-import 'bootstrap/dist/css/bootstrap.min.css';
 import VerifiedSeller from "./pages/VerifiedSeller"
 import EcoReward from "./pages/EcoReward"
 import Wishlist from "./pages/Wishlist"
@@ -17,7 +16,7 @@ import DeleteRecord from "./pages/DeleteRecord"
 import ChangePassword from "./pages/ChangePassword"
 import OrderHistory from "./pages/OrderHistory"
 import ShoppingCart from "./pages/ShoppingCart"
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

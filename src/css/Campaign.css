@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     padding: 100px 20px;
-    min-height: calc(100vh - 180px); /* Adjust the value based on your footer height */
+    min-height: calc(100vh - 180px); 
   }
   
   .campaign-content h2 {
@@ -57,4 +57,5 @@
   .campaign-item a:hover {
     background-color: #05652D;
   }
+
   
