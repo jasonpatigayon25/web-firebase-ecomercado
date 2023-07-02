@@ -88,7 +88,7 @@ function Signup() {
                           <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          className='username md-2 shadow'
+                          className='username'
                           placeholder="Enter Username"
                           aria-label="Enter Username"
                           value={username}
@@ -103,7 +103,7 @@ function Signup() {
                         <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
                       </div>
                       <FormControl
-                        className='first-name md-2 shadow'
+                        className='first-name'
                         placeholder="Enter First Name"
                         aria-label="Enter First Name"
                         value={firstname}
@@ -118,7 +118,7 @@ function Signup() {
                         <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
                       </div>
                       <FormControl
-                        className='last-name md-2 shadow'
+                        className='last-name'
                         placeholder="Enter Last Name"
                         aria-label="Enter Last Name"
                         value={lastname}
@@ -133,7 +133,7 @@ function Signup() {
                           <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          className='password md-2 shadow'
+                          className='password'
                           placeholder="Enter Password"
                           aria-label="Enter Password"
                           type="password"
@@ -149,7 +149,7 @@ function Signup() {
                           <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
                         </div>
                         <FormControl
-                          className='repeat-password md-2 shadow'
+                          className='repeat-password'
                           placeholder="Repeat your password"
                           aria-label="Repeat your password"
                           type="password"

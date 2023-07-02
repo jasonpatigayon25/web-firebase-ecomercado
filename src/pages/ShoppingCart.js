@@ -42,6 +42,14 @@ const ShoppingCart = () => {
       image: 'product2'
     },
   ];
+
+  const [hover, setHover] = useState(false);
+
+  const style = {
+      backgroundColor: hover ? '#05652D' : 'transparent',
+      color: hover ? 'white' : '#05652D',
+      borderColor: '#05652D',
+  };
   
   const [quantities, setQuantities] = useState(items.map(() => 1));
 
@@ -243,7 +251,15 @@ const ShoppingCart = () => {
                             className="form-control-lg" 
                         />
                         </Form.Group>
-                        <Button type="button" className="btn-lg ms-3 custom-btn">Apply</Button>
+                        <Button 
+                            type="button"
+                            className="btn-lg ms-3"
+                            style={style}
+                            onMouseEnter={() => setHover(true)}
+                            onMouseLeave={() => setHover(false)}
+                        >
+                            Apply
+                        </Button>
                     </Card.Body>
                     </Card>
 
@@ -254,7 +270,7 @@ const ShoppingCart = () => {
                         className="btn-block btn-lg custom-button"
                         style={{ backgroundColor: "#05652D", border: "#05652D" }}
                         >
-                        Proceed to Pay
+                        Check Out
                     </Button>
                 </Card.Body>
              </Card>
