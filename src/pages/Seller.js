@@ -1,16 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Seller() {
   const [shopName, setShopName] = useState("");
   const [pickupAddress, setPickupAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // Updated username state
 
-  const handleSubmit = (e) => {
+  // Fetch the signed-in user's information upon component mount
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = async () => {
+    try {
+      // Make an API call to fetch the signed-in user's information
+      const response = await axios.get("http://localhost:8000/user-info");
+
+      // Assuming the response contains the user's information including the username
+      setUsername(response.data.username);
+    } catch (error) {
+      console.error("Error fetching user information:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // function for product
+
+    const registrationData = {
+      shopName: shopName,
+      pickupAddress: pickupAddress,
+      phoneNumber: phoneNumber,
+      email: email,
+      username: username
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8000/register-seller", registrationData);
+
+      if (response.data === "success") {
+        console.log("Seller registration successful");
+      } else if (response.data === "userNotFound") {
+        console.log("User not found. Please sign up first.");
+      } else {
+        console.log("Seller registration failed");
+      }
+    } catch (error) {
+      console.error("An error occurred during seller registration:", error);
+    }
+
     setShopName("");
     setPickupAddress("");
     setPhoneNumber("");
@@ -66,12 +107,12 @@ function Seller() {
               variant="primary"
               className="mb-4"
               style={{
-                borderColor: '#05652D',
-                backgroundColor: '#05652D',
-                width: '300px',
-                margin: 'auto',
-                display: 'block',
-                marginTop: '20px',
+                borderColor: "#05652D",
+                backgroundColor: "#05652D",
+                width: "300px",
+                margin: "auto",
+                display: "block",
+                marginTop: "20px"
               }}
               as={Link}
               to="/verified-seller"

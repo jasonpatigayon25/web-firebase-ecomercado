@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+//login
 app.post("/", async (req, res) => {
   const { username, password } = req.body;
 
@@ -46,6 +47,7 @@ app.get("/", async (req, res) => {
   res.render("index", { data });
 });
 
+//signup
 app.post("/signup", async (req, res) => {
   const { username, firstname, lastname, password } = req.body;
 
@@ -80,6 +82,7 @@ app.get("/", cors(), async (req, res) => {
   }
 });
 
+//update-account
 app.put("/update/:username", async (req, res) => {
   try {
     const { username } = req.params;
@@ -98,6 +101,7 @@ app.put("/update/:username", async (req, res) => {
   }
 });
 
+//delete-record
 app.delete("/delete/:username", async (req, res) => {
   try {
     const { username } = req.params;
@@ -113,6 +117,54 @@ app.delete("/delete/:username", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+//account-read
+app.get("/user-info", async (req, res) => {
+  try {
+    // Assuming you have implemented authentication and have access to the signed-in user's information
+    const username = "signed-in-username"; // Replace with the actual implementation to retrieve the signed-in user's username
+    const user = await collection.findOne({ username: username });
+
+    if (user) {
+      // Return the user's information
+      res.json(user);
+    } else {
+      // User not found
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error retrieving user information:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//seller-registration
+app.post("/register-seller", async (req, res) => {
+  const { shopName, pickupAddress, phoneNumber, email, username } = req.body;
+
+  const data = {
+    shopName: shopName,
+    pickupAddress: pickupAddress,
+    phoneNumber: phoneNumber,
+    email: email,
+    username: username
+  };
+
+  try {
+    const check = await collection.findOne({ username: username });
+
+    if (check) {
+      res.json("userExists");
+    } else {
+      await collection.insertMany([data]);
+      res.json("success");
+    }
+  } catch (error) {
+    console.error("Error registering seller:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 app.listen(8000, () => {
   console.log("Server connected on port 8000");
