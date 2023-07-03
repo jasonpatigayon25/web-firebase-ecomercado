@@ -30,22 +30,6 @@ mongoose.connect(connection_string, {
     password: {
       type: String,
       required: true
-    },
-    shopName: {
-      type: String,
-      required: true
-    },
-    pickupAddress: {
-      type: String,
-      required: true
-    },
-    phoneNumber: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: true
     }
   });
 
