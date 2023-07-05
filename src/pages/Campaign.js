@@ -168,12 +168,12 @@ const Campaign = () => {
       </nav>
       
       <div className="campaign-content">
-        <h1 style={{ color: "#05652D"}}>Campaign</h1>
+        <h1 style={{ color: "#05652D" }}>Campaign</h1>
         <p>Join a campaign for promoting sustainability and saving the earth and environment.</p>
         <div className="campaign-list">
           {campaigns.map((campaign) => (
             <div className="campaign-item" key={campaign.id}>
-              <h3 style={{ color: "#05652D"}}>{campaign.title}</h3>
+              <h3 style={{ color: "#05652D" }}>{campaign.title}</h3>
               <p>{campaign.details}</p>
               <a href={campaign.link} target="_blank" rel="noopener noreferrer">
                 Join Campaign

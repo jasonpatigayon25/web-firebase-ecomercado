@@ -76,7 +76,7 @@ function Signup() {
                 border: 'none',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               }}
-              className="p-4"
+              className="p-4 shadow"
             >
               <Form>
                 <Row>

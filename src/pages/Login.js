@@ -53,7 +53,7 @@ function Login() {
               border: 'none',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             }}
-            className="p-4"
+            className="p-4 shadow"
           >
           <Form>
             <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-3 mt-2" style={{ color: '#05652D' }}>Log In</p>

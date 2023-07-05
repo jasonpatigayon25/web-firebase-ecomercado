@@ -78,7 +78,7 @@ function Seller() {
         <Card.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="shopName">
-              <Form.Label>Shop Name</Form.Label>
+              <Form.Label>Shop/Seller Name</Form.Label>
               <Form.Control type="text" value={shopName} onChange={(e) => setShopName(e.target.value)} required />
             </Form.Group>
             <Form.Group controlId="pickupAddress">

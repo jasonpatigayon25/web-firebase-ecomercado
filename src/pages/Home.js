@@ -193,7 +193,7 @@ function Home() {
                   </div>
                   <Carousel
                     showThumbs={false}
-                    autoPlay
+                    infiniteLoop autoPlay
                     renderIndicator={(onClickHandler, isSelected, index, label) => {
                       if (isSelected) {
                         return (
@@ -276,9 +276,9 @@ function Home() {
         }}
       >
         <div className="feature sections md-2 shadow" style={{ display: "flex", justifyContent: "center", padding: "10px", borderRadius: "25px" }}>
-          <Link
+        <Link
             className="nav-link"
-            to="/donate"
+            to="/seller"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -288,6 +288,27 @@ function Home() {
               margin: "0 10px",
             }}
             onMouseEnter={() => handleMouseEnter(11)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/become-seller.png"}
+              alt="Become a Seller"
+              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
+            />
+            Seller
+          </Link>
+          <Link
+            className="nav-link"
+            to="/donate"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "10px",
+              transform: hoveredIndex === 12 ? "scale(1.1)" : "scale(1)",
+              margin: "0 10px",
+            }}
+            onMouseEnter={() => handleMouseEnter(12)}
             onMouseLeave={handleMouseLeave}
           >
             <img
@@ -305,10 +326,10 @@ function Home() {
               flexDirection: "column",
               alignItems: "center",
               padding: "10px",
-              transform: hoveredIndex === 12 ? "scale(1.1)" : "scale(1)",
+              transform: hoveredIndex === 13 ? "scale(1.1)" : "scale(1)",
               margin: "0 10px",
             }}
-            onMouseEnter={() => handleMouseEnter(12)}
+            onMouseEnter={() => handleMouseEnter(13)}
             onMouseLeave={handleMouseLeave}
           >
             <img
@@ -318,27 +339,7 @@ function Home() {
             />
             Campaign
           </Link>
-          <Link
-            className="nav-link"
-            to="/seller"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "10px",
-              transform: hoveredIndex === 13 ? "scale(1.1)" : "scale(1)",
-              margin: "0 10px",
-            }}
-            onMouseEnter={() => handleMouseEnter(13)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/become-seller.png"}
-              alt="Become a Seller"
-              style={{ width: "30px", height: "30px", marginBottom: "5px" }}
-            />
-            Become a Seller
-          </Link>
+
           <Link
             className="nav-link"
             to="/eco-lover-rewards"
