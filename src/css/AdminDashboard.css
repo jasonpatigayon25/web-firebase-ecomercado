@@ -1,0 +1,128 @@
+.admin-dashboard {
+    display: flex;
+  }
+  
+  .admin-dashboard-sidebar {
+    width: 250px;
+    background-color: #E3FCE9;
+    padding: 20px;
+  }
+  
+  .admin-dashboard-logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .admin-dashboard-logo img {
+    width: 100px;
+  }
+  
+  .admin-dashboard-nav {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .admin-dashboard-nav li {
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard-nav a {
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .admin-dashboard-nav i {
+    margin-right: 10px;
+  }
+  
+  .admin-dashboard-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .admin-dashboard-content h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard-content p {
+    font-size: 20px;
+  }
+  
+  .admin-dashboard-divider-alt {
+    width: 1px;
+    height: 20px;
+    background-color: #808080;
+    margin: 0 10px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .admin-dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .admin-dashboard-card {
+    width: calc(50% - 10px);
+    background-color: #05652D;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+  }
+  
+  .title-label {
+    color: #333;
+    text-align: center;
+  }
+  
+  .stats {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .admin-dashboard-recent-users {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-dashboard-recent-users h2 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard-recent-users ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .admin-dashboard-recent-users li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard-recent-users span {
+    color: #666;
+  }
+
+  .title-label {
+    color: #fff;
+  }
+
+  .stats {
+    color: #fff;
+  }
+  
+  .icon-white {
+    color: white;
+  }
+  

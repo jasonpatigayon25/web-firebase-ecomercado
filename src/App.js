@@ -17,6 +17,7 @@ import ChangePassword from "./pages/ChangePassword"
 import OrderHistory from "./pages/OrderHistory"
 import ShoppingCart from "./pages/ShoppingCart"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AdminDashboard from "./pages/AdminDashboard"
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/delete-record" element={<DeleteRecord/>}/>
           <Route path="/change-password" element={<ChangePassword/>}/>
           <Route path="/order-history" element={<OrderHistory/>}/>
+          <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
         </Routes>
       </Router>
     </div>
