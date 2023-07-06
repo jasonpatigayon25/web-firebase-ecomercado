@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart,
-  FaUserCheck, FaHandshake, FaBoxOpen, FaShoppingBag, FaHeart, FaUser
+  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -20,7 +19,8 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </FaUser>
 ));
 
-function AdminDashboard() {
+function AdminSales() {
+
   return (
     <div className="admin-dashboard">
       <div className="admin-dashboard-sidebar">
@@ -85,52 +85,17 @@ function AdminDashboard() {
           </li>
         </ul>
       </div>
-      <div className="admin-dashboard-content">
-        <h1>Admin Dashboard</h1> 
+      <div>
+        <div>
+      <h1>Sales and Revenue</h1>
 
-        <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Verified Sellers</h2>
-            <p className="stats"> <FaHandshake style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card center-card">
-            <h2 className="title-label"> Total Donors</h2>
-            <p className="stats"> <FaHeart style={{ color: 'white' }} /> 0</p>
-          </div>
-        </div>
 
-        <div className="admin-dashboard-recent-users">
-          <h2>Recent Users</h2>
-          <ul>
-            <li>
-              <span>Username1</span>
-              <span>Date1</span>
-            </li>
-            <li>
-              <span>Username2</span>
-              <span>Date2</span>
-            </li>
-            <li>
-              <span>Username3</span>
-              <span>Date3</span>
-            </li>
-          </ul>
-        </div>
+      {/* This is where your graph would go
+      <SalesGraph /> */}
+    </div>
       </div>
     </div>
   );
 }
 
-export default AdminDashboard;
+export default AdminSales;
