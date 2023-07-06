@@ -45,6 +45,7 @@ const OrderHistory = () => {
   return (
     <div className="order-history">
      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ background: '#E3FCE9' }}>
+     <Link to="/home">
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
           width="240"
@@ -53,6 +54,7 @@ const OrderHistory = () => {
           alt="Logo"
           style={{ marginLeft: '50px' }}
         />
+        </Link>
         <div className="container">
           <form className="d-flex justify-content-center" onSubmit={handleSearch}>
             <input
