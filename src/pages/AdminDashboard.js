@@ -54,31 +54,31 @@ function AdminDashboard() {
             </Link>
           </li>
           <li>
-            <Link to="/admin/users">
+            <Link to="/admin-users">
               <FaUsers />
               User Statistics
             </Link>
           </li>
           <li>
-            <Link to="/admin/products">
+            <Link to="/admin-products">
               <FaCogs />
               Product Metrics
             </Link>
           </li>
           <li>
-            <Link to="/admin/donations">
+            <Link to="/admin-donations">
               <FaHandHoldingHeart />
               Donations
             </Link>
           </li>
           <li>
-            <Link to="/admin/seller-request">
+            <Link to="/admin-seller">
               <FaCogs />
               Seller Request
             </Link>
           </li>
           <li>
-            <Link to="/admin/feedback">
+            <Link to="/admin-feedback">
               <FaComment />
               User Feedback
             </Link>
@@ -87,7 +87,7 @@ function AdminDashboard() {
       </div>
       <div className="admin-dashboard-content">
         <h1>Admin Dashboard</h1> 
-
+        <div className="divider"></div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Users/Customers</h2>
@@ -111,8 +111,9 @@ function AdminDashboard() {
           </div>
         </div>
 
-        <div className="admin-dashboard-recent-users">
+        <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Recent Users</h2>
+          <div className="divider"></div>
           <ul>
             <li>
               <span>Username1</span>

@@ -2,8 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart,
-  FaUser,
-  FaUserCheck,
+  FaUser
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -21,7 +20,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </FaUser>
 ));
 
-function AdminSales() {
+function AdminSellerRequest() {
   return (
     <div className="admin-dashboard">
       <div className="admin-dashboard-sidebar">
@@ -87,29 +86,18 @@ function AdminSales() {
         </ul>
       </div>
       <div className="admin-dashboard-content">
-        <h1>Admin Sales and Revenue</h1> 
+        <h1>Admin Seller Request</h1> 
         <div className="divider"></div>
-        <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
-            <div className="divider"></div>
-            <h2 className="title-label"> Sales Revenue</h2>
-            <p className="stats"> ₱ 0</p>
-          </div>
-          
-          <div className="admin-dashboard-card">
-            </div>
-            </div>
-          <div className="admin-dashboard-recent-users mb-4 shadow">
-            <h2>SAMPLE</h2>
-            <div className="divider"></div>
-            <ul>
-            </ul>
-          </div>
+
+        <div className="admin-dashboard-recent-users mb-4 shadow">
+          <h2>SAMPLE</h2>
+          <div className="divider"></div>
+          <ul>
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
 
-export default AdminSales;
+export default AdminSellerRequest;

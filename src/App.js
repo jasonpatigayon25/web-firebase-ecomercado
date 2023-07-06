@@ -19,6 +19,11 @@ import ShoppingCart from "./pages/ShoppingCart"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminSales from "./pages/AdminSales"
+import AdminDonations from "./pages/AdminDonations"
+import AdminSellerRequest from "./pages/AdminSellerRequest"
+import AdminProductMetrics from "./pages/AdminProductMetrics"
+import AdminUserFeedback from "./pages/AdminUserFeedback"
+import AdminUserStatistics from "./pages/AdminUserStatistics"
 
 function App() {
   return (
@@ -43,6 +48,11 @@ function App() {
           <Route path="/order-history" element={<OrderHistory/>}/>
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/admin-sales" element={<AdminSales/>}/>
+          <Route path="/admin-donations" element={<AdminDonations/>}/>
+          <Route path="/admin-seller" element={<AdminSellerRequest/>}/>
+          <Route path="/admin-products" element={<AdminProductMetrics/>}/>
+          <Route path="/admin-feedback" element={<AdminUserFeedback/>}/>
+          <Route path="/admin-users" element={<AdminUserStatistics/>}/>
         </Routes>
       </Router>
     </div>
