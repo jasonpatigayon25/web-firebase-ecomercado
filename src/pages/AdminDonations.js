@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart,
-  FaUser
+  FaUser,
+  FaEye
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -104,11 +105,12 @@ function AdminDonations() {
           <div className="divider"></div>
           <ul>
             {donors.map((donor, index) => (
-              <li key={index}>
+                <li key={index}>
                 <img src="https://via.placeholder.com/150" alt="User" />  
-                <div style={{color: 'grey'}}>{donor.date}</div> 
+                <div style={{ fontSize: '20px'}}>{donor.product}</div>
                 <div style={{color: '#05652D', fontSize: '20px'}}>{donor.username}</div> 
-                <div style={{color: 'grey', fontSize: '14px'}}>{donor.product} <Link to={`/view-product/${donor.product}`}>View</Link></div>
+                <div style={{color: 'grey'}}>{donor.date}</div>
+                <Link to={`/view-product/${donor.product}`}><FaEye/></Link>
               </li>
             ))}
           </ul>

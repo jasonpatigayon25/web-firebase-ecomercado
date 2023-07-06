@@ -102,7 +102,7 @@ function AdminSales() {
             </div>
             </div>
           <div className="admin-dashboard-recent-users mb-4 shadow">
-            <h2>SAMPLE</h2>
+            <h2>Graph</h2>
             <div className="divider"></div>
             <ul>
             </ul>

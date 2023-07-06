@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart,
-  FaUser
+  FaUser, FaTrash, FaCheck, FaEye
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -19,6 +19,34 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     {children}
   </FaUser>
 ));
+
+// Sample data
+const pendingRequests = [
+  {username: 'Username1', shopName: 'Shop1'},
+  {username: 'Username2', shopName: 'Shop2'},
+  {username: 'Username3', shopName: 'Shop3'},
+  {username: 'Username4', shopName: 'Shop4'},
+  {username: 'Username5', shopName: 'Shop5'},
+  {username: 'Username6', shopName: 'Shop6'},
+  {username: 'Username7', shopName: 'Shop7'},
+  {username: 'Username8', shopName: 'Shop8'},
+  {username: 'Username9', shopName: 'Shop9'},
+  {username: 'Username10', shopName: 'Shop10'},
+];
+
+const approvedSellers = [
+  {username: 'Username11', shopName: 'Shop11'},
+  {username: 'Username12', shopName: 'Shop12'},
+  {username: 'Username13', shopName: 'Shop13'},
+  {username: 'Username14', shopName: 'Shop14'},
+  {username: 'Username15', shopName: 'Shop15'},
+  {username: 'Username16', shopName: 'Shop16'},
+  {username: 'Username17', shopName: 'Shop17'},
+  {username: 'Username18', shopName: 'Shop18'},
+  {username: 'Username19', shopName: 'Shop19'},
+  {username: 'Username20', shopName: 'Shop20'},
+];
+
 
 function AdminSellerRequest() {
   return (
@@ -85,15 +113,36 @@ function AdminSellerRequest() {
           </li>
         </ul>
       </div>
+
       <div className="admin-dashboard-content">
         <h1>Admin Seller Request</h1> 
         <div className="divider"></div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>SAMPLE</h2>
+          <h2>Pending Request</h2>
           <div className="divider"></div>
           <ul>
+            {pendingRequests.map((request, index) => (
+              <li key={index}>
+                <div>{request.username} - {request.shopName}</div> 
+                <FaTrash style={{ color: 'red' }} />
+                <FaCheck style={{ color: '#05652D' }} />
+              </li>
+            ))}
           </ul>
+        </div>
+        
+        <div className="admin-dashboard-recent-users mb-4 shadow">
+          <h2>Approved Sellers</h2>
+          <div className="divider"></div>
+          <ul>
+            {approvedSellers.map((seller, index) => (
+              <li key={index}>
+                <div>{seller.username} - {seller.shopName}</div>
+                <FaEye />
+              </li>
+            ))}
+                   </ul>
         </div>
       </div>
     </div>
