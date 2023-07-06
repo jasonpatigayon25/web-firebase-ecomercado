@@ -1,11 +1,17 @@
 .admin-dashboard {
     display: flex;
+    height: 100vh;
   }
   
   .admin-dashboard-sidebar {
     width: 250px;
     background-color: #E3FCE9;
     padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
   }
   
   .admin-dashboard-logo {
@@ -51,6 +57,7 @@
   .admin-dashboard-content {
     flex: 1;
     padding: 20px;
+    margin-left: 250px;
   }
   
   .admin-dashboard-content h1 {

@@ -98,11 +98,11 @@ function AdminProductMetrics() {
             <p className="stats"> ₱ 0</p>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
+            <h2 className="title-label"> TARGET</h2>
+            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> </p>
             <div className="divider"></div>
-            <h2 className="title-label"> Sales Revenue</h2>
-            <p className="stats"> ₱ 0</p>
+            <h2 className="title-label"> </h2>
+            <p className="stats"> </p>
           </div>
           </div>
 

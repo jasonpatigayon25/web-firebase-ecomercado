@@ -20,6 +20,16 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </FaUser>
 ));
 
+ // sample data
+ const donors = [
+    {username: 'Username1', date: '7/6/23', product: 'Product1'},
+    {username: 'Username2', date: '7/6/23', product: 'Product2'},
+    {username: 'Username3', date: '7/6/23', product: 'Product3'},
+    {username: 'Username4', date: '7/6/23', product: 'Product4'},
+    {username: 'Username5', date: '7/6/23', product: 'Product5'},
+    {username: 'Username6', date: '7/6/23', product: 'Product6'},
+  ];
+  
 function AdminDonations() {
   return (
     <div className="admin-dashboard">
@@ -90,9 +100,17 @@ function AdminDonations() {
         <div className="divider"></div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>SAMPLE</h2>
+          <h2>Total Donors: 0 </h2>
           <div className="divider"></div>
           <ul>
+            {donors.map((donor, index) => (
+              <li key={index}>
+                <img src="https://via.placeholder.com/150" alt="User" />  
+                <div style={{color: 'grey'}}>{donor.date}</div> 
+                <div style={{color: '#05652D', fontSize: '20px'}}>{donor.username}</div> 
+                <div style={{color: 'grey', fontSize: '14px'}}>{donor.product} <Link to={`/view-product/${donor.product}`}>View</Link></div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

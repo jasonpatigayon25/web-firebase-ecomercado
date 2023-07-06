@@ -93,9 +93,12 @@ function AdminUserStatistics() {
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Users</h2>
             <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
+            <div className="divider"></div>
+            <h2 className="title-label"> Total Verified Sellers</h2>
+            <p className="stats"> ₱ 0</p>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Verified Sellers</h2>
+            <h2 className="title-label"> Users Online</h2>
             <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
           </div>
           </div>
