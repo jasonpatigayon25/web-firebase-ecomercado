@@ -2,18 +2,44 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart,
-  FaUserCheck, FaHandshake, FaBoxOpen, FaShoppingBag, FaHeart
+  FaUserCheck, FaHandshake, FaBoxOpen, FaShoppingBag, FaHeart, FaUser
 } from "react-icons/fa";
+import { Dropdown } from "react-bootstrap";
 import "../css/AdminDashboard.css";
+
+const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+  <FaUser
+    className="admin-icon"
+    ref={ref}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(e);
+    }}
+  >
+    {children}
+  </FaUser>
+));
 
 function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <div className="admin-dashboard-sidebar">
-        <div className="admin-dashboard-logo">
-          <img src={process.env.PUBLIC_URL + "/admin.png"} alt="Admin Logo" style={{ height: '20px', width: '20px' }} />
-          <span className="admin-dashboard-divider-alt"></span> ADMIN
+      <div className="admin-user">
+        <div className="admin-user">
+          <Dropdown>
+            <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
+              <Dropdown.Item href="#/change-account">Change Account</Dropdown.Item>
+              <Dropdown.Item href="#/help">Help</Dropdown.Item>
+              <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <span className="admin-dashboard-divider-alt"></span> 
         </div>
+        <span>ADMIN</span>
+      </div>
+      <div className="divider"></div>
         <ul className="admin-dashboard-nav">
           <li>
             <Link to="/admin-dashboard">

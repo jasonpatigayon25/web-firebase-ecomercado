@@ -5,6 +5,7 @@ import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import { BsPersonFill } from 'react-icons/bs';
 import '../css/Navbar.css';
+import { FaUser } from 'react-icons/fa';
 
 const OrderHistory = () => {
   const orders = [
@@ -129,7 +130,7 @@ const OrderHistory = () => {
               <li className="nav-item dropdown">
                 <Dropdown>
                   <Dropdown.Toggle
-                    className="nav-link"
+                    className="nav-link user-icon"
                     style={{
                       background: 'none',
                       border: 'none',
@@ -137,11 +138,10 @@ const OrderHistory = () => {
                     }}
                   >
                     <div className="d-flex flex-column align-items-center">
-                      <img
-                        src={process.env.PUBLIC_URL + '/settings.png'}
-                        alt="Option"
-                        className="nav-icon"
+                      <FaUser
+                        className='user-style'
                         style={{
+                          fontSize:'24px',
                           transform: hoveredIndex === 2 ? 'scale(1.1)' : 'scale(1)',
                         }}
                         onMouseEnter={() => handleMouseEnter(2)}

@@ -36,6 +36,17 @@
   .admin-dashboard-nav i {
     margin-right: 10px;
   }
+
+  .admin-dashboard-nav li a {
+    color: black;
+    font-size: 16px;
+    transition: color 0.3s ease, font-size 0.3s ease;
+  }
+  
+  .admin-dashboard-nav li a:hover {
+    color: #05652D;
+    font-size: 18px;
+  }
   
   .admin-dashboard-content {
     flex: 1;
@@ -125,3 +136,39 @@
   .icon-white {
     color: white;
   }
+
+  .admin-dropdown {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .admin-user {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; 
+  }
+
+  .divider {
+    height: 1px;
+    background-color: grey;  
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .admin-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+.admin-icon:hover {
+  color: #05652D;
+  background-color: black;
+}
