@@ -4,6 +4,7 @@ import { Dropdown } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Campaign.css';
 import { BsPersonFill } from 'react-icons/bs';
+import '../css/Navbar.css';
 
 
 const Campaign = () => {
@@ -47,11 +48,8 @@ const Campaign = () => {
       <Link to="/home">
         <img
           src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
-          width="240"
-          height="60"
-          className="d-inline-block align-top"
+          className="navbar-logo d-inline-block align-top"
           alt="Logo"
-          style={{ marginLeft: '50px' }}
         />
         </Link>
         <div className="container">

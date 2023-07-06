@@ -5,6 +5,7 @@ import { Dropdown } from "react-bootstrap";
 import Footer from '../footer/Footer';
 import { BsPersonFill } from 'react-icons/bs';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import '../css/Navbar.css';
 
 
 function EcoReward() {
@@ -51,11 +52,8 @@ function EcoReward() {
       <Link to="/home">
         <img
           src={process.env.PUBLIC_URL + "/ecomercado-logo.png"}
-          width="240px"
-          height="60px"
-          className="d-inline-block align-top"
+          className="navbar-logo d-inline-block align-top"
           alt="Logo"
-          style={{ marginLeft: "50px" }}
         />
         </Link>
         <div className="container">

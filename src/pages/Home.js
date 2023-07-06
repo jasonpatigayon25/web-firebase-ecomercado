@@ -5,6 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Dropdown } from "react-bootstrap";
 import Footer from '../footer/Footer';
 import { BsPersonFill } from 'react-icons/bs';
+import '../css/Navbar.css';
 
 function Home() {
   const location = useLocation();
@@ -39,11 +40,9 @@ function Home() {
       <Link to="/home">
         <img
           src={process.env.PUBLIC_URL + "/ecomercado-logo.png"}
-          width="240"
-          height="60"
-          className="d-inline-block align-top"
+          className="navbar-logo d-inline-block align-top"
           alt="Logo"
-          style={{ marginLeft: "50px" }}
+
         />
         </Link>
         <div className="container">
