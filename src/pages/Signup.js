@@ -175,7 +175,7 @@ function Signup() {
                         Already have an account? <Link to="/login" style={{ color: '#05652D', textDecoration: 'none' }}>Log In</Link>
                       </p>
                       <div className="divider d-flex align-items-center my-4">
-                        <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                      <p className="text-or"><span>OR</span></p>
                       </div>
 
                       <div className="d-flex justify-content-center text-center mt-4 pt-1">
