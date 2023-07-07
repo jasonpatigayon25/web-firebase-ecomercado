@@ -101,19 +101,21 @@ function AdminDonations() {
         <div className="divider"></div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>Total Donors: 0 </h2>
+          <h2>Total Donors: {donors.length} </h2>
           <div className="divider"></div>
-          <ul>
-            {donors.map((donor, index) => (
-                <li key={index}>
-                <img src="https://via.placeholder.com/150" alt="User" />  
-                <div style={{ fontSize: '20px'}}>{donor.product}</div>
-                <div style={{color: '#05652D', fontSize: '20px'}}>{donor.username}</div> 
-                <div style={{color: 'grey'}}>{donor.date}</div>
-                <Link to={`/view-product/${donor.product}`}><FaEye/></Link>
-              </li>
-            ))}
-          </ul>
+          <table style={{ width: '100%' }}>
+            <tbody>
+              {donors.map((donor, index) => (
+                <tr key={index}>
+                  <td><img src="https://via.placeholder.com/150" alt="User" /></td>
+                  <td>{donor.product}</td>
+                  <td>{donor.username}</td> 
+                  <td style={{ textAlign: 'right' }}>{donor.date}</td>
+                  <td style={{ textAlign: 'right' }}><Link to={`/view-product/${donor.product}`}><FaEye color="#05652D"/></Link></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

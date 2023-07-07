@@ -195,3 +195,57 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
+
+.admin-dashboard-recent-users table td {
+  text-align: left;
+}
+
+.admin-dashboard-recent-users table td:last-child {
+  text-align: right;
+}
+
+.admin-dashboard-recent-users table td svg {
+  margin: 0 0.5rem;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 8px;
+}
+
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 40%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 40%;
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  width: 20%;
+  text-align: center;
+}
+
+.admin-dashboard-recent-users table th:last-child,
+.admin-dashboard-recent-users table td:last-child {
+  text-align: right;
+}
+

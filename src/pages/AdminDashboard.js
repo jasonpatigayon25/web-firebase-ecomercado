@@ -20,6 +20,19 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </FaUser>
 ));
 
+const recentUsers = [
+  {username: 'Username1', date: '2023-06-01'},
+  {username: 'Username2', date: '2023-05-25'},
+  {username: 'Username3', date: '2023-05-18'},
+  {username: 'Username4', date: '2023-05-16'},
+  {username: 'Username5', date: '2023-05-10'},
+  {username: 'Username6', date: '2023-05-05'},
+  {username: 'Username7', date: '2023-04-29'},
+  {username: 'Username8', date: '2023-04-20'},
+  {username: 'Username9', date: '2023-04-12'},
+  {username: 'Username10', date: '2023-04-03'}
+];
+
 function AdminDashboard() {
   return (
     <div className="admin-dashboard">
@@ -114,20 +127,22 @@ function AdminDashboard() {
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Recent Users</h2>
           <div className="divider"></div>
-          <ul>
-            <li>
-              <span>Username1</span>
-              <span>Date1</span>
-            </li>
-            <li>
-              <span>Username2</span>
-              <span>Date2</span>
-            </li>
-            <li>
-              <span>Username3</span>
-              <span>Date3</span>
-            </li>
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Date Registered</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentUsers.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.username}</td>
+                  <td>{user.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

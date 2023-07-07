@@ -121,28 +121,49 @@ function AdminSellerRequest() {
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Pending Request</h2>
           <div className="divider"></div>
-          <ul>
-            {pendingRequests.map((request, index) => (
-              <li key={index}>
-                <div>{request.username} - {request.shopName}</div> 
-                <FaTrash style={{ color: 'red' }} />
-                <FaCheck style={{ color: '#05652D' }} />
-              </li>
-            ))}
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Shop/Seller Name</th>
+                <th colSpan="3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pendingRequests.map((request, index) => (
+                <tr key={index}> 
+                  <td>{request.username}</td>
+                  <td>{request.shopName}</td>
+                  <td><FaEye color="#05652D"/></td>
+                  <td><FaTrash style={{ color: 'red' }} /></td>
+                  <td><FaCheck style={{ color: '#05652D' }} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        
+
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Approved Sellers</h2>
           <div className="divider"></div>
-          <ul>
-            {approvedSellers.map((seller, index) => (
-              <li key={index}>
-                <div>{seller.username} - {seller.shopName}</div>
-                <FaEye />
-              </li>
-            ))}
-                   </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Shop/Seller Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {approvedSellers.map((seller, index) => (
+                <tr key={index}>
+                  <td>{seller.username}</td>
+                  <td>{seller.shopName}</td>
+                  <td><FaEye color="#05652D"/></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
