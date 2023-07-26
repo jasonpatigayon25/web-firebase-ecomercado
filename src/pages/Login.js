@@ -20,7 +20,7 @@ function Login() {
       });
 
       if (res.data === 'exist') {
-        navigate('/home', { state: { id: username } });
+        navigate('/admin-dashboard', { state: { id: username } });
       } else if (res.data === 'notexist') {
         alert('User has not signed up');
       } else if (res.data === 'passwordIncorrect') {
