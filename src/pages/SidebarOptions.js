@@ -54,26 +54,26 @@ function SidebarOptions() {
             Product Viewer
           </Link>
         </li>
-        <li className={location.pathname === "/admin-users" ? "active" : ""}>
-          <Link to="/admin-users">
+        <li className={location.pathname === "/user-statistics" ? "active" : ""}>
+          <Link to="/user-statistics">
             <FaUsers />
             User Statistics
           </Link>
         </li>
-        <li className={location.pathname === "/admin-products" ? "active" : ""}>
-          <Link to="/admin-products">
+        <li className={location.pathname === "/product-metrics" ? "active" : ""}>
+          <Link to="/product-metrics">
             <FaCogs />
             Product Metrics
           </Link>
         </li>
-        <li className={location.pathname === "/admin-donations" ? "active" : ""}>
-          <Link to="/admin-donations">
+        <li className={location.pathname === "/donations" ? "active" : ""}>
+          <Link to="/donations">
             <FaHandHoldingHeart />
             Donations
           </Link>
         </li>
-        <li className={location.pathname === "/admin-feedback" ? "active" : ""}>
-          <Link to="/admin-feedback">
+        <li className={location.pathname === "/user-feedback" ? "active" : ""}>
+          <Link to="/user-feedback">
             <FaComment />
             User Feedback
           </Link>

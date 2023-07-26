@@ -1,66 +1,56 @@
 import React from "react";
-import { FaUserCheck, FaHandshake, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
+import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 
-const recentUsers = [
-  {username: 'Username1', date: '2023-06-01'},
-  {username: 'Username2', date: '2023-05-25'},
-  {username: 'Username3', date: '2023-05-18'},
-  {username: 'Username4', date: '2023-05-16'},
-  {username: 'Username5', date: '2023-05-10'},
-  {username: 'Username6', date: '2023-05-05'},
-  {username: 'Username7', date: '2023-04-29'},
-  {username: 'Username8', date: '2023-04-20'},
-  {username: 'Username9', date: '2023-04-12'},
-  {username: 'Username10', date: '2023-04-03'}
+const recentProducts = [
+  { itemName: 'Product 1', userName: 'Username1', datePublished: '2023-06-01' },
+  { itemName: 'Product 2', userName: 'Username2', datePublished: '2023-05-25' },
+  { itemName: 'Product 3', userName: 'Username3', datePublished: '2023-05-18' },
+  { itemName: 'Product 4', userName: 'Username4', datePublished: '2023-05-16' },
+  { itemName: 'Product 5', userName: 'Username5', datePublished: '2023-05-10' },
+  { itemName: 'Product 6', userName: 'Username6', datePublished: '2023-05-05' },
+  { itemName: 'Product 7', userName: 'Username7', datePublished: '2023-04-29' },
+  { itemName: 'Product 8', userName: 'Username8', datePublished: '2023-04-20' },
+  { itemName: 'Product 9', userName: 'Username9', datePublished: '2023-04-12' },
+  { itemName: 'Product 10', userName: 'Username10', datePublished: '2023-04-03' }
 ];
 
-function AdminDashboard() {
+function ProductMetrics() {
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h1>Admin Dashboard</h1> 
+        <h2>ADMIN DASHBOARD</h2>
         <div className="divider"></div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Verified Sellers</h2>
-            <p className="stats"> <FaHandshake style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> 0</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card center-card">
-            <h2 className="title-label"> Total Donors</h2>
-            <p className="stats"> <FaHeart style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0</p>
           </div>
         </div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>Recent Users</h2>
+          <h1>Recent Products Published</h1>
           <div className="divider"></div>
-          <table>
+          <table className="recent-products-table">
             <thead>
               <tr>
+                <th>Item Name</th>
                 <th>Username</th>
-                <th>Date Registered</th>
+                <th>Date Published</th>
               </tr>
             </thead>
             <tbody>
-              {recentUsers.map((user, index) => (
+              {recentProducts.map((product, index) => (
                 <tr key={index}>
-                  <td>{user.username}</td>
-                  <td>{user.date}</td>
+                  <td>{product.itemName}</td>
+                  <td>{product.userName}</td>
+                  <td>{product.datePublished}</td>
                 </tr>
               ))}
             </tbody>
@@ -71,4 +61,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default ProductMetrics;

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCheck, FaHandshake, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
+import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 
@@ -21,33 +21,29 @@ function AdminDashboard() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h1>Admin Dashboard</h1> 
+        <h2>ADMIN DASHBOARD</h2> 
         <div className="divider"></div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'white' }} /> 0</p>
-          </div>
-          <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Verified Sellers</h2>
-            <p className="stats"> <FaHandshake style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> 0</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> 0</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0</p>
           </div>
           <div className="admin-dashboard-card center-card">
             <h2 className="title-label"> Total Donors</h2>
-            <p className="stats"> <FaHeart style={{ color: 'white' }} /> 0</p>
+            <p className="stats"> <FaHeart style={{ color: 'black' }} /> 0</p>
           </div>
         </div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>Recent Users</h2>
+          <h1>Recent Users</h1>
           <div className="divider"></div>
           <table>
             <thead>

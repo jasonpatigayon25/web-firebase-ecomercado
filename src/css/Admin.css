@@ -160,10 +160,14 @@
   background-color: var(--background-color);
 }
 
+.admin-dashboard-content h2 {
+  color: #05652D;
+}
+
 .admin-dashboard-content h1 {
   font-size: 24px;
   margin-bottom: 10px;
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .admin-dashboard-content p {
@@ -202,10 +206,10 @@
 }
 
 .stats {
-  font-size: 24px;
+  font-size: 38px;
   font-weight: bold;
   text-align: center;
-  color: var(--primary-color);
+  color: var(--text-color);
 }
 
 .admin-dashboard-recent-users {
@@ -217,7 +221,7 @@
 }
 
 .admin-dashboard-recent-users h2 {
-  color: var(--primary-color);
+  color: var(--secondary-color);
   margin-bottom: 10px;
 }
 
@@ -346,3 +350,153 @@ td:nth-child(5) {
 .admin-dashboard-recent-users table td:last-child {
   text-align: right;
 }
+
+.donation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.donation-table th,
+.donation-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.donation-table th {
+  background-color: #05652d;
+  color: #fff;
+}
+
+.donation-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.donation-table tr:hover {
+  background-color: #ddd;
+}
+
+.user-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.admin-dashboard-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.user-feedback-container {
+  height: 100%; /* Set the height of the container to 100% of its parent (admin-dashboard-content) */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+.user-feedback-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-feedback-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #05652d;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.feedback-content {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.feedback-date {
+  min-width: 70px;
+  text-align: right;
+}
+
+.active {
+  background-color: #b0f4c0;
+}
+
+.recent-products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recent-products-table th,
+.recent-products-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.recent-products-table thead th {
+  background-color: #f2f2f2;
+}
+
+.recent-products-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.recent-products-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.admin-dashboard-recent-users {
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.admin-dashboard-recent-users h1 {
+  padding: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.admin-dashboard-recent-users table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-dashboard-recent-users th,
+.admin-dashboard-recent-users td {
+  padding: 12px;
+  text-align: left;
+}
+
+.admin-dashboard-recent-users thead th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+}
+
+.admin-dashboard-recent-users tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.admin-dashboard-recent-users tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+
+
+
+
