@@ -1,185 +1,283 @@
+/* Admin.css */
+
+:root {
+  --primary-color: #E3FCE9;
+  --secondary-color: #05652D;
+  --background-color: #f1f1f1;
+  --text-color: #333;
+}
+
 .admin-dashboard {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .admin-dashboard-sidebar {
-    width: 250px;
-    background-color: #E3FCE9;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
-  }
-  
-  .admin-dashboard-logo {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .admin-dashboard-logo img {
-    width: 100px;
-  }
-  
-  .admin-dashboard-nav {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .admin-dashboard-nav li {
-    margin-bottom: 10px;
-  }
-  
-  .admin-dashboard-nav a {
-    display: flex;
-    align-items: center;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .admin-dashboard-nav i {
-    margin-right: 10px;
-  }
+  display: flex;
+  height: 100vh;
+}
 
-  .admin-dashboard-nav li a {
-    color: black;
-    font-size: 16px;
-    transition: color 0.3s ease, font-size 0.3s ease;
-  }
-  
-  .admin-dashboard-nav li a:hover {
-    color: #05652D;
-    font-size: 18px;
-  }
-  
-  .admin-dashboard-content {
-    flex: 1;
-    padding: 20px;
-    margin-left: 250px;
-  }
-  
-  .admin-dashboard-content h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #05652D;
-  }
-  
-  .admin-dashboard-content p {
-    font-size: 20px;
-  }
-  
-  .admin-dashboard-divider-alt {
-    width: 1px;
-    height: 20px;
-    background-color: #808080;
-    margin: 0 10px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  
-  .admin-dashboard-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .admin-dashboard-card {
-    width: calc(50% - 10px);
-    background-color: #05652D;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 5px;
-  }
-  
-  .title-label {
-    color: #333;
-    text-align: center;
-  }
-  
-  .stats {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .admin-dashboard-recent-users {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .admin-dashboard-recent-users h2 {
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .admin-dashboard-recent-users ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .admin-dashboard-recent-users li {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .admin-dashboard-recent-users span {
-    color: #666;
-  }
+.admin-dashboard-sidebar {
+  background-color: var(--primary-color);
+  color: black;
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.3);
+}
 
-  .title-label {
-    color: #fff;
-  }
+.admin-user {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
 
-  .stats {
-    color: #fff;
-  }
-  
-  .icon-white {
-    color: white;
-  }
+.admin-user .admin-icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: black;
+}
 
-  .admin-dropdown {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .admin-user {
-    display: flex;
-    align-items: center;
-    margin-right: 10px; 
-  }
+.admin-user .admin-username {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: black;
+}
 
-  .divider {
-    height: 1px;
-    background-color: grey;  
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
+.admin-dashboard-nav {
+  list-style: none;
+  padding: 0;
+}
 
-  .admin-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: white;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+.admin-dashboard-nav li {
+  padding: 15px;
+}
+
+.admin-dashboard-nav li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.admin-dashboard-nav li a:hover {
+  background-color: #05652D; 
+  color: white; 
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.admin-dashboard-nav li.active a {
+  color: #05652D; 
+  font-size: 18px;
+  background-color: transparent;
+}
+
+.admin-dashboard-nav li a svg {
+  margin-right: 10px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #444;
+  margin: 10px 0;
+}
+
+.dropdown-menu {
+  background-color: var(--primary-color);
+  border: none;
+}
+
+.dropdown-item {
+  color: black;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #05652D;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.admin-dashboard-nav li.active a {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.admin-dashboard-nav li.active a:hover {
+  color: #05652D; 
+  font-size: 18px;
+  background-color: transparent;
+}
+
+.admin-dashboard-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-dashboard-logo img {
+  width: 100px;
+}
+
+.admin-dashboard-nav {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-dashboard-nav li {
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-nav a {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.admin-dashboard-nav i {
+  margin-right: 10px;
+}
+
+.admin-dashboard-nav li a {
+  color: var(--text-color);
+  font-size: 16px;
+  transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.admin-dashboard-nav li a:hover {
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+.admin-dashboard-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px;
+  background-color: var(--background-color);
+}
+
+.admin-dashboard-content h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.admin-dashboard-content p {
+  font-size: 20px;
+}
+
+.admin-dashboard-divider-alt {
+  width: 1px;
+  height: 20px;
+  background-color: #808080;
+  margin: 0 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.admin-dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-dashboard-card {
+  width: calc(50% - 10px);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.title-label {
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+.stats {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.admin-dashboard-recent-users {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+}
+
+.admin-dashboard-recent-users h2 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-recent-users ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-dashboard-recent-users li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-recent-users span {
+  color: var(--secondary-color);
+}
+
+.icon-white {
+  color: white;
+}
+
+.admin-dropdown {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.divider {
+  height: 1px;
+  background-color: grey;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.admin-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: white;
+  color: black; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
 .admin-icon:hover {
-  color: #05652D;
-  background-color: black;
+  color: white; 
+  background-color: #05652D;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 .sales-dashboard-cards {
   display: flex;
   flex-wrap: wrap;
@@ -189,11 +287,12 @@
 
 .sales-dashboard-card {
   width: calc(50% - 10px);
-  background-color: #05652D;
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  color: var(--text-color);
 }
 
 .admin-dashboard-recent-users table td {
@@ -207,7 +306,6 @@
 .admin-dashboard-recent-users table td svg {
   margin: 0 0.5rem;
 }
-
 
 table {
   width: 100%;
@@ -248,4 +346,3 @@ td:nth-child(5) {
 .admin-dashboard-recent-users table td:last-child {
   text-align: right;
 }
-

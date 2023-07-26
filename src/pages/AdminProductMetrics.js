@@ -61,7 +61,7 @@ function AdminProductMetrics() {
             </Link>
           </li>
           <li>
-            <Link to="/admin-products">
+            <Link to="/product-metrics">
               <FaCogs />
               Product Metrics
             </Link>

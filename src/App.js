@@ -14,6 +14,8 @@ import AdminSellerRequest from "./pages/AdminSellerRequest"
 import AdminProductMetrics from "./pages/AdminProductMetrics"
 import AdminUserFeedback from "./pages/AdminUserFeedback"
 import AdminUserStatistics from "./pages/AdminUserStatistics"
+import ProductMetrics from "./pages/ProductMetrics"
+import ProductViewer from "./pages/ProductViewer"
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/admin-products" element={<AdminProductMetrics/>}/>
           <Route path="/admin-feedback" element={<AdminUserFeedback/>}/>
           <Route path="/admin-users" element={<AdminUserStatistics/>}/>
+          <Route path="/product-metrics" element={<ProductMetrics/>}/>
+          <Route path="/product-viewer" element={<ProductViewer/>}/>
         </Routes>
       </Router>
     </div>
