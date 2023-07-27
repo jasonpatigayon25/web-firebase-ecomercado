@@ -21,18 +21,6 @@ function Welcome() {
                 alt="Logo"
               />
             </Link>
-            <ul className="navbar-nav ml-2 d-flex align-items-center">
-              <li className="nav-item">
-                <Link className="nav-link" to="/about-us" style={{ color: '#05652D' }}>
-                  About Us
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/contact-us" style={{ color: '#05652D' }}>
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
           </div>
           <div>
             <ul className="navbar-nav ml-auto">
@@ -65,7 +53,7 @@ function Welcome() {
         <Row className="justify-content-center mt-5">
           <Col md={6}>
             <h1 style={{ fontWeight: 'bold', color: '#05652D' }}>Welcome to ECOMercado!</h1>
-            <h2 className="mb-4" style={{ color: '#05652D' }}>Shop and donate to reduce waste and support a sustainable future.</h2>
+            <h2 className="mb-4" style={{ color: '#05652D' }}>Buy, sell, and donate to reduce waste and support a sustainable future.</h2>
             <Button
               className="mx-2 px-4 py-3 hover-effect"
               variant="primary"

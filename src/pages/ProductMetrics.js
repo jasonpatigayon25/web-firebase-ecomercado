@@ -21,7 +21,7 @@ function ProductMetrics() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>ADMIN DASHBOARD</h2>
+        <h2>PRODUCT METRICS</h2>
         <div className="divider"></div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">

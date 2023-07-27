@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Row, Col, Card, Form, InputGroup, FormControl, FormCheck, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, FormControl, FormCheck, Button } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Signup.css';
 
@@ -69,95 +69,65 @@ function Signup() {
       </div>
       <Container fluid>
         <Row className="justify-content-center">
-          <Col md="6">
+          <Col md="4">
             <Card
-              style={{
-                borderRadius: '0',
-                border: 'none',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-              className="p-4 shadow"
+              className="card p-4 shadow"
             >
               <Form>
                 <Row>
                   <Col md="12" className="order-lg-1 d-flex flex-column align-items-center">
                     <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-4 mt-3" style={{ color: '#05652D' }}>Sign up</p>
-                    <div className="d-flex flex-row align-items-center mb-4">
-                      <InputGroup>
-                        <div>
-                          <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
-                        </div>
-                        <FormControl
-                          className='username'
-                          placeholder="Enter Username"
-                          aria-label="Enter Username"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
-                        />
-                      </InputGroup>
+                    <div className="txtinput mb-4">
+                      <FormControl
+                        className='username'
+                        placeholder="Enter Username"
+                        aria-label="Enter Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
+                      />
                     </div>
-                    <div className="d-flex flex-row align-items-center mb-4">
-                    <InputGroup>
-                      <div>
-                        <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
-                      </div>
+                    <div className="txtinput mb-4">
                       <FormControl
                         className='first-name'
                         placeholder="Enter First Name"
                         aria-label="Enter First Name"
                         value={firstname}
                         onChange={(e) => setFirstname(e.target.value)}
-                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
                       />
-                    </InputGroup>
-                  </div>
-                  <div className="d-flex flex-row align-items-center mb-4">
-                    <InputGroup>
-                      <div>
-                        <img src={process.env.PUBLIC_URL + '/user.png'} alt="Account" className="me-3" />
-                      </div>
+                    </div>
+                    <div className="txtinput mb-4">
                       <FormControl
                         className='last-name'
                         placeholder="Enter Last Name"
                         aria-label="Enter Last Name"
                         value={lastname}
                         onChange={(e) => setLastname(e.target.value)}
-                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px'}}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
                       />
-                    </InputGroup>
-                  </div>
-                    <div className="d-flex flex-row align-items-center mb-4">
-                      <InputGroup>
-                        <div>
-                          <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
-                        </div>
-                        <FormControl
-                          className='password'
-                          placeholder="Enter Password"
-                          aria-label="Enter Password"
-                          type="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
-                        />
-                      </InputGroup>
                     </div>
-                    <div className="d-flex flex-row align-items-center mb-4">
-                      <InputGroup>
-                        <div>
-                          <img src={process.env.PUBLIC_URL + '/lock.png'} alt="Account" className="me-3" />
-                        </div>
-                        <FormControl
-                          className='repeat-password'
-                          placeholder="Repeat your password"
-                          aria-label="Repeat your password"
-                          type="password"
-                          value={repeatPassword}
-                          onChange={(e) => setRepeatPassword(e.target.value)}
-                          style={{ borderColor: '#05652D', borderRadius: '15px', width: '350px' }}
-                        />
-                      </InputGroup>
+                    <div className="txtinput mb-4">
+                      <FormControl
+                        className='password'
+                        placeholder="Enter Password"
+                        aria-label="Enter Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
+                      />
+                    </div>
+                    <div className="txtinput mb-4">
+                      <FormControl
+                        className='repeat-password'
+                        placeholder="Repeat your password"
+                        aria-label="Repeat your password"
+                        type="password"
+                        value={repeatPassword}
+                        onChange={(e) => setRepeatPassword(e.target.value)}
+                        style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
+                      />
                     </div>
                     <div className="mb-4">
                       <FormCheck id="flexCheckDefault" label="Accept terms and conditions" checked={termsChecked} onChange={() => setTermsChecked(!termsChecked)} />
@@ -166,7 +136,7 @@ function Signup() {
                       className="mb-4"
                       size="lg"
                       onClick={submit}
-                      style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
+                      style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '100%', display: 'block' }}
                     >
                       Register
                     </Button>
@@ -174,18 +144,6 @@ function Signup() {
                       <p>
                         Already have an account? <Link to="/login" style={{ color: '#05652D', textDecoration: 'none' }}>Log In</Link>
                       </p>
-                      <div className="divider d-flex align-items-center my-4">
-                      <p className="text-or"><span>OR</span></p>
-                      </div>
-
-                      <div className="d-flex justify-content-center text-center mt-4 pt-1">
-                        <a href="#!" className="text-black icon-link me-3">
-                          <img src={process.env.PUBLIC_URL + '/facebook.png'} alt="Facebook" className="icon" />
-                        </a>
-                        <a href="#!" className="text-black icon-link mb-1">
-                          <img src={process.env.PUBLIC_URL + '/google.png'} alt="Google" className="icon" style={{ marginBottom: '3px' }} />
-                        </a>
-                      </div>
                     </div>
                   </Col>
                 </Row>
