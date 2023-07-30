@@ -12,7 +12,6 @@ import UserStatistics from "./pages/UserStatistics"
 import Donation from "./pages/Donation"
 import UserFeedback from "./pages/UserFeedback"
 import ProductMetrics from "./pages/ProductMetrics"
-import { Auth } from "./components/auth"
 
 function App() {
   return (

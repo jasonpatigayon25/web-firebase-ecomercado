@@ -1,34 +1,65 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
-import axios from 'axios';
 import Footer from '../footer/Footer';
 import '../css/Login.css';
+import { getDocs, query, where } from "firebase/firestore";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+import { usersCollection } from '../config/firebase';
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
+  const auth = getAuth();
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
 
   async function submit(e) {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:8000/', {
-        username,
-        password,
-      });
+      const q = query(usersCollection, where("user", "==", username));
+      const querySnapshot = await getDocs(q);
 
-      if (res.data === 'exist') {
-        navigate('/admin-dashboard', { state: { id: username } });
-      } else if (res.data === 'notexist') {
+      if (querySnapshot.empty) {
         alert('User has not signed up');
-      } else if (res.data === 'passwordIncorrect') {
-        alert('Incorrect password');
+        return;
       }
+
+      // Get the first document from the query (should only be one)
+      const userDoc = querySnapshot.docs[0];
+
+      if (userDoc.data().password !== password) {
+        alert('Incorrect password');
+        return;
+      }
+
+      navigate('/admin-dashboard', { state: { id: username } });
     } catch (error) {
       console.log(error);
-      alert('Wrong details');
+      alert('Something went wrong.');
+    }
+  }
+
+  async function signInWithGoogle() {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate('/admin-dashboard');
+    } catch (error) {
+      console.error(error);
+      alert('Google Sign In failed.');
+    }
+  }
+
+  async function handleFacebookLogin() {
+    try {
+      await signInWithPopup(auth, facebookProvider);
+      navigate('/admin-dashboard');
+    } catch (error) {
+      console.error(error);
+      alert('Facebook Sign In failed.');
     }
   }
 
@@ -108,10 +139,10 @@ function Login() {
             </div>
 
             <div className="d-flex justify-content-center text-center mt-4 pt-1">
-            <a href="#!" className="text-black icon-link me-3">
+            <a href="#!" className="text-black icon-link me-3" onClick={handleFacebookLogin}>
               <img src={process.env.PUBLIC_URL + '/facebook.png'} alt="Facebook" className="icon" />
             </a>
-            <a href="#!" className="text-black icon-link">
+            <a href="#!" className="text-black icon-link" onClick={signInWithGoogle}>
               <img src={process.env.PUBLIC_URL + '/google.png'} alt="Google" className="icon" />
             </a>
           </div>

@@ -33,7 +33,7 @@ function SidebarOptions() {
               <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
               <Dropdown.Item href="#/change-account">Change Account</Dropdown.Item>
               <Dropdown.Item href="#/help">Help</Dropdown.Item>
-              <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
+              <Dropdown.Item href="/">Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <span className="admin-dashboard-divider-alt"></span> 
