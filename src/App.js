@@ -12,13 +12,14 @@ import UserStatistics from "./pages/UserStatistics"
 import Donation from "./pages/Donation"
 import UserFeedback from "./pages/UserFeedback"
 import ProductMetrics from "./pages/ProductMetrics"
+import { Auth } from "./components/auth"
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Welcome/>}/>
+          <Route path="/" element={<Welcome />}/>
           <Route path="/about-us" element={<AboutUs/>}/>
           <Route path="/contact-us" element={<ContactUs/>}/>
           <Route path="/login" element={<Login/>}/>
