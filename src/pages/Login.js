@@ -4,17 +4,16 @@ import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bo
 import Footer from '../footer/Footer';
 import '../css/Login.css';
 import { getDocs, query, where } from "firebase/firestore";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+import { auth, facebookProvider, googleProvider } from "../config/firebase";
 import { usersCollection } from '../config/firebase';
+import {
+  signInWithPopup,
+} from "firebase/auth";
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
-  const auth = getAuth();
-  const googleProvider = new GoogleAuthProvider();
-  const facebookProvider = new FacebookAuthProvider();
 
   async function submit(e) {
     e.preventDefault();
@@ -43,25 +42,22 @@ function Login() {
     }
   }
 
-  async function signInWithGoogle() {
+  const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
       navigate('/admin-dashboard');
-    } catch (error) {
-      console.error(error);
-      alert('Google Sign In failed.');
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
 
-  async function handleFacebookLogin() {
+  const signInWithFacebook = async () => {
     try {
       await signInWithPopup(auth, facebookProvider);
-      navigate('/admin-dashboard');
-    } catch (error) {
-      console.error(error);
-      alert('Facebook Sign In failed.');
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
 
   return (
     <div style={{ background: 'linear-gradient(to bottom, #E3FCE9, #BEF7CC)' }}>
@@ -139,7 +135,7 @@ function Login() {
             </div>
 
             <div className="d-flex justify-content-center text-center mt-4 pt-1">
-            <a href="#!" className="text-black icon-link me-3" onClick={handleFacebookLogin}>
+            <a href="#!" className="text-black icon-link me-3" onClick={signInWithFacebook}>
               <img src={process.env.PUBLIC_URL + '/facebook.png'} alt="Facebook" className="icon" />
             </a>
             <a href="#!" className="text-black icon-link" onClick={signInWithGoogle}>
