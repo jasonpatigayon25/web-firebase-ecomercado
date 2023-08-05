@@ -505,6 +505,41 @@ td:nth-child(5) {
 .message-icon:hover {
   color: #063e1e;
 }
+.notification-table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.notification-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.notification-message {
+  padding: 10px;
+}
+
+.notification-actions {
+  text-align: right;
+}
+
+.btn-action {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #f44336; 
+  color: white;
+}
+
+.btn-mute {
+  background-color: #4CAF50; 
+  color: white;
+}
 
 
 

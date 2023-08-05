@@ -2,9 +2,20 @@ import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Modal } from "react-bootstrap";
-import { FaUser, FaEnvelope } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaTrashAlt } from "react-icons/fa";
 
 function UserFeedback() {
+  const [feedbacks, setFeedbacks] = useState([
+    { username: 'OceanBreeze22', feedback: 'The user interface is good but ...', date: '5/29/23' },
+    { username: 'CosmicUser', feedback: 'The search feature can be improved ...', date: '5/29/23' },
+    { username: 'TechGuru77', feedback: 'Really like the design aesthetics...', date: '5/30/23' },
+    { username: 'User123', feedback: 'The website is very user-friendly...', date: '6/1/23' },
+    { username: 'FeedbackMaster', feedback: 'Had some issues with the cart page...', date: '6/2/23' },
+    { username: 'HappyCustomer', feedback: 'Love the eco-friendly products on offer...', date: '6/3/23' },
+    { username: 'TestUser', feedback: 'The checkout process was a bit complex...', date: '6/4/23' },
+    // Add more feedbacks here...
+  ]);
+
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const handleFeedbackClick = (feedback) => {
@@ -20,16 +31,10 @@ function UserFeedback() {
     alert(`Message sent to ${username}`);
   };
 
-  const feedbacks = [
-    { username: 'OceanBreeze22', feedback: 'The user interface is good but ...', date: '5/29/23' },
-    { username: 'CosmicUser', feedback: 'The search feature can be improved ...', date: '5/29/23' },
-    { username: 'TechGuru77', feedback: 'Really like the design aesthetics...', date: '5/30/23' },
-    { username: 'User123', feedback: 'The website is very user-friendly...', date: '6/1/23' },
-    { username: 'FeedbackMaster', feedback: 'Had some issues with the cart page...', date: '6/2/23' },
-    { username: 'HappyCustomer', feedback: 'Love the eco-friendly products on offer...', date: '6/3/23' },
-    { username: 'TestUser', feedback: 'The checkout process was a bit complex...', date: '6/4/23' },
-    // Add more feedbacks here...
-  ];
+  const handleDeleteFeedback = (username) => {
+    setFeedbacks(feedbacks.filter(feedback => feedback.username !== username));
+    setSelectedFeedback(null);
+  };
 
   return (
     <div className="admin-dashboard">
@@ -80,6 +85,9 @@ function UserFeedback() {
                   <i>{selectedFeedback.date}</i>
                 </p>
                 <p>{selectedFeedback.feedback}</p>
+                <button onClick={() => handleDeleteFeedback(selectedFeedback.username)}>
+                  <FaTrashAlt /> Delete Feedback
+                </button>
               </>
             )}
           </Modal.Body>

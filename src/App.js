@@ -15,6 +15,8 @@ import ProductMetrics from "./pages/ProductMetrics"
 import ForgotPassword from "./pages/ForgotPassword"
 import EditProfile from "./pages/EditProfile"
 import DeleteProfile from "./pages/DeleteProfile"
+import Notification from "./pages/Notification"
+import SwitchAccount from "./pages/SwitchAccount"
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>}/>
           <Route path="/edit-profile" element={<EditProfile/>}/>
           <Route path="/delete-profile" element={<DeleteProfile/>}/>
+          <Route path="/notification" element={<Notification/>}/>
+          <Route path="/switch-account" element={<SwitchAccount/>}/>
         </Routes>
       </Router>
     </div>

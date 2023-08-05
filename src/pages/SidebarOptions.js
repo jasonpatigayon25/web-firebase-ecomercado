@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser
+  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -33,7 +33,7 @@ function SidebarOptions() {
               <Dropdown.Item as={Link} to="/edit-profile">Edit Profile</Dropdown.Item>
               <Dropdown.Item as={Link} to="/delete-profile">Delete Profile</Dropdown.Item>
               <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
-              <Dropdown.Item href="#/change-account">Change Account</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/switch-account">Switch Account</Dropdown.Item>
               <Dropdown.Item href="/">Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -77,6 +77,12 @@ function SidebarOptions() {
           <Link to="/user-feedback">
             <FaComment />
             User Feedback
+          </Link>
+        </li>
+        <li className={location.pathname === "/notification" ? "active" : ""}>
+          <Link to="/notification">
+            <FaBell/>
+            Notification
           </Link>
         </li>
       </ul>

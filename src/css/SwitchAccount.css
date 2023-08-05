@@ -1,0 +1,64 @@
+.switch-account-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  
+  .switch-account-w-100 {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .switch-account-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .switch-account-card-body {
+    padding: 2rem;
+  }
+  
+  .switch-account-text-center {
+    text-align: center;
+  }
+  
+  .switch-account-mb-4 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .switch-account-mt-4 {
+    margin-top: 1.5rem;
+  }
+  
+  .switch-account-form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .switch-account-form-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .switch-account-form-control {
+    padding: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    height: auto;
+  }
+  
+  .switch-account-btn {
+    background-color: #05652D;
+    border: none;
+    color: white;
+    padding: 0.75rem 0;
+    font-size: 1.25rem;
+    border-radius: 5px;
+  }
+  
+  .switch-account-btn:hover {
+    background-color: #03481b;
+  }
+  
