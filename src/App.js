@@ -12,6 +12,8 @@ import UserStatistics from "./pages/UserStatistics"
 import Donation from "./pages/Donation"
 import UserFeedback from "./pages/UserFeedback"
 import ProductMetrics from "./pages/ProductMetrics"
+import ForgotPassword from "./pages/ForgotPassword"
+import EditProfile from "./pages/EditProfile"
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/donations" element={<Donation/>}/>
           <Route path="/user-feedback" element={<UserFeedback/>}/>
           <Route path="/product-metrics" element={<ProductMetrics/>}/>
+          <Route path="/forgot-password" element={<ForgotPassword/>}/>
+          <Route path="/edit-profile" element={<EditProfile/>}/>
         </Routes>
       </Router>
     </div>

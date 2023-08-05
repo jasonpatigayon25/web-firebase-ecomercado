@@ -21,6 +21,18 @@ function Welcome() {
                 alt="Logo"
               />
             </Link>
+            <ul className="navbar-nav ml-2 d-flex align-items-center">
+              <li className="nav-item">
+                <Link className="nav-link" to="/about-us" style={{ color: '#05652D' }}>
+                  About Us
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/contact-us" style={{ color: '#05652D' }}>
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
           </div>
           <div>
             <ul className="navbar-nav ml-auto">

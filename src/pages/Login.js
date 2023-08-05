@@ -26,8 +26,6 @@ function Login() {
         alert('User has not signed up');
         return;
       }
-
-      // Get the first document from the query (should only be one)
       const userDoc = querySnapshot.docs[0];
 
       if (userDoc.data().password !== password) {
@@ -112,9 +110,9 @@ function Login() {
             </InputGroup>
             <div className="d-flex justify-content-between mx-3 mb-4">
               <Form.Check type="checkbox" id="flexCheckDefault" label="Remember me" className="me-4" />
-              <a href="#!" style={{ color: '#05652D', textDecoration: 'none' }}>
+              <Link to="/forgot-password" style={{ color: '#05652D', textDecoration: 'none' }}>
                 Forgot password?
-              </a>
+            </Link>
             </div>
             <Button
               variant="primary"

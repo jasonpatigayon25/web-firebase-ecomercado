@@ -30,6 +30,7 @@ function SidebarOptions() {
           <Dropdown>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
             <Dropdown.Menu>
+              <Dropdown.Item as={Link} to="/edit-profile">Edit Profile</Dropdown.Item>
               <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
               <Dropdown.Item href="#/change-account">Change Account</Dropdown.Item>
               <Dropdown.Item href="#/help">Help</Dropdown.Item>
