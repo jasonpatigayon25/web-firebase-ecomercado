@@ -14,6 +14,7 @@ import UserFeedback from "./pages/UserFeedback"
 import ProductMetrics from "./pages/ProductMetrics"
 import ForgotPassword from "./pages/ForgotPassword"
 import EditProfile from "./pages/EditProfile"
+import DeleteProfile from "./pages/DeleteProfile"
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/product-metrics" element={<ProductMetrics/>}/>
           <Route path="/forgot-password" element={<ForgotPassword/>}/>
           <Route path="/edit-profile" element={<EditProfile/>}/>
+          <Route path="/delete-profile" element={<DeleteProfile/>}/>
         </Routes>
       </Router>
     </div>

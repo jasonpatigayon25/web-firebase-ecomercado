@@ -1,11 +1,12 @@
-.edit-profile-container {
+.delete-profile-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-  }
-  
-.edit-profile-card {
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.delete-profile-card {
     width: 100%;
     max-width: 400px;
     padding: 20px;
@@ -14,43 +15,35 @@
     border: none;
     border-radius: 10px;
     box-shadow: 0px 14px 28px rgba(0,0,0,0.25), 0px 10px 10px rgba(0,0,0,0.22);
-  }
-  
-.edit-profile-form-group {
+}
+
+.delete-profile-form-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-  }
-  
-.edit-profile-form-label {
+}
+
+.delete-profile-form-label {
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-.edit-profile-form-control {
+}
+
+.delete-profile-form-control {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-  }
-  
-.edit-profile-w-100 {
+}
+
+.delete-profile-w-100 {
     width: 100%;
-  }
-  
-.edit-profile-text-center {
+}
+
+.delete-profile-text-center {
     text-align: center;
-  }
-  
-.edit-profile-mt-4 {
-    margin-top: 1.5rem;
-  }
-  
-.edit-profile-mb-4 {
-    margin-bottom: 1.5rem;
-  }
-  
-.edit-profile-btn {
-    background-color: #05652D;
+}
+
+.delete-profile-btn {
+    background-color: #ff0000;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -59,8 +52,13 @@
     font-size: 16px;
     text-transform: uppercase;
     transition: 0.3s;
-  }
-  
-.edit-profile-btn:hover {
-    background-color: #033418;
-  }
+}
+
+.delete-profile-btn:hover {
+    background-color: #b30000;
+}
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}

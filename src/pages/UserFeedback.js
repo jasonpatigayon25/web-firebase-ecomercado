@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Modal } from "react-bootstrap";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaEnvelope } from "react-icons/fa";
 
 function UserFeedback() {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
@@ -13,6 +13,11 @@ function UserFeedback() {
 
   const handleClose = () => {
     setSelectedFeedback(null);
+  };
+
+  const handleMessageClick = (username) => {
+    // You should write your own implementation of sending a message here.
+    alert(`Message sent to ${username}`);
   };
 
   const feedbacks = [
@@ -51,6 +56,12 @@ function UserFeedback() {
                 </div>
                 <div className="feedback-date">
                   <i>{feedback.date}</i>
+                </div>
+                <div className="message-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    handleMessageClick(feedback.username);
+                  }}>
+                  <FaEnvelope size={20} />
                 </div>
               </div>
             ))}

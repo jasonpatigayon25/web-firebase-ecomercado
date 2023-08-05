@@ -111,8 +111,8 @@ function Login() {
             <div className="d-flex justify-content-between mx-3 mb-4">
               <Form.Check type="checkbox" id="flexCheckDefault" label="Remember me" className="me-4" />
               <Link to="/forgot-password" style={{ color: '#05652D', textDecoration: 'none' }}>
-                Forgot password?
-            </Link>
+              Forgot password?
+          </Link>
             </div>
             <Button
               variant="primary"

@@ -496,6 +496,15 @@ td:nth-child(5) {
   background-color: #f5f5f5;
 }
 
+.message-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  color: #05652D;
+}
+
+.message-icon:hover {
+  color: #063e1e;
+}
 
 
 
