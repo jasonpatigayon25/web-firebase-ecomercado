@@ -1,10 +1,8 @@
-// ProductViewer.js
 import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import "../css/Admin.css";
-import { FaBell } from "react-icons/fa";
 
 function ProductViewer() {
   const [featuredPictures, setFeaturedPictures] = useState([]);
@@ -63,9 +61,6 @@ function ProductViewer() {
       <div className="admin-dashboard-content">
         <div className="admin-dashboard-header">
           <h2>PRODUCT VIEWER</h2>
-          <div className="notification-icon">
-            <FaBell style={{ color: '#05652D' }} />
-          </div>
         </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Featured Products</h1>
@@ -99,8 +94,6 @@ function ProductViewer() {
           </div>
           <input type="file" accept="image/*" multiple onChange={(e) => handleUpload(e, "featured")} />
         </div>
-
-        {/* Top Picked Products */}
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Top Picked Products</h1>
           <div className="divider"></div>

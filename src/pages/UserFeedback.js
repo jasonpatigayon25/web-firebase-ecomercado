@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Modal } from "react-bootstrap";
-import { FaUser, FaEnvelope, FaTrashAlt, FaBell } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaTrashAlt } from "react-icons/fa";
 
 function UserFeedback() {
   const [feedbacks, setFeedbacks] = useState([
@@ -41,9 +41,6 @@ function UserFeedback() {
       <div className="admin-dashboard-content">
         <div className="admin-dashboard-header">
           <h2>USER FEEDBACKS</h2>
-          <div className="notification-icon">
-            <FaBell style={{ color: '#05652D' }} />
-          </div>
         </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Recent Feedbacks</h2>

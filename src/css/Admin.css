@@ -625,6 +625,106 @@ td:nth-child(5) {
   box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.3);
 }
 
+.notification-container {
+  display: flex;
+  align-items: center;
+}
 
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  margin-right: 15px;
+}
 
+.notifications-list {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 300px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.notifications-list p {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.notifications-list p:last-child {
+  border-bottom: none;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.notification-item p {
+  flex: 1;
+  margin: 0;
+  padding: 0 10px;
+}
+
+.notification-item button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 14px;
+  transition: color 0.2s ease-in-out;
+}
+
+.notification-item button:hover {
+  color: #0056b3;
+}
+
+.delete-all {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #ff0000;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 5px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  transition: color 0.2s ease-in-out;
+}
+
+.delete-all:hover {
+  color: #cc0000;
+}
+
+.no-notifications {
+  text-align: center;
+  padding: 10px;
+  color: #888;
+}
+.styled-bell {
+  color: #05652D;
+  font-size: 25px;  
+}
+
+.logout-link {
+  background-color: #05652D;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.logout-link:hover {
+  background-color: #034a22;
+  text-decoration: none;
+}
 
