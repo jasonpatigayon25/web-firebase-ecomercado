@@ -24,6 +24,13 @@ function SidebarOptions() {
   const location = useLocation();
 
   return (
+    <div>
+      <div className="admin-navbar">
+        <Link to="/admin-dashboard">
+          <img src={`${process.env.PUBLIC_URL}/ecomercado-logo.png`} alt="Logo" className="admin-logo" />
+        </Link>
+        <Link to="/" className="logout-link">Logout</Link>
+      </div>
     <div className="admin-dashboard-sidebar">
       <div className="admin-user">
         <div className="admin-user">
@@ -86,6 +93,7 @@ function SidebarOptions() {
           </Link>
         </li>
       </ul>
+    </div>
     </div>
   );
 }

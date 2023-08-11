@@ -2,7 +2,7 @@
 import React from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUserCheck } from "react-icons/fa";
+import { FaBell, FaUserCheck } from "react-icons/fa";
 
 const totalUsers = 0; 
 const weeklyRegisteredUsers = 0;
@@ -25,8 +25,12 @@ function UserStatistics() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>USER STATISTICS</h2>
-        <div className="divider"></div>
+        <div className="admin-dashboard-header">
+          <h2>USER STATISTICS</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Users</h2>

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
+import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart, FaBell } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 
@@ -21,8 +21,12 @@ function AdminDashboard() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>ADMIN DASHBOARD</h2> 
-        <div className="divider"></div>
+        <div className="admin-dashboard-header">
+          <h2>ADMIN DASHBOARD</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Users/Customers</h2>

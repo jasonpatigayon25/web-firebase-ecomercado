@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
+import { FaBell, FaBoxOpen, FaShoppingBag } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 
@@ -21,8 +21,12 @@ function ProductMetrics() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>PRODUCT METRICS</h2>
-        <div className="divider"></div>
+        <div className="admin-dashboard-header">
+          <h2>PRODUCT METRICS</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Published</h2>

@@ -7,8 +7,6 @@ function DeleteProfile() {
 
     const deleteProfile = (e) => {
         e.preventDefault();
-
-        // You should write your own implementation of deleting user profile here.
         alert(`User ${username} has been banned permanently.`);
     }
 

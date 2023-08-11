@@ -2,7 +2,7 @@ import React from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import { FaBell, FaEye } from "react-icons/fa";
 
 function Donation() {
   const donors = [
@@ -21,8 +21,12 @@ function Donation() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>DONATIONS</h2>
-        <div className="divider"></div>
+        <div className="admin-dashboard-header">
+          <h2>DONATION REPORTS</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Total Donors: {donors.length}</h2>
           <div className="divider"></div>

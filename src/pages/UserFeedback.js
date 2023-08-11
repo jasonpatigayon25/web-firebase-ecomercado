@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Modal } from "react-bootstrap";
-import { FaUser, FaEnvelope, FaTrashAlt } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaTrashAlt, FaBell } from "react-icons/fa";
 
 function UserFeedback() {
   const [feedbacks, setFeedbacks] = useState([
@@ -13,7 +13,6 @@ function UserFeedback() {
     { username: 'FeedbackMaster', feedback: 'Had some issues with the cart page...', date: '6/2/23' },
     { username: 'HappyCustomer', feedback: 'Love the eco-friendly products on offer...', date: '6/3/23' },
     { username: 'TestUser', feedback: 'The checkout process was a bit complex...', date: '6/4/23' },
-    // Add more feedbacks here...
   ]);
 
   const [selectedFeedback, setSelectedFeedback] = useState(null);
@@ -27,7 +26,7 @@ function UserFeedback() {
   };
 
   const handleMessageClick = (username) => {
-    // You should write your own implementation of sending a message here.
+  
     alert(`Message sent to ${username}`);
   };
 
@@ -39,9 +38,13 @@ function UserFeedback() {
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
-      <div className="admin-dashboard-content user-feedback-container">
-        <h2>USER FEEDBACKS</h2>
-        <div className="divider"></div>
+      <div className="admin-dashboard-content">
+        <div className="admin-dashboard-header">
+          <h2>USER FEEDBACKS</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Recent Feedbacks</h2>
           <div className="divider"></div>

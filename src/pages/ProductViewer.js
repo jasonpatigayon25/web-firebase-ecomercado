@@ -4,6 +4,7 @@ import SidebarOptions from "./SidebarOptions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import "../css/Admin.css";
+import { FaBell } from "react-icons/fa";
 
 function ProductViewer() {
   const [featuredPictures, setFeaturedPictures] = useState([]);
@@ -60,10 +61,12 @@ function ProductViewer() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <h2>PRODUCT VIEWER</h2>
-        <div className="divider"></div>
-
-        {/* Featured Products */}
+        <div className="admin-dashboard-header">
+          <h2>PRODUCT VIEWER</h2>
+          <div className="notification-icon">
+            <FaBell style={{ color: '#05652D' }} />
+          </div>
+        </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Featured Products</h1>
           <div className="divider"></div>
@@ -131,12 +134,10 @@ function ProductViewer() {
           <input type="file" accept="image/*" multiple onChange={(e) => handleUpload(e, "topPicked")} />
         </div>
 
-        {/* Example of Posted Photos */}
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Posted Featured Product Photos</h1>
           <div className="divider"></div>
           <div className="posted-photos-container">
-            {/* Example images */}
             <div className="posted-photo">
               <img
                 src="example1.jpg"
