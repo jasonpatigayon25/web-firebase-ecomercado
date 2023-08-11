@@ -1,9 +1,16 @@
 .delete-profile-container {
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding-top: 10px;
+    padding-top: 80px;
+}
+
+.delete-profile-back-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
 }
 
 .delete-profile-card {

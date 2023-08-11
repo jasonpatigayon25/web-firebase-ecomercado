@@ -64,3 +64,9 @@
 .edit-profile-btn:hover {
     background-color: #033418;
   }
+
+  .edit-profile-back-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+  }

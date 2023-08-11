@@ -18,9 +18,18 @@ function SwitchAccount() {
 
   return (
     <Container className="switch-account-container">
+      <Link to="/admin-dashboard" className="switch-account-back-button">
+        <img
+          src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
+          width="240"
+          height="60"
+          className="d-inline-block align-top switch-account-logo"
+          alt="Logo"
+        />
+      </Link>
       <div className="switch-account-w-100">
         <Card className="switch-account-card">
-          <Card.Body>
+          <Card.Body className="switch-account-card-body">
             <h2 className="switch-account-text-center switch-account-mb-4">Switch Account</h2>
             <Form>
               <Form.Group id="account" className="switch-account-form-group">

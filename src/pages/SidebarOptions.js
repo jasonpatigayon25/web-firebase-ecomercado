@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell
+  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-  <FaUser
-    className="admin-icon"
-    ref={ref}
-    onClick={(e) => {
-      e.preventDefault();
-      onClick(e);
-    }}
-  >
-    {children}
-  </FaUser>
+const CustomToggle = React.forwardRef(({ children }, ref) => (
+  <Link to="/edit-profile">
+    <FaUser className="admin-icon" ref={ref}>
+      {children}
+    </FaUser>
+  </Link>
 ));
 
 function SidebarOptions() {
@@ -90,16 +86,7 @@ function SidebarOptions() {
     <div className="admin-dashboard-sidebar">
       <div className="admin-user">
         <div className="admin-user">
-          <Dropdown>
-            <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-            <Dropdown.Menu>
-              <Dropdown.Item as={Link} to="/edit-profile">Edit Profile</Dropdown.Item>
-              <Dropdown.Item as={Link} to="/delete-profile">Delete Profile</Dropdown.Item>
-              <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
-              <Dropdown.Item as={Link} to="/switch-account">Switch Account</Dropdown.Item>
-              <Dropdown.Item href="/">Logout</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <CustomToggle />
           <span className="admin-dashboard-divider-alt"></span> 
         </div>
         <span className="admin-username">ADMIN</span>
@@ -143,6 +130,20 @@ function SidebarOptions() {
           </Link>
         </li>
       </ul>
+      <div className="settings-dropdown settings-icon-container">
+        <Dropdown drop="up">
+          <Dropdown.Toggle as="div" className="settings-dropdown-icon" id="settings-dropdown-custom-components">
+            <FaCog />
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item as={Link} to="/edit-profile">Edit Profile</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/delete-profile">Delete Profile</Dropdown.Item>
+            <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/switch-account">Switch Account</Dropdown.Item>
+            <Dropdown.Item href="/">Logout</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </div>
     </div>
   );
