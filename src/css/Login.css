@@ -1,63 +1,82 @@
 .divider:after,
 .divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
 
 .icon-link {
-    display: inline-block;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  
-  .icon-link:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .icon {
-    width: 40px;
-    height: 40px;
-  }
+  display: inline-block;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 
-  .text-or {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 0;
-    position: relative;
-    text-decoration: none;
-    overflow: hidden;
-  }
-  
-  .text-or::before,
-  .text-or::after {
-    content: "";
-    position: absolute;
-    height: 1px;
-    width: 40%;
-    top: 50%;
-    background: #000;
-  }
-  
-  .text-or::before {
-    left: 0;
-    margin-right: 5%;
-  }
-  
-  .text-or::after {
-    right: 0;
-    margin-left: 5%;
-  }
-  
-  .text-or span {
-    background: #fff;
-    padding: 0 10px;
-    position: relative;
-    z-index: 1;
-  }
+.icon-link:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  
-  
+.icon {
+  width: 40px;
+  height: 40px;
+}
+
+.text-or {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0;
+  position: relative;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.text-or::before,
+.text-or::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 40%;
+  top: 50%;
+  background: #000;
+}
+
+.text-or::before {
+  left: 0;
+  margin-right: 5%;
+}
+
+.text-or::after {
+  right: 0;
+  margin-left: 5%;
+}
+
+.text-or span {
+  background: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.username,
+.password {
+  transition: all 0.3s ease;
+}
+
+.username:focus,
+.password:focus {
+  box-shadow: 0 0 5px #05652D;
+}
+
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+button[type="submit"]:hover {
+  background-color: #034a22;
+}

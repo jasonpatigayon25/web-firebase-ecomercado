@@ -11,7 +11,7 @@ function SwitchAccount() {
 
   const handleSwitchAccount = e => {
     e.preventDefault();
-    // ... perform switch account operation here ...
+    //
     alert(`Switched to ${selectedAccount}`);
     navigate('/admin-dashboard');
   };

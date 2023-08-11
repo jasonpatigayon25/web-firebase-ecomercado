@@ -57,8 +57,14 @@ function Login() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      submit(e);
+    }
+  };
+
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #E3FCE9, #BEF7CC)' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #E3FCE9, #BEF7CC)' }} onKeyPress={handleKeyPress}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img
