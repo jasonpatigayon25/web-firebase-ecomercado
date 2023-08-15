@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
+import '../css/ButtonAnimation.css';
 import { Modal } from "react-bootstrap";
 import { FaUser, FaEnvelope, FaTrashAlt } from "react-icons/fa";
 
@@ -16,6 +17,9 @@ function UserFeedback() {
   ]);
 
   const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [userToMessage, setUserToMessage] = useState(null);
+  const [messageContent, setMessageContent] = useState("");
 
   const handleFeedbackClick = (feedback) => {
     setSelectedFeedback(feedback);
@@ -26,8 +30,14 @@ function UserFeedback() {
   };
 
   const handleMessageClick = (username) => {
-  
-    alert(`Message sent to ${username}`);
+    setUserToMessage(username);
+    setShowMessageModal(true);
+  };
+
+  const handleSendMessage = () => {
+    alert(`Message sent to ${userToMessage}: "${messageContent}"`);
+    setMessageContent("");
+    setShowMessageModal(false);
   };
 
   const handleDeleteFeedback = (username) => {
@@ -92,6 +102,26 @@ function UserFeedback() {
             )}
           </Modal.Body>
         </Modal>
+
+        <Modal show={showMessageModal} onHide={() => setShowMessageModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Send Message</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Send a message to <strong>{userToMessage}</strong></p>
+            <textarea
+              value={messageContent}
+              onChange={(e) => setMessageContent(e.target.value)}
+              placeholder="Write your message here..."
+              rows={4}
+              style={{ width: "100%" }}
+            />
+            <button className="animated-button" onClick={handleSendMessage}>
+              Send Message
+            </button>
+          </Modal.Body>
+        </Modal>
+
       </div>
     </div>
   );
