@@ -2,27 +2,15 @@ import React, { useState, useEffect } from "react";
 import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit} from "firebase/firestore";
 import "../css/Admin.css";
-
-const recentUsers = [
-  {username: 'Username1', date: '2023-06-01'},
-  {username: 'Username2', date: '2023-05-25'},
-  {username: 'Username3', date: '2023-05-18'},
-  {username: 'Username4', date: '2023-05-16'},
-  {username: 'Username5', date: '2023-05-10'},
-  {username: 'Username6', date: '2023-05-05'},
-  {username: 'Username7', date: '2023-04-29'},
-  {username: 'Username8', date: '2023-04-20'},
-  {username: 'Username9', date: '2023-04-12'},
-  {username: 'Username10', date: '2023-04-03'}
-];
 
 function AdminDashboard() {
 
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalDonation, setTotalDonation] = useState(0);
+  const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -49,6 +37,19 @@ function AdminDashboard() {
         console.error("Error fetching donation: ", err);
       });
 
+      getDocs(collection(db, 'users'), limit(20))
+        .then(snapshot => {
+            const fetchedUsers = snapshot.docs.map(doc => ({
+                user: doc.data().user,
+                firstName: doc.data().firstName,
+                lastName: doc.data().lastName,
+                dateRegistered: doc.data().dateRegistered || "--"
+            }));
+            setRecentFetchedUsers(fetchedUsers);
+        })
+        .catch(err => {
+            console.error("Error fetching recent users: ", err);
+        });
 
   }, []);
 
@@ -79,25 +80,29 @@ function AdminDashboard() {
         </div>
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h1>Recent Users</h1>
-          <div className="divider"></div>
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Date Registered</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentUsers.map((user, index) => (
-                <tr key={index}>
-                  <td>{user.username}</td>
-                  <td>{user.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <h1>Recent Users</h1>
+                <div className="divider"></div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date Registered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recentFetchedUsers.map((user, index) => (
+                            <tr key={index}>
+                                <td>{user.user}</td>
+                                <td>{user.firstName}</td>
+                                <td>{user.lastName}</td>
+                                <td>{user.dateRegistered}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
       </div>
     </div>
   );
