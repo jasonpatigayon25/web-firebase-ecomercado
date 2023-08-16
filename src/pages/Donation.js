@@ -1,8 +1,10 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import { db } from '../config/firebase';
+import { collection, getDocs } from "firebase/firestore";
 
 function Donation() {
   const donors = [
@@ -17,6 +19,20 @@ function Donation() {
     { username: 'Username9', date: '7/6/23', product: 'Shirts' },
   ];
 
+  const [totalDonation, setTotalDonation] = useState(0);
+
+  useEffect(() => {
+
+    getDocs(collection(db, 'donation'))
+      .then(snapshot => {
+        setTotalDonation(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching products: ", err);
+      });
+
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -25,7 +41,7 @@ function Donation() {
           <h2>DONATION REPORTS</h2>
         </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
-          <h2>Total Donors: {donors.length}</h2>
+          <h2>Total Donations: {totalDonation}</h2>
           <div className="divider"></div>
           <table className="donation-table">
             <thead>

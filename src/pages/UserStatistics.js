@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaUserCheck } from "react-icons/fa";
+import { db } from '../config/firebase';
+import { collection, getDocs } from "firebase/firestore";
 
-const totalUsers = 0; 
 const weeklyRegisteredUsers = 0;
 
 const recentUsers = [
@@ -20,6 +21,21 @@ const recentUsers = [
 ];
 
 function UserStatistics() {
+
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  useEffect(() => {
+
+    getDocs(collection(db, 'users'))
+      .then(snapshot => {
+        setTotalUsers(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching products: ", err);
+      });
+
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
