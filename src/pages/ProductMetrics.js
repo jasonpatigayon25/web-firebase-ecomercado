@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
+import { db } from '../config/firebase';
+import { collection, getDocs } from "firebase/firestore";
 import "../css/Admin.css";
 
 const recentProducts = [
@@ -17,6 +19,21 @@ const recentProducts = [
 ];
 
 function ProductMetrics() {
+
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  useEffect(() => {
+
+    getDocs(collection(db, 'products'))
+      .then(snapshot => {
+        setTotalProducts(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching products: ", err);
+      });
+
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -27,7 +44,7 @@ function ProductMetrics() {
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> 0</p>
+            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Sold</h2>

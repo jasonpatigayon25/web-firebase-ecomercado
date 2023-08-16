@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
+import { db } from '../config/firebase';
+import { collection, getDocs } from "firebase/firestore";
 import "../css/Admin.css";
 
 const recentUsers = [
@@ -17,6 +19,39 @@ const recentUsers = [
 ];
 
 function AdminDashboard() {
+
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [totalDonation, setTotalDonation] = useState(0);
+
+  useEffect(() => {
+    getDocs(collection(db, 'users'))
+      .then(snapshot => {
+        setTotalUsers(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching users: ", err);
+      });
+
+    getDocs(collection(db, 'products'))
+      .then(snapshot => {
+        setTotalProducts(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching products: ", err);
+      });
+
+      getDocs(collection(db, 'donation'))
+      .then(snapshot => {
+        setTotalDonation(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching donation: ", err);
+      });
+
+
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -26,20 +61,20 @@ function AdminDashboard() {
         </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users/Customers</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> 0</p>
+            <h2 className="title-label"> Total Users</h2>
+            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> {totalUsers}</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> 0</p>
+            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
           </div>
           <div className="admin-dashboard-card">
             <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0</p>
+            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0 </p>
           </div>
           <div className="admin-dashboard-card center-card">
-            <h2 className="title-label"> Total Donors</h2>
-            <p className="stats"> <FaHeart style={{ color: 'black' }} /> 0</p>
+            <h2 className="title-label"> Total Donations</h2>
+            <p className="stats"> <FaHeart style={{ color: 'black' }} />  {totalDonation}</p>
           </div>
         </div>
 
