@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
-import { collection, getDocs, limit} from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query} from "firebase/firestore";
 import "../css/Admin.css";
 
 function AdminDashboard() {
@@ -37,7 +37,7 @@ function AdminDashboard() {
         console.error("Error fetching donation: ", err);
       });
 
-      getDocs(collection(db, 'users'), limit(20))
+      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
         .then(snapshot => {
             const fetchedUsers = snapshot.docs.map(doc => ({
                 email: doc.data().email,

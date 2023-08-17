@@ -4,7 +4,7 @@ import "../css/Admin.css";
 import { FaUserCheck } from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, limit } from "firebase/firestore";
-import { where, query } from "firebase/firestore";
+import { where, query, orderBy } from "firebase/firestore";
 
 function UserStatistics() {
 
@@ -45,12 +45,12 @@ function UserStatistics() {
         console.error("Error fetching weekly registered users: ", err);
       });
     
-    getDocs(collection(db, 'users'), limit(20))
+      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
       .then(snapshot => {
           const fetchedUsers = snapshot.docs.map(doc => ({
               email: doc.data().email,
               fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-              dateRegistered: doc.data().dateRegistered || "--"
+              dateRegistered: doc.data().dateRegistered
           }));
           setRecentFetchedUsers(fetchedUsers);
       })
