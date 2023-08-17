@@ -3,42 +3,44 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Login.css';
-import { getDocs, query, where } from "firebase/firestore";
 import { auth, facebookProvider, googleProvider } from "../config/firebase";
-import { usersCollection } from '../config/firebase';
 import {
+  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 
 function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   async function submit(e) {
     e.preventDefault();
 
     try {
-      const q = query(usersCollection, where("user", "==", username));
-      const querySnapshot = await getDocs(q);
+      
+      await signInWithEmailAndPassword(auth, email, password);
 
-      if (querySnapshot.empty) {
-        alert('User has not signed up');
-        return;
-      }
-      const userDoc = querySnapshot.docs[0];
-
-      if (userDoc.data().password !== password) {
-        alert('Incorrect password');
-        return;
-      }
-
-      navigate('/admin-dashboard', { state: { id: username } });
+      navigate('/admin-dashboard', { state: { id: email } });
     } catch (error) {
       console.log(error);
-      alert('Something went wrong.');
+      switch (error.code) {
+        case 'auth/user-not-found':
+          alert('User has not signed up.');
+          break;
+        case 'auth/wrong-password':
+          alert('Incorrect password.');
+          break;
+        case 'auth/invalid-email':
+          alert('Invalid email format.');
+          break;
+        default:
+          alert('Something went wrong.');
+          break;
+      }
     }
   }
+
 
   const signInWithGoogle = async () => {
     try {
@@ -95,9 +97,9 @@ function Login() {
               <FormControl
                 className='username'
                 type="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address"
                 style={{ borderColor: '#05652D', borderRadius: 0 }}
               />
             </InputGroup>

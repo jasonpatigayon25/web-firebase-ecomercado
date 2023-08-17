@@ -1,17 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { usersCollection } from '../config/firebase';
-import { addDoc } from 'firebase/firestore';
+import { adminCollection } from '../config/firebase';
+import { addDoc, Timestamp } from 'firebase/firestore';
 import { query, where, getDocs } from "firebase/firestore";
 import { Container, Row, Col, Card, Form, FormControl, FormCheck, Button } from 'react-bootstrap';
 import Footer from '../footer/Footer';
 import '../css/Signup.css';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 function Signup() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
@@ -32,35 +34,38 @@ function Signup() {
     }
   
     try {
-      const q = query(usersCollection, where("user", "==", user));
+      const auth = getAuth();
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      
+      const q = query(adminCollection, where("email", "==", email));
       const querySnapshot = await getDocs(q);
+      
       if (!querySnapshot.empty) {
-        alert('User already exists.');
-        return;
+        alert('User already exists.');  
       }
   
-      const userDoc = {
-        user: user,
-        firstName: firstName,
-        lastName: lastName,
-        password: password
-      };
-  
-      await addDoc(usersCollection, userDoc);
+      const dateRegistered = Timestamp.now();
+      const userDoc = { email, firstName, lastName, uid, dateRegistered };
+      await addDoc(adminCollection, userDoc);
   
       alert('Congratulations! You are now officially registered with ECOMercado.');
-      navigate('/login', { state: { id: user } });
+      navigate('/login', { state: { id: email } });
     } catch (e) {
       console.log(e);
-      alert('Something went wrong.');
+      if (e.code === 'auth/email-already-in-use') {
+        alert('Email already in use.');
+      } else {
+        alert('Something went wrong.');
+      }
     }
   }
-
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       register(e);
     }
-  };
+  }
 
   return (
     <div style={{ background: 'linear-gradient(to right, #E3FCE9, #BEF7CC)' }} onKeyPress={handleKeyPress} >
@@ -84,13 +89,13 @@ function Signup() {
                   <Col md="12" className="order-lg-1 d-flex flex-column align-items-center">
                     <p className="text-center h1 fw-bold mb-3 mx-1 mx-md-4 mt-3" style={{ color: '#05652D' }}>Sign up</p>
                     <div className="txtinput mb-4">
-                      <label className='username-label'>Username</label>
+                      <label className='username-label'>Email Address</label>
                       <FormControl
                         className='username'
-                        placeholder="Enter Username"
-                        aria-label="Enter Username"
-                        value={user}
-                        onChange={(e) => setUser(e.target.value)}
+                        placeholder="Enter Email Address"
+                        aria-label="Enter Email Address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         style={{ borderColor: '#05652D', borderRadius: '15px', width: '100%' }}
                       />
                     </div>
