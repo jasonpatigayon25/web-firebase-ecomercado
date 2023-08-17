@@ -25,9 +25,8 @@ function UserStatistics() {
       getDocs(collection(db, 'users'), limit(20))
       .then(snapshot => {
           const fetchedUsers = snapshot.docs.map(doc => ({
-              user: doc.data().user,
-              firstName: doc.data().firstName,
-              lastName: doc.data().lastName,
+              email: doc.data().email,
+              fullName: `${doc.data().firstName} ${doc.data().lastName}`,
               dateRegistered: doc.data().dateRegistered || "--"
           }));
           setRecentFetchedUsers(fetchedUsers);
@@ -63,17 +62,15 @@ function UserStatistics() {
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>Name</th>
                             <th>Date Registered</th>
                         </tr>
                     </thead>
                       <tbody>
                         {recentFetchedUsers.map((user, index) => (
                           <tr key={index}>
-                              <td>{user.user}</td>
-                              <td>{user.firstName}</td>
-                              <td>{user.lastName}</td>
+                              <td>{user.email}</td>
+                              <td>{user.fullName}</td>
                               <td>{user.dateRegistered}</td>
                           </tr>
                       ))}
