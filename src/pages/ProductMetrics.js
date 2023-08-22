@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
+import { FaBoxOpen, FaShoppingBag, FaEye } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
@@ -21,6 +21,19 @@ const recentProducts = [
 function ProductMetrics() {
 
   const [totalProducts, setTotalProducts] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleOpenModal = (product) => {
+    setSelectedProduct(product);
+    setModalVisible(true);
+  }
+
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+    setModalVisible(false);
+  }
+
 
   useEffect(() => {
 
@@ -61,6 +74,7 @@ function ProductMetrics() {
                 <th>Item Name</th>
                 <th>Username</th>
                 <th>Date Published</th>
+                <th>View</th>
               </tr>
             </thead>
             <tbody>
@@ -69,11 +83,30 @@ function ProductMetrics() {
                   <td>{product.itemName}</td>
                   <td>{product.userName}</td>
                   <td>{product.datePublished}</td>
+                  <td>
+                    <FaEye onClick={() => handleOpenModal(product)} style={{ cursor: 'pointer', color: '#05652d' }} />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        {isModalVisible && (
+          <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProductDetailsModal({ product, onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>{product.itemName}</h2>
+        <p>Username: {product.userName}</p>
+        <p>Date Published: {product.datePublished}</p>
+        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
@@ -20,6 +19,18 @@ function Donation() {
   ];
 
   const [totalDonation, setTotalDonation] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedDonor, setSelectedDonor] = useState(null);
+
+  const handleOpenModal = (donor) => {
+    setSelectedDonor(donor);
+    setModalVisible(true);
+  }
+
+  const handleCloseModal = () => {
+    setSelectedDonor(null);
+    setModalVisible(false);
+  }
 
   useEffect(() => {
 
@@ -63,15 +74,29 @@ function Donation() {
                   <td>{donor.username}</td>
                   <td>{donor.date}</td>
                   <td>
-                    <Link to={`/view-product/${donor.product}`}>
-                      <FaEye color="#05652D" />
-                    </Link>
+                  <FaEye onClick={() => handleOpenModal(donor)} style={{ cursor: 'pointer', color: '#05652D' }} />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        {isModalVisible && (
+          <DonorDetailsModal donor={selectedDonor} onClose={handleCloseModal} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DonorDetailsModal({ donor, onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>{donor.product}</h2>
+        <p>Donor Username: {donor.username}</p>
+        <p>Date: {donor.date}</p>
+        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );
