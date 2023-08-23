@@ -17,6 +17,7 @@ import EditProfile from "./pages/EditProfile"
 import DeleteProfile from "./pages/DeleteProfile"
 import Notification from "./pages/Notification"
 import SwitchAccount from "./pages/SwitchAccount"
+import HelpForum from "./pages/HelpForum"
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/delete-profile" element={<DeleteProfile/>}/>
           <Route path="/notification" element={<Notification/>}/>
           <Route path="/switch-account" element={<SwitchAccount/>}/>
+          <Route path="/help-forum" element={<HelpForum/>}/>
         </Routes>
       </Router>
     </div>
