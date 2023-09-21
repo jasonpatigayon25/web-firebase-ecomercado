@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaHome, FaChartBar, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog
+  FaHome, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog
 } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
@@ -97,12 +97,6 @@ function SidebarOptions() {
           <Link to="/admin-dashboard">
             <FaHome />
             Home
-          </Link>
-        </li>
-        <li className={location.pathname === "/product-viewer" ? "active" : ""}>
-          <Link to="/product-viewer">
-            <FaChartBar />
-            Product Viewer
           </Link>
         </li>
         <li className={location.pathname === "/user-statistics" ? "active" : ""}>
