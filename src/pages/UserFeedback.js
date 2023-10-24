@@ -1,25 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import '../css/ButtonAnimation.css';
 import { Modal } from "react-bootstrap";
-import { FaUser, FaEnvelope, FaTrashAlt } from "react-icons/fa";
+import { FaUser, FaTrashAlt } from "react-icons/fa";
+import { db } from '../config/firebase'; 
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 
 function UserFeedback() {
-  const [feedbacks, setFeedbacks] = useState([
-    { username: 'OceanBreeze22', feedback: 'The user interface is good but ...', date: '5/29/23' },
-    { username: 'CosmicUser', feedback: 'The search feature can be improved ...', date: '5/29/23' },
-    { username: 'TechGuru77', feedback: 'Really like the design aesthetics...', date: '5/30/23' },
-    { username: 'User123', feedback: 'The website is very user-friendly...', date: '6/1/23' },
-    { username: 'FeedbackMaster', feedback: 'Had some issues with the cart page...', date: '6/2/23' },
-    { username: 'HappyCustomer', feedback: 'Love the eco-friendly products on offer...', date: '6/3/23' },
-    { username: 'TestUser', feedback: 'The checkout process was a bit complex...', date: '6/4/23' },
-  ]);
+  const [feedbacks, setFeedbacks] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const feedbackCollection = collection(db, 'feedback');
+      const feedbackData = await getDocs(feedbackCollection);
+      const feedbacks = feedbackData.docs.map(doc => ({
+        username: doc.data().email, 
+        description: doc.data().description,
+        date: doc.data().timestamp.toDate().toLocaleDateString()
+      }));
+      setFeedbacks(feedbacks);
+    };
+    fetchData();
+  }, []);
 
   const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [showMessageModal, setShowMessageModal] = useState(false);
-  const [userToMessage, setUserToMessage] = useState(null);
-  const [messageContent, setMessageContent] = useState("");
 
   const handleFeedbackClick = (feedback) => {
     setSelectedFeedback(feedback);
@@ -29,19 +34,12 @@ function UserFeedback() {
     setSelectedFeedback(null);
   };
 
-  const handleMessageClick = (username) => {
-    setUserToMessage(username);
-    setShowMessageModal(true);
-  };
-
-  const handleSendMessage = () => {
-    alert(`Message sent to ${userToMessage}: "${messageContent}"`);
-    setMessageContent("");
-    setShowMessageModal(false);
-  };
-
-  const handleDeleteFeedback = (username) => {
-    setFeedbacks(feedbacks.filter(feedback => feedback.username !== username));
+  const handleDeleteFeedback = async (username) => {
+    const feedbackToDelete = feedbacks.find(f => f.username === username);
+    if (feedbackToDelete) {
+      await deleteDoc(doc(db, 'feedback', feedbackToDelete.id));
+      setFeedbacks(feedbacks.filter(feedback => feedback.username !== username));
+    }
     setSelectedFeedback(null);
   };
 
@@ -67,16 +65,16 @@ function UserFeedback() {
                 </div>
                 <div className="feedback-content">
                   <strong>{feedback.username}</strong>
-                  <p>{feedback.feedback.slice(0, 50) + "..."}</p>
+                  <p>{feedback.description ? (feedback.description.slice(0, 50) + "...") : "No description provided"}</p>
                 </div>
                 <div className="feedback-date">
                   <i>{feedback.date}</i>
                 </div>
-                <div className="message-icon" onClick={(e) => {
+                <div className="delete-icon" onClick={(e) => {
                     e.stopPropagation();
-                    handleMessageClick(feedback.username);
+                    handleDeleteFeedback(feedback.username);
                   }}>
-                  <FaEnvelope size={20} />
+                  <FaTrashAlt size={20} /> 
                 </div>
               </div>
             ))}
@@ -94,31 +92,12 @@ function UserFeedback() {
                   <strong>{selectedFeedback.username}</strong> -{" "}
                   <i>{selectedFeedback.date}</i>
                 </p>
-                <p>{selectedFeedback.feedback}</p>
+                <p>{selectedFeedback.description}</p>
                 <button onClick={() => handleDeleteFeedback(selectedFeedback.username)}>
                   <FaTrashAlt /> Delete Feedback
                 </button>
               </>
             )}
-          </Modal.Body>
-        </Modal>
-
-        <Modal show={showMessageModal} onHide={() => setShowMessageModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Send Message</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Send a message to <strong>{userToMessage}</strong></p>
-            <textarea
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              placeholder="Write your message here..."
-              rows={4}
-              style={{ width: "100%" }}
-            />
-            <button className="animated-button" onClick={handleSendMessage}>
-              Send Message
-            </button>
           </Modal.Body>
         </Modal>
 
