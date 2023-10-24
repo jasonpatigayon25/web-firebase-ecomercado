@@ -9,9 +9,11 @@ import { auth } from "../config/firebase";
 function ForgotPassword() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
+    setLoading(true);
 
     try {
       await sendPasswordResetEmail(auth, email);
@@ -19,7 +21,19 @@ function ForgotPassword() {
       navigate('/');
     } catch (error) {
       console.log(error);
-      alert('Something went wrong.');
+      switch (error.code) {
+        case 'auth/user-not-found':
+          alert('There is no user record corresponding to this email.');
+          break;
+        case 'auth/invalid-email':
+          alert('The email address is not valid.');
+          break;
+        default:
+          alert('Something went wrong.');
+          break;
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -65,9 +79,10 @@ function ForgotPassword() {
               variant="primary"
               className="mb-4"
               onClick={submit}
+              disabled={loading}
               style={{ fontWeight: 'bold', borderColor: '#05652D', backgroundColor: '#05652D', width: '300px', margin: 'auto', display: 'block' }}
             >
-              Reset Password
+              {loading ? "Sending..." : "Reset Password"}
             </Button>
             <div className="text-center">
               <p>
