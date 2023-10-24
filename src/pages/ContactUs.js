@@ -7,6 +7,22 @@ import Footer from '../footer/Footer';
 const Container = styled.div`
   background: linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC);
   color: #05652D;
+  font-size: 18px; // Increase the base font size
+  padding-bottom: 50px; // To give some breathing space at the bottom
+`;
+
+const ContactHeader = styled.h1`
+  font-size: 36px;
+  margin-top: 40px;
+`;
+
+const ContactSubHeader = styled.h2`
+  font-size: 28px;
+  margin-top: 40px;
+`;
+
+const ContactInfoList = styled.ul`
+  margin-top: 20px;
 `;
 
 const ContactUs = () => {
@@ -64,53 +80,23 @@ const ContactUs = () => {
         </div>
       </nav>
       <hr style={{ backgroundColor: '#05652D', height: '2px', margin: '0' }} />
+        <div className="container py-5">
+          <ContactHeader>Contact Us</ContactHeader>
+          <p className="mt-4">
+            Thank you for visiting our website. If you have any questions, feedback, or inquiries, please feel free to
+            contact us using the information below or by filling out the contact form.
+          </p>
 
-      <div className="container">
-        <h1>Contact Us</h1>
-        <p>
-          Thank you for visiting our website. If you have any questions, feedback, or inquiries, please feel free to
-          contact us using the information below or by filling out the contact form.
-        </p>
-
-        <h2>Contact Information</h2>
-        <ul>
-          <li>Email: ecomercado@gmail.com</li>
-          <li>Phone: 123-456-7890</li>
-          <li>Address: 123 My Street, City, State, ZIP</li>
-        </ul>
-
-        <h2>Contact Form</h2>
-        <form>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name:
-            </label>
-            <input type="text" id="name" name="name" className="form-control" />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email:
-            </label>
-            <input type="email" id="email" name="email" className="form-control" />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="message" className="form-label">
-              Message:
-            </label>
-            <textarea id="message" name="message" rows="5" className="form-control"></textarea>
-          </div>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            style={{ backgroundColor: '#05652D', borderColor: '#05652D' }}
-          >
-            Submit
-          </button>
-        </form>
-      </div>
+          <ContactSubHeader>Contact Information</ContactSubHeader>
+          <ContactInfoList>
+            <li>Email: ecomercado@gmail.com</li>
+            <li>Phone: 09956710656</li>
+            <li>Facebook: ECOMercado</li>
+          </ContactInfoList>
+        </div>
       <Footer />
     </Container>
-  );
-};
+    );
+  };
 
 export default ContactUs;
