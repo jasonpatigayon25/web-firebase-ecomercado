@@ -6,42 +6,37 @@ import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
 
 function Donation() {
-  const donors = [
-    { username: 'Username1', date: '7/6/23', product: 'T-shirts' },
-    { username: 'Username2', date: '7/6/23', product: 'Bags' },
-    { username: 'Username3', date: '7/6/23', product: 'Clothes' },
-    { username: 'Username4', date: '7/6/23', product: 'Old Compute' },
-    { username: 'Username5', date: '7/6/23', product: 'Dresses' },
-    { username: 'Username6', date: '7/6/23', product: 'TV' },
-    { username: 'Username7', date: '7/6/23', product: 'Cabinet' },
-    { username: 'Username8', date: '7/6/23', product: 'Furnitures' },
-    { username: 'Username9', date: '7/6/23', product: 'Shirts' },
-  ];
+  const [donations, setDonations] = useState([]);
 
   const [totalDonation, setTotalDonation] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDonor, setSelectedDonor] = useState(null);
+  const [selectedDonation, setSelectedDonation] = useState(null);
 
-  const handleOpenModal = (donor) => {
-    setSelectedDonor(donor);
+  const handleOpenModal = (donation) => {
+    setSelectedDonation(donation);
     setModalVisible(true);
   }
 
   const handleCloseModal = () => {
-    setSelectedDonor(null);
+    setSelectedDonation(null);
     setModalVisible(false);
   }
 
   useEffect(() => {
-
-    getDocs(collection(db, 'donation'))
-      .then(snapshot => {
-        setTotalDonation(snapshot.size);
-      })
-      .catch(err => {
-        console.error("Error fetching products: ", err);
-      });
-
+    const fetchData = async () => {
+      const donationCollection = collection(db, 'donation');
+      const donationData = await getDocs(donationCollection);
+      const donations = donationData.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().name,
+        photo: doc.data().photo,
+        location: doc.data().location,
+        message: doc.data().description
+      }));
+      setDonations(donations);
+      setTotalDonation(donationData.size);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -57,24 +52,22 @@ function Donation() {
           <table className="donation-table">
             <thead>
               <tr>
-                <th></th>
+                <th>Image</th>
                 <th>Product</th>
-                <th>Username</th>
-                <th>Date</th>
+                <th>Location</th>
                 <th>View</th>
               </tr>
             </thead>
             <tbody>
-              {donors.map((donor, index) => (
+              {donations.map((donation, index) => (
                 <tr key={index}>
                   <td className="user-image">
-                    <img src="https://via.placeholder.com/150" alt="User" />
+                    <img src={donation.photo} alt="Donation" width="50" height="50"/>
                   </td>
-                  <td>{donor.product}</td>
-                  <td>{donor.username}</td>
-                  <td>{donor.date}</td>
+                  <td>{donation.name}</td>
+                  <td>{donation.location}</td>
                   <td>
-                  <FaEye onClick={() => handleOpenModal(donor)} style={{ cursor: 'pointer', color: '#05652D' }} />
+                    <FaEye onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer', color: '#05652D' }} />
                   </td>
                 </tr>
               ))}
@@ -82,20 +75,22 @@ function Donation() {
           </table>
         </div>
         {isModalVisible && (
-          <DonorDetailsModal donor={selectedDonor} onClose={handleCloseModal} />
+          <DonationDetailsModal donation={selectedDonation} onClose={handleCloseModal} />
         )}
       </div>
     </div>
   );
 }
 
-function DonorDetailsModal({ donor, onClose }) {
+function DonationDetailsModal({ donation, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>{donor.product}</h2>
-        <p>Donor Username: {donor.username}</p>
-        <p>Date: {donor.date}</p>
+        <img src={donation.photo} alt={donation.name} width="100%" />
+        <h2>{donation.name}</h2>
+        <p>Price: ₱{donation.price}</p>
+        <p>Location: {donation.location}</p>
+        <p>Message: {donation.message}</p>
         <button onClick={onClose}>Close</button>
       </div>
     </div>
