@@ -5,21 +5,8 @@ import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
 import "../css/Admin.css";
 
-const recentProducts = [
-  { itemName: 'Product 1', userName: 'Username1', datePublished: '2023-06-01' },
-  { itemName: 'Product 2', userName: 'Username2', datePublished: '2023-05-25' },
-  { itemName: 'Product 3', userName: 'Username3', datePublished: '2023-05-18' },
-  { itemName: 'Product 4', userName: 'Username4', datePublished: '2023-05-16' },
-  { itemName: 'Product 5', userName: 'Username5', datePublished: '2023-05-10' },
-  { itemName: 'Product 6', userName: 'Username6', datePublished: '2023-05-05' },
-  { itemName: 'Product 7', userName: 'Username7', datePublished: '2023-04-29' },
-  { itemName: 'Product 8', userName: 'Username8', datePublished: '2023-04-20' },
-  { itemName: 'Product 9', userName: 'Username9', datePublished: '2023-04-12' },
-  { itemName: 'Product 10', userName: 'Username10', datePublished: '2023-04-03' }
-];
-
 function ProductMetrics() {
-
+  const [products, setProducts] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -34,17 +21,22 @@ function ProductMetrics() {
     setModalVisible(false);
   }
 
-
   useEffect(() => {
-
-    getDocs(collection(db, 'products'))
-      .then(snapshot => {
-        setTotalProducts(snapshot.size);
-      })
-      .catch(err => {
-        console.error("Error fetching products: ", err);
-      });
-
+    const fetchProducts = async () => {
+      const productCollection = collection(db, 'products');
+      const productData = await getDocs(productCollection);
+      const products = productData.docs.map(doc => ({
+        id: doc.id,
+        photo: doc.data().photo,
+        name: doc.data().name,
+        category: doc.data().category,
+        price: doc.data().price,
+        description: doc.data().description
+      }));
+      setProducts(products);
+      setTotalProducts(productData.size);
+    };
+    fetchProducts();
   }, []);
 
   return (
@@ -56,33 +48,34 @@ function ProductMetrics() {
         </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
+            <h2 className="title-label">Total Product Published</h2>
+            <p className="stats"><FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0</p>
+            <h2 className="title-label">Total Product Sold</h2>
+            <p className="stats"><FaShoppingBag style={{ color: 'black' }} /> 0</p>
           </div>
         </div>
-
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Recent Products Published</h1>
           <div className="divider"></div>
           <table className="recent-products-table">
             <thead>
               <tr>
-                <th>Item Name</th>
-                <th>Username</th>
-                <th>Date Published</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
                 <th>View</th>
               </tr>
             </thead>
             <tbody>
-              {recentProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <tr key={index}>
-                  <td>{product.itemName}</td>
-                  <td>{product.userName}</td>
-                  <td>{product.datePublished}</td>
+                  <td><img src={product.photo} alt={product.name} width="50" height="50"/></td>
+                  <td>{product.name}</td>
+                  <td>{product.category}</td>
+                  <td>${product.price}</td>
                   <td>
                     <FaEye onClick={() => handleOpenModal(product)} style={{ cursor: 'pointer', color: '#05652d' }} />
                   </td>
@@ -103,9 +96,11 @@ function ProductDetailsModal({ product, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>{product.itemName}</h2>
-        <p>Username: {product.userName}</p>
-        <p>Date Published: {product.datePublished}</p>
+        <img src={product.photo} alt={product.name} width="100%" />
+        <h2>{product.name}</h2>
+        <p>Category: {product.category}</p>
+        <p>Price: ${product.price}</p>
+        <p>Description: {product.description}</p>
         <button onClick={onClose}>Close</button>
       </div>
     </div>

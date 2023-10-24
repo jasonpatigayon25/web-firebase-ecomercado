@@ -31,7 +31,7 @@ function Donation() {
         name: doc.data().name,
         photo: doc.data().photo,
         location: doc.data().location,
-        message: doc.data().description
+        message: doc.data().message
       }));
       setDonations(donations);
       setTotalDonation(donationData.size);
@@ -88,7 +88,6 @@ function DonationDetailsModal({ donation, onClose }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={donation.photo} alt={donation.name} width="100%" />
         <h2>{donation.name}</h2>
-        <p>Price: ₱{donation.price}</p>
         <p>Location: {donation.location}</p>
         <p>Message: {donation.message}</p>
         <button onClick={onClose}>Close</button>
