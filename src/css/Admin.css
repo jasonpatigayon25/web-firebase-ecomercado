@@ -420,38 +420,74 @@ td:nth-child(5) {
 }
 
 .user-feedback-list {
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
+}
+
+.user-feedback-item:hover {
+  background-color: #f0f0f0;
 }
 
 .user-feedback-item {
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
 .user-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 15px;
+}
+
+.user-icon img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #05652d;
-  color: #fff;
-  margin-right: 10px;
 }
 
 .feedback-content {
   flex: 1;
-  margin-right: 10px;
 }
 
 .feedback-date {
   min-width: 70px;
   text-align: right;
+}
+
+.delete-icon {
+  margin-left: 10px;
+}
+
+.search-feedback {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-feedback input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e4e6e9;
+}
+
+.search-feedback button {
+  margin-left: 10px;
+  background-color: #00a562; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-feedback button:hover {
+  background-color: #008a4e; 
 }
 
 .active {
