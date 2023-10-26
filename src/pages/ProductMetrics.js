@@ -43,22 +43,20 @@ function ProductMetrics() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-header">
-          <h2>PRODUCT METRICS</h2>
-        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label">Total Product Published</h2>
-            <p className="stats"><FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
+            <div className="stats-number"><span>{totalProducts}</span></div>
+            <div className="stats-icon"><FaBoxOpen /></div>
+            <div className="stats-label">Total Product Publishe</div>     
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label">Total Product Sold</h2>
-            <p className="stats"><FaShoppingBag style={{ color: 'black' }} /> 0</p>
+            <div className="stats-number"><span>0</span></div>
+            <div className="stats-icon"><FaShoppingBag /></div>
+            <div className="stats-label">Total Product Sold</div>
           </div>
         </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Recent Products Published</h1>
-          <div className="divider"></div>
           <table>
             <thead>
               <tr>

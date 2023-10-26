@@ -56,29 +56,30 @@ function AdminDashboard() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-header">
-          <h2>ADMIN DASHBOARD</h2>
-        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> {totalUsers}</p>
+            <div className="stats-number"><span>{totalUsers}</span></div>
+            <div className="stats-icon"><FaUserCheck /></div>
+            <div className="stats-label">Total Users</div>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Published</h2>
-            <p className="stats"> <FaBoxOpen style={{ color: 'black' }} /> {totalProducts}</p>
+            <div className="stats-number"><span>{totalProducts}</span></div>
+            <div className="stats-icon"><FaBoxOpen /></div>
+            <div className="stats-label">Total Product Published</div>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Product Sold</h2>
-            <p className="stats"> <FaShoppingBag style={{ color: 'black' }} /> 0 </p>
+            <div className="stats-number"><span>0</span></div>
+            <div className="stats-icon"><FaShoppingBag /></div>
+            <div className="stats-label">Total Product Sold</div>
           </div>
-          <div className="admin-dashboard-card center-card">
-            <h2 className="title-label"> Total Donations</h2>
-            <p className="stats"> <FaHeart style={{ color: 'black' }} />  {totalDonation}</p>
+          <div className="admin-dashboard-card">
+            <div className="stats-number"><span>{totalDonation}</span></div>
+            <div className="stats-icon"><FaHeart /></div>
+            <div className="stats-label">Total Donations</div>
           </div>
         </div>
 
-        <div className="admin-dashboard-recent-users mb-4 shadow">
+        <div className="admin-dashboard-recent-users">
                 <h1>Recent Users</h1>
                 <table>
                     <thead>

@@ -43,12 +43,8 @@ function Donation() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-header">
-          <h2>DONATION REPORTS</h2>
-        </div>
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h2>Total Donations: {totalDonation}</h2>
-          <div className="divider"></div>
           <table className="donation-table">
             <thead>
               <tr>

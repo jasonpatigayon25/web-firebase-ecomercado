@@ -64,17 +64,16 @@ function UserStatistics() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-header">
-          <h2>USER STATISTICS</h2>
-        </div>
         <div className="admin-dashboard-cards">
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Total Users</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> {totalUsers}</p>
+            <div className="stats-number"><span>{totalUsers}</span></div>
+            <div className="stats-icon"><FaUserCheck /></div>
+            <div className="stats-label">Total Users</div>
           </div>
           <div className="admin-dashboard-card">
-            <h2 className="title-label"> Weekly Registered Users</h2>
-            <p className="stats"> <FaUserCheck style={{ color: 'black' }} /> {weeklyRegisteredUsers}</p>
+            <div className="stats-number"><span>{weeklyRegisteredUsers}</span></div>
+            <div className="stats-icon"><FaUserCheck /></div>
+            <div className="stats-label">Weekly Registered Users</div>
           </div>
         </div>
 
