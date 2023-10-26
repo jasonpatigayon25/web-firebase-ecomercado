@@ -80,7 +80,6 @@ function AdminDashboard() {
 
         <div className="admin-dashboard-recent-users mb-4 shadow">
                 <h1>Recent Users</h1>
-                <div className="divider"></div>
                 <table>
                     <thead>
                         <tr>

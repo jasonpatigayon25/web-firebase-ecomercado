@@ -59,7 +59,7 @@ function ProductMetrics() {
         <div className="admin-dashboard-recent-users mb-4 shadow">
           <h1>Recent Products Published</h1>
           <div className="divider"></div>
-          <table className="recent-products-table">
+          <table>
             <thead>
               <tr>
                 <th>Photo</th>
@@ -75,7 +75,7 @@ function ProductMetrics() {
                   <td><img src={product.photo} alt={product.name} width="50" height="50"/></td>
                   <td>{product.name}</td>
                   <td>{product.category}</td>
-                  <td>${product.price}</td>
+                  <td>₱{product.price}</td>
                   <td>
                     <FaEye onClick={() => handleOpenModal(product)} style={{ cursor: 'pointer', color: '#05652d' }} />
                   </td>
@@ -99,7 +99,7 @@ function ProductDetailsModal({ product, onClose }) {
         <img src={product.photo} alt={product.name} width="100%" />
         <h2>{product.name}</h2>
         <p>Category: {product.category}</p>
-        <p>Price: ${product.price}</p>
+        <p>Price: ₱{product.price}</p>
         <p>Description: {product.description}</p>
         <button onClick={onClose}>Close</button>
       </div>
