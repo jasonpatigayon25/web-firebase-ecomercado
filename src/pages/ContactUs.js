@@ -7,8 +7,8 @@ import Footer from '../footer/Footer';
 const Container = styled.div`
   background: linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC);
   color: #05652D;
-  font-size: 18px; // Increase the base font size
-  padding-bottom: 50px; // To give some breathing space at the bottom
+  font-size: 18px; 
+  padding-bottom: 50px; 
 `;
 
 const ContactHeader = styled.h1`

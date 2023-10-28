@@ -79,7 +79,7 @@ function AdminDashboard() {
           </div>
         </div>
 
-        <div className="admin-dashboard-recent-users">
+        <div className="admin-dashboard-recent-users mb-4 shadow">
                 <h1>Recent Users</h1>
                 <table>
                     <thead>

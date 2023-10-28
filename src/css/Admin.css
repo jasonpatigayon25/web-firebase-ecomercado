@@ -57,17 +57,11 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.admin-dashboard-nav li.active a {
-  color: #05652D; 
-  font-size: 18px;
-  background-color: transparent;
-}
-
 .admin-dashboard-nav li a svg {
   margin-right: 10px;
 }
 
-.divider {
+.divider { 
   height: 1px;
   background-color: #ccc;
   margin: 10px 0;
@@ -92,7 +86,9 @@
 }
 
 .admin-dashboard-nav li.active a {
-  background-color: transparent;
+  background-color: white;
+  color: #05652D; 
+  font-size: 18px;
   border-radius: 5px;
 }
 
@@ -100,6 +96,12 @@
   color: #05652D; 
   font-size: 18px;
   background-color: transparent;
+}
+
+.admin-dashboard-nav li.active {
+  background-color: white;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
 }
 
 .admin-dashboard-logo {
