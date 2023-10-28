@@ -101,6 +101,7 @@
 .admin-dashboard-nav li.active {
   background-color: white;
   border-top-left-radius: 25px;
+  font-weight: bold;
   border-bottom-left-radius: 25px;
 }
 
@@ -111,11 +112,6 @@
 
 .admin-dashboard-logo img {
   width: 100px;
-}
-
-.admin-dashboard-nav {
-  list-style: none;
-  padding: 0;
 }
 
 .admin-dashboard-nav li {
