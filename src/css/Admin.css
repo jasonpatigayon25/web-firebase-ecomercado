@@ -114,6 +114,11 @@
   width: 100px;
 }
 
+.admin-dashboard-nav {
+  list-style: none;
+  padding: 0;
+}
+
 .admin-dashboard-nav li {
   margin-bottom: 10px;
 }
@@ -813,6 +818,3 @@ td:nth-child(5) {
   max-width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
-
-
