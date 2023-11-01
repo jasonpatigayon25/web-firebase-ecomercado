@@ -47,7 +47,7 @@ function ProductMetrics() {
           <div className="admin-dashboard-card">
             <div className="stats-number"><span>{totalProducts}</span></div>
             <div className="stats-icon"><FaBoxOpen /></div>
-            <div className="stats-label">Total Product Publishe</div>     
+            <div className="stats-label">Total Product Published</div>     
           </div>
           <div className="admin-dashboard-card">
             <div className="stats-number"><span>0</span></div>
