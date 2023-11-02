@@ -18,7 +18,9 @@ function UserFeedback() {
             const feedbackCollection = collection(db, 'feedback');
             const feedbackData = await getDocs(feedbackCollection);
             const feedbacks = feedbackData.docs.map(doc => ({
-                username: doc.data().email,
+                id: doc.id,
+                uid: doc.data().uid,
+                email: doc.data().email,
                 description: doc.data().description,
                 date: doc.data().timestamp.toDate().toLocaleDateString()
             }));
@@ -28,14 +30,10 @@ function UserFeedback() {
     }, []);
 
     useEffect(() => {
-        if (searchTerm === '') {
-            setFilteredFeedbacks(feedbacks);
-        } else {
-            setFilteredFeedbacks(feedbacks.filter(feedback => 
-                feedback.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                feedback.description.toLowerCase().includes(searchTerm.toLowerCase())
-            ));
-        }
+        setFilteredFeedbacks(feedbacks.filter(feedback => 
+            feedback.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            feedback.description.toLowerCase().includes(searchTerm.toLowerCase())
+        ));
     }, [feedbacks, searchTerm]);
 
     const handleFeedbackClick = (feedback) => {
@@ -46,12 +44,9 @@ function UserFeedback() {
         setSelectedFeedback(null);
     };
 
-    const handleDeleteFeedback = async (username) => {
-        const feedbackToDelete = feedbacks.find(f => f.username === username);
-        if (feedbackToDelete) {
-            await deleteDoc(doc(db, 'feedback', feedbackToDelete.id));
-            setFeedbacks(feedbacks.filter(feedback => feedback.username !== username));
-        }
+    const handleDeleteFeedback = async (id) => {
+        await deleteDoc(doc(db, 'feedback', id));
+        setFeedbacks(currentFeedbacks => currentFeedbacks.filter(feedback => feedback.id !== id));
         setSelectedFeedback(null);
     };
 
@@ -59,8 +54,6 @@ function UserFeedback() {
         <div className="admin-dashboard">
             <SidebarOptions />
             <div className="admin-dashboard-content">
-
-                {/* Search bar */}
                 <div className="search-feedback">
                     <input
                         type="text"
@@ -71,14 +64,13 @@ function UserFeedback() {
                     <button onClick={() => setSearchTerm('')}>Clear</button>
                 </div>
 
-                {/* Feedback list */}
                 <div className="admin-dashboard-recent-users mb-4 shadow">
                     <h2>Recent Feedbacks</h2>
                     <div className="divider"></div>
                     <div className="user-feedback-list">
-                        {filteredFeedbacks.map((feedback, index) => (
+                        {filteredFeedbacks.map((feedback) => (
                             <div
-                                key={index}
+                                key={feedback.id}
                                 className={`user-feedback-item ${selectedFeedback === feedback ? "active" : ""}`}
                                 onClick={() => handleFeedbackClick(feedback)}
                             >
@@ -86,24 +78,23 @@ function UserFeedback() {
                                     <FaUser size={30} />
                                 </div>
                                 <div className="feedback-content">
-                                    <strong>{feedback.username}</strong>
-                                    <p>{feedback.description ? (feedback.description.slice(0, 50) + "...") : "No description provided"}</p>
+                                    <strong>{feedback.email}</strong>
+                                    <p>{feedback.description ? (feedback.description.slice(0, 50)) : "No description provided"}</p>
                                 </div>
                                 <div className="feedback-date">
                                     <i>{feedback.date}</i>
                                 </div>
                                 <div className="delete-icon" onClick={(e) => {
                                         e.stopPropagation();
-                                        handleDeleteFeedback(feedback.username);
+                                        handleDeleteFeedback(feedback.id);
                                     }}>
-                                    <FaTrashAlt size={20} />
+                                    <FaTrashAlt size={20} color="#ff0000"/>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Feedback details modal */}
                 <Modal show={selectedFeedback !== null} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>User Feedback</Modal.Title>
@@ -112,11 +103,14 @@ function UserFeedback() {
                         {selectedFeedback && (
                             <>
                                 <p>
-                                    <strong>{selectedFeedback.username}</strong> -{" "}
+                                    <strong>{selectedFeedback.email}</strong> -{" "}
                                     <i>{selectedFeedback.date}</i>
                                 </p>
                                 <p>{selectedFeedback.description}</p>
-                                <button onClick={() => handleDeleteFeedback(selectedFeedback.username)}>
+                                <button 
+                                    onClick={() => handleDeleteFeedback(selectedFeedback.id)}
+                                    className="btn btn-danger"
+                                >
                                     <FaTrashAlt /> Delete Feedback
                                 </button>
                             </>
