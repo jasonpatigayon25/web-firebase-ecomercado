@@ -69,3 +69,14 @@
     top: 10px;
     left: 10px;
 }
+.delete-profile-btn-red {
+    background-color: red;
+    border-color: red;
+    color: white;
+  }
+  
+  .delete-profile-btn-red:hover {
+    background-color: darkred;
+    border-color: darkred;
+  }
+  
