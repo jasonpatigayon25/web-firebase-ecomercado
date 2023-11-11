@@ -133,8 +133,7 @@ function SidebarOptions() {
             <Dropdown.Item as={Link} to="/help-forum">Help Forum</Dropdown.Item>
             <Dropdown.Item as={Link} to="/edit-profile">Edit Profile</Dropdown.Item>
             <Dropdown.Item as={Link} to="/delete-profile">Delete Profile</Dropdown.Item>
-            <Dropdown.Item href="#/change-password">Change Password</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/switch-account">Switch Account</Dropdown.Item>
+            <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
             <Dropdown.Item href="/">Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
