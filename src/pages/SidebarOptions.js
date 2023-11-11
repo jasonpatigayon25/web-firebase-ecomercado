@@ -8,7 +8,7 @@ import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CustomToggle = React.forwardRef(({ children }, ref) => (
-  <Link to="/edit-profile">
+  <Link to="/admin-profile">
     <FaUser className="admin-icon" ref={ref}>
       {children}
     </FaUser>
