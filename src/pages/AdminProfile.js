@@ -105,7 +105,7 @@ function AdminProfile() {
                   name="email"
                   placeholder="Enter email"
                   value={adminProfile.email}
-                  disabled // Email is typically not editable
+                  disabled 
                 />
               </FormGroup>
               <div className="admin-profile-actions">

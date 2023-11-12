@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from "firebase/auth";
 import { Container, Row, Col, Card, Form, FormControl, Button } from 'react-bootstrap';
 import '../css/AdminChangePassword.css'; 
+import '../css/Admin.css'; 
 import { useNavigate } from 'react-router-dom';
+import SidebarOptions from "./SidebarOptions";
 
 function AdminChangePassword() {
     const navigate = useNavigate();
@@ -43,7 +45,9 @@ function AdminChangePassword() {
     }
 
     return (
-        <div className="container-fluid">
+        <div className="admin-dashboard">
+            <SidebarOptions />
+            <div className="admin-dashboard-content">
             <Container>
                 <Row className="justify-content-center">
                     <Col md="6">
@@ -92,6 +96,7 @@ function AdminChangePassword() {
                     </Col>
                 </Row>
             </Container>
+            </div>
         </div>
     );
 }

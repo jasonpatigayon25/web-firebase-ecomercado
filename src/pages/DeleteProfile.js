@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { query, collection, where, getDocs, deleteDoc } from "firebase/firestore";
 import '../css/DeleteProfile.css';
+import '../css/Admin.css';
+import SidebarOptions from "./SidebarOptions";
 
 function DeleteProfile() {
   const [email, setEmail] = useState('');
@@ -34,18 +35,10 @@ function DeleteProfile() {
   }
 
   return (
+    <div className="admin-dashboard">
+    <SidebarOptions />
+    <div className="admin-dashboard-content">
     <div className="delete-profile-container">
-      <div className="delete-profile-back-button">
-        <Link to="/admin-dashboard">
-          <img
-            src={process.env.PUBLIC_URL + '/ecomercado-logo.png'}
-            width="240"
-            height="60"
-            className="d-inline-block align-top"
-            alt="Logo"
-          />
-        </Link>
-      </div>
       <div className="delete-profile-card">
         <h1 className="delete-profile-text-center">Ban User</h1>
         <form onSubmit={deleteProfile}>
@@ -62,6 +55,8 @@ function DeleteProfile() {
           <button type="submit" className="delete-profile-btn delete-profile-w-100 delete-profile-btn-red">Ban User Permanently</button>
         </form>
       </div>
+    </div>
+    </div>
     </div>
   );
 }
