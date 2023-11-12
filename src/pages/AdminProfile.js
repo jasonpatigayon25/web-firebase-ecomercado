@@ -5,6 +5,7 @@ import { doc, query, collection, where, getDocs, updateDoc } from "firebase/fire
 import { Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import SidebarOptions from "./SidebarOptions"; 
 import "../css/Admin.css"; 
+import "../css/AdminProfile.css"; 
 
 function AdminProfile() {
   const [adminProfile, setAdminProfile] = useState({
@@ -73,54 +74,62 @@ function AdminProfile() {
         <SidebarOptions />
         <div className="admin-dashboard-content">
           <div className="admin-profile-container">
-            <h1>Admin Profile</h1>
-            <Form onSubmit={handleSubmit}>
-              <FormGroup className="mb-3">
+            <h1 className="admin-profile-header">Admin Details</h1>
+            <Form onSubmit={handleSubmit} className="admin-profile-form">
+              <FormGroup className="mb-3" controlId="formFirstName">
                 <FormLabel>First Name</FormLabel>
                 <FormControl
                   type="text"
                   name="firstName"
+                  placeholder="Enter first name"
                   value={adminProfile.firstName}
                   onChange={handleInputChange}
                   disabled={!editMode}
                 />
               </FormGroup>
-              <FormGroup className="mb-3">
+              <FormGroup className="mb-3" controlId="formLastName">
                 <FormLabel>Last Name</FormLabel>
                 <FormControl
                   type="text"
                   name="lastName"
+                  placeholder="Enter last name"
                   value={adminProfile.lastName}
                   onChange={handleInputChange}
                   disabled={!editMode}
                 />
               </FormGroup>
-              <FormGroup className="mb-3">
+              <FormGroup className="mb-3" controlId="formEmail">
                 <FormLabel>Email</FormLabel>
                 <FormControl
                   type="email"
                   name="email"
+                  placeholder="Enter email"
                   value={adminProfile.email}
-                  disabled
+                  disabled // Email is typically not editable
                 />
               </FormGroup>
-              {!editMode ? (
-                <Button variant="primary" onClick={handleEditToggle}>Edit Profile</Button>
-              ) : (
-                <>
-                  <Button variant="secondary" onClick={handleEditToggle} className="me-2">
-                    Cancel
+              <div className="admin-profile-actions">
+                {!editMode ? (
+                  <Button variant="outline-primary" onClick={handleEditToggle}>
+                    Edit Profile
                   </Button>
-                  <Button variant="success" type="submit">
-                    Save Changes
-                  </Button>
-                </>
-              )}
+                ) : (
+                  <>
+                    <Button variant="outline-secondary" onClick={handleEditToggle} className="me-2">
+                      Cancel
+                    </Button>
+                    <Button variant="outline-success" type="submit">
+                      Save Changes
+                    </Button>
+                  </>
+                )}
+              </div>
             </Form>
           </div>
         </div>
       </div>
     );
+    
   }
   
   export default AdminProfile;
