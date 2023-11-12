@@ -196,8 +196,6 @@
   background-color: #05652D; 
 }
 
-
-
 .title-label {
   font-size: 1rem;
 }
@@ -296,6 +294,10 @@
   color: white; 
   background-color: #05652D;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+.admin-icon-active {
+  color: white;
+  background-color: #05652D;
 }
 
 .sales-dashboard-cards {

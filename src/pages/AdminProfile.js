@@ -3,6 +3,8 @@ import { getAuth } from "firebase/auth";
 import { db } from '../config/firebase';
 import { doc, query, collection, where, getDocs, updateDoc } from "firebase/firestore";
 import { Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import SidebarOptions from "./SidebarOptions"; 
+import "../css/Admin.css"; 
 
 function AdminProfile() {
   const [adminProfile, setAdminProfile] = useState({
@@ -17,18 +19,17 @@ function AdminProfile() {
 
   useEffect(() => {
     if (user) {
-      // Query admin collection using the email from auth.currentUser
+
       const adminsRef = collection(db, "admin");
       const q = query(adminsRef, where("email", "==", user.email));
 
       const fetchAdminProfile = async () => {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-          // Assuming only one admin document per email
           const adminData = querySnapshot.docs[0].data();
           setAdminProfile({
             ...adminData,
-            docId: querySnapshot.docs[0].id // Storing document ID for updates
+            docId: querySnapshot.docs[0].id
           });
         } else {
           console.log("No admin profile found!");
@@ -53,7 +54,6 @@ function AdminProfile() {
         const adminRef = doc(db, "admin", adminProfile.docId);
   
         try {
-          // Only update firstName and lastName as email should not be changed
           await updateDoc(adminRef, {
             firstName: adminProfile.firstName,
             lastName: adminProfile.lastName,
@@ -67,55 +67,60 @@ function AdminProfile() {
       }
     };
   
+
     return (
-      <div className="admin-profile-container">
-        <h1>Admin Profile</h1>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup className="mb-3">
-            <FormLabel>First Name</FormLabel>
-            <FormControl 
-              type="text" 
-              name="firstName" 
-              value={adminProfile.firstName} 
-              onChange={handleInputChange} 
-              disabled={!editMode} 
-            />
-          </FormGroup>
-          <FormGroup className="mb-3">
-            <FormLabel>Last Name</FormLabel>
-            <FormControl
-              type="text"
-              name="lastName"
-              value={adminProfile.lastName}
-              onChange={handleInputChange}
-              disabled={!editMode}
-            />
-          </FormGroup>
-          <FormGroup className="mb-3">
-            <FormLabel>Email</FormLabel>
-            <FormControl
-              type="email"
-              name="email"
-              value={adminProfile.email}
-              disabled // Email cannot be edited
-            />
-          </FormGroup>
-          {!editMode ? (
-            <Button variant="primary" onClick={handleEditToggle}>Edit Profile</Button>
-          ) : (
-            <>
-              <Button variant="secondary" onClick={handleEditToggle} className="me-2">
-                Cancel
-              </Button>
-              <Button variant="success" type="submit">
-                Save Changes
-              </Button>
-            </>
-          )}
-        </Form>
+      <div className="admin-dashboard">
+        <SidebarOptions />
+        <div className="admin-dashboard-content">
+          <div className="admin-profile-container">
+            <h1>Admin Profile</h1>
+            <Form onSubmit={handleSubmit}>
+              <FormGroup className="mb-3">
+                <FormLabel>First Name</FormLabel>
+                <FormControl
+                  type="text"
+                  name="firstName"
+                  value={adminProfile.firstName}
+                  onChange={handleInputChange}
+                  disabled={!editMode}
+                />
+              </FormGroup>
+              <FormGroup className="mb-3">
+                <FormLabel>Last Name</FormLabel>
+                <FormControl
+                  type="text"
+                  name="lastName"
+                  value={adminProfile.lastName}
+                  onChange={handleInputChange}
+                  disabled={!editMode}
+                />
+              </FormGroup>
+              <FormGroup className="mb-3">
+                <FormLabel>Email</FormLabel>
+                <FormControl
+                  type="email"
+                  name="email"
+                  value={adminProfile.email}
+                  disabled
+                />
+              </FormGroup>
+              {!editMode ? (
+                <Button variant="primary" onClick={handleEditToggle}>Edit Profile</Button>
+              ) : (
+                <>
+                  <Button variant="secondary" onClick={handleEditToggle} className="me-2">
+                    Cancel
+                  </Button>
+                  <Button variant="success" type="submit">
+                    Save Changes
+                  </Button>
+                </>
+              )}
+            </Form>
+          </div>
+        </div>
       </div>
     );
   }
   
   export default AdminProfile;
-  

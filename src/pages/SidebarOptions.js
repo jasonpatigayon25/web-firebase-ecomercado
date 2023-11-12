@@ -7,9 +7,13 @@ import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const CustomToggle = React.forwardRef(({ children }, ref) => (
-  <Link to="/admin-profile">
-    <FaUser className="admin-icon" ref={ref}>
+
+const CustomToggle = React.forwardRef(({ children, onClick, isActive }, ref) => (
+  <Link to="/admin-profile" onClick={onClick}>
+    <FaUser
+      className={`admin-icon ${isActive ? "admin-icon-active" : ""}`}
+      ref={ref}
+    >
       {children}
     </FaUser>
   </Link>
@@ -50,6 +54,12 @@ function SidebarOptions() {
     }
   };
 
+  const [activeIcon, setActiveIcon] = useState(null);
+
+  const handleProfileIconClick = () => {
+    setActiveIcon('profile');
+  };
+
   return (
     <div>
       <div className="admin-navbar">
@@ -86,7 +96,10 @@ function SidebarOptions() {
     <div className="admin-dashboard-sidebar">
       <div className="admin-user">
         <div className="admin-user">
-          <CustomToggle />
+          <CustomToggle
+            isActive={activeIcon === 'profile'}
+            onClick={handleProfileIconClick}
+          />
           <span className="admin-dashboard-divider-alt"></span> 
         </div>
         <span className="admin-username">ADMIN</span>
@@ -131,10 +144,9 @@ function SidebarOptions() {
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item as={Link} to="/help-forum">Help Forum</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item>
             <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/delete-profile">Delete Profile</Dropdown.Item>
-            <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
-            <Dropdown.Item href="/">Logout</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>
