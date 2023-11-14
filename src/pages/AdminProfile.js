@@ -128,8 +128,7 @@ function AdminProfile() {
           </div>
         </div>
       </div>
-    );
-    
+    ); 
   }
   
   export default AdminProfile;

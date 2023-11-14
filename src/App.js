@@ -15,7 +15,6 @@ import ForgotPassword from "./pages/ForgotPassword"
 import DeleteProfile from "./pages/DeleteProfile"
 import Notification from "./pages/Notification"
 import SwitchAccount from "./pages/SwitchAccount"
-import HelpForum from "./pages/HelpForum"
 import AdminChangePassword from "./pages/AdminChangePassword"
 import AdminProfile from "./pages/AdminProfile"
 
@@ -38,7 +37,6 @@ function App() {
           <Route path="/delete-profile" element={<DeleteProfile/>}/>
           <Route path="/notification" element={<Notification/>}/>
           <Route path="/switch-account" element={<SwitchAccount/>}/>
-          <Route path="/help-forum" element={<HelpForum/>}/>
           <Route path="/change-password" element={<AdminChangePassword/>}/>
           <Route path="/admin-profile" element={<AdminProfile/>}/>
         </Routes>

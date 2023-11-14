@@ -7,7 +7,6 @@ import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <Link to="/admin-profile" onClick={onClick}>
     <FaUser className="admin-icon" ref={ref}>
@@ -131,7 +130,6 @@ function SidebarOptions() {
             <FaCog />
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/help-forum">Help Forum</Dropdown.Item>
             <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item>
             <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
             <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
