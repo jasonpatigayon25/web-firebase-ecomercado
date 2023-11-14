@@ -31,7 +31,8 @@ function ProductMetrics() {
         name: doc.data().name,
         category: doc.data().category,
         price: doc.data().price,
-        description: doc.data().description
+        description: doc.data().description,
+        seller_email: doc.data().seller_email 
       }));
       setProducts(products);
       setTotalProducts(productData.size);
@@ -61,7 +62,8 @@ function ProductMetrics() {
             <thead>
               <tr>
                 <th>Photo</th>
-                <th>Name</th>
+                <th>Product Name</th>
+                <th>Seller</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>View</th>
@@ -72,6 +74,7 @@ function ProductMetrics() {
                 <tr key={index}>
                   <td><img src={product.photo} alt={product.name} width="50" height="50"/></td>
                   <td>{product.name}</td>
+                  <td>{product.seller_email}</td>
                   <td>{product.category}</td>
                   <td>₱{product.price}</td>
                   <td>
@@ -96,6 +99,7 @@ function ProductDetailsModal({ product, onClose }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={product.photo} alt={product.name} width="100%" />
         <h2>{product.name}</h2>
+        <p>Seller Email: {product.seller_email}</p>
         <p>Category: {product.category}</p>
         <p>Price: ₱{product.price}</p>
         <p>Description: {product.description}</p>

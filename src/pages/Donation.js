@@ -31,7 +31,8 @@ function Donation() {
         name: doc.data().name,
         photo: doc.data().photo,
         location: doc.data().location,
-        message: doc.data().message
+        message: doc.data().message,
+        donor_email: doc.data().donor_email 
       }));
       setDonations(donations);
       setTotalDonation(donationData.size);
@@ -50,6 +51,7 @@ function Donation() {
               <tr>
                 <th>Image</th>
                 <th>Product</th>
+                <th>Donor</th>
                 <th>Location</th>
                 <th>View</th>
               </tr>
@@ -61,6 +63,7 @@ function Donation() {
                     <img src={donation.photo} alt="Donation" width="50" height="50"/>
                   </td>
                   <td>{donation.name}</td>
+                  <td>{donation.donor_email}</td>
                   <td>{donation.location}</td>
                   <td>
                     <FaEye onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer', color: '#05652D' }} />
@@ -84,6 +87,7 @@ function DonationDetailsModal({ donation, onClose }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={donation.photo} alt={donation.name} width="100%" />
         <h2>{donation.name}</h2>
+        <p>Donor Email: {donation.donor_email}</p>
         <p>Location: {donation.location}</p>
         <p>Message: {donation.message}</p>
         <button onClick={onClose}>Close</button>
