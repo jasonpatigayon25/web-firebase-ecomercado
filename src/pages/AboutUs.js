@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import Footer from '../footer/Footer';
 
 const Container = styled.div`
   background: linear-gradient(to bottom, #FFFFFF, #E3FCE9, #BEF7CC);
@@ -90,7 +89,6 @@ const AboutUs = () => {
         Thank you for choosing ECOMercado.
         </p>
       </div>
-      <Footer />
     </Container>
   );
 };

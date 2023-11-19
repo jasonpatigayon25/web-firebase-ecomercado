@@ -6,6 +6,11 @@
   background: #eee;
 }
 
+.white-text {
+  color: #fff;
+}
+
+
 .icon-link {
   display: inline-block;
   border-radius: 50%;
@@ -53,7 +58,7 @@
 }
 
 .text-or span {
-  background: #fff;
+  background: #333;
   padding: 0 10px;
   position: relative;
   z-index: 1;
@@ -78,5 +83,11 @@
 }
 
 button[type="submit"]:hover {
-  background-color: #034a22;
+  background-color: #fff;
+}
+
+.custom-button:hover {
+  background-color: #E3FCE9;
+  color: #05652D;
+  transform: scale(1.1);
 }

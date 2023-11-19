@@ -54,7 +54,7 @@ function SidebarOptions() {
     <div>
       <div className="admin-navbar">
         <Link to="/admin-dashboard">
-          <img src={`${process.env.PUBLIC_URL}/ecomercado-logo.png`} alt="Logo" className="admin-logo" />
+          <img src={`${process.env.PUBLIC_URL}/ecomercado-logo-white.png`} alt="Logo" className="admin-logo" />
         </Link>
         <div className="notification-container">
           <div onClick={toggleNotifications} className="notification-bell styled-bell">

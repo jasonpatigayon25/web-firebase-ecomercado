@@ -679,6 +679,27 @@ td:nth-child(5) {
   transition: color 0.3s;
 }
 
+
+.view-link {
+  background-color: #E3FCE9; 
+  color: #05652D;
+  padding: 8px 15px;
+  border-radius: 20px; 
+  margin: auto; 
+  text-align: center; 
+  cursor: pointer;
+  display: block; 
+  transition: background-color 0.3s, box-shadow 0.3s; 
+  text-decoration: none; 
+}x
+
+.view-link:hover {
+  background-color: #05652D; 
+  color: #E3FCE9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 .logout-link:hover {
   color: #537e63;
 }
@@ -861,3 +882,21 @@ td:nth-child(5) {
   font-size: larger; 
   font-weight: bold;
 }
+
+.modal-close-button {
+  background-color: #05652D; 
+  color: white; 
+  padding: 10px 20px;
+  border: none; 
+  border-radius: 5px; 
+  font-weight: bold; 
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s; 
+}
+
+.modal-close-button:hover {
+  background-color: #E3FCE9; 
+  color: #05652D;
+  transform: scale(1.05); 
+}
+

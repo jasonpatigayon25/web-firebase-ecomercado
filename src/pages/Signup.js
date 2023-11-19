@@ -5,7 +5,6 @@ import { adminCollection } from '../config/firebase';
 import { addDoc, Timestamp } from 'firebase/firestore';
 import { query, where, getDocs } from "firebase/firestore";
 import { Container, Row, Col, Card, Form, FormControl, FormCheck, Button } from 'react-bootstrap';
-import Footer from '../footer/Footer';
 import '../css/Signup.css';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getAuth } from "firebase/auth";
@@ -149,7 +148,7 @@ function Signup() {
                       <FormCheck id="flexCheckDefault" label="Accept terms and conditions" checked={termsChecked} onChange={() => setTermsChecked(!termsChecked)} />
                     </div>
                     <Button
-                      className="mb-4"
+                      className="submit-button mb-4"
                       size="lg"
                       onClick={register}
                       style={{ borderColor: '#05652D', backgroundColor: '#05652D', width: '100%', display: 'block' }}
@@ -179,7 +178,6 @@ function Signup() {
           </Col>
         </Row>
       </Container>
-      <Footer />
     </div>
   );
 }

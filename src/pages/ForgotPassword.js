@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
-import Footer from '../footer/Footer';
 import '../css/ForgotPassword.css';
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -92,7 +91,6 @@ function ForgotPassword() {
           </Form>
         </Card>
       </Container>
-      <Footer />
     </div>
   );
 }

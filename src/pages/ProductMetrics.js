@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen, FaShoppingBag, FaEye } from "react-icons/fa";
+import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
@@ -77,9 +77,9 @@ function ProductMetrics() {
                   <td>{product.seller_email}</td>
                   <td>{product.category}</td>
                   <td>₱{product.price}</td>
-                  <td>
-                    <FaEye onClick={() => handleOpenModal(product)} style={{ cursor: 'pointer', color: '#05652d' }} />
-                  </td>
+                  <button className="view-link" onClick={() => handleOpenModal(product)} style={{ cursor: 'pointer' }}>
+                    View
+                  </button>
                 </tr>
               ))}
             </tbody>
@@ -103,7 +103,7 @@ function ProductDetailsModal({ product, onClose }) {
         <p>Category: {product.category}</p>
         <p>Price: ₱{product.price}</p>
         <p>Description: {product.description}</p>
-        <button onClick={onClose}>Close</button>
+        <button className= "modal-close-button" onClick={onClose}>Close</button>
       </div>
     </div>
   );

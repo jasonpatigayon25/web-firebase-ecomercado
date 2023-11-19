@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaEye } from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs } from "firebase/firestore";
 
@@ -65,9 +64,9 @@ function Donation() {
                   <td>{donation.name}</td>
                   <td>{donation.donor_email}</td>
                   <td>{donation.location}</td>
-                  <td>
-                    <FaEye onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer', color: '#05652D' }} />
-                  </td>
+                  <button className="view-link" onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer' }}>
+                    View
+                  </button>
                 </tr>
               ))}
             </tbody>
@@ -90,7 +89,7 @@ function DonationDetailsModal({ donation, onClose }) {
         <p>Donor Email: {donation.donor_email}</p>
         <p>Location: {donation.location}</p>
         <p>Message: {donation.message}</p>
-        <button onClick={onClose}>Close</button>
+        <button className="modal-close-button" onClick={onClose}>Close</button>
       </div>
     </div>
   );
