@@ -56,7 +56,7 @@ function ProductMetrics() {
             <div className="stats-label">Total Product Sold</div>
           </div>
         </div>
-        <div className="admin-dashboard-recent-users mb-4 shadow">
+        <div className="admin-dashboard-recent-users">
           <h1>Recent Products Published</h1>
           <table>
             <thead>

@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 import { doc, query, collection, where, getDocs, updateDoc } from "firebase/firestore";
 import { Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import SidebarOptions from "./SidebarOptions"; 
-import "../css/Admin.css"; 
+
 import "../css/AdminProfile.css"; 
 
 function AdminProfile() {

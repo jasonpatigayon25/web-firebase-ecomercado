@@ -77,9 +77,8 @@ function UserStatistics() {
           </div>
         </div>
 
-        <div className="admin-dashboard-recent-users mb-4 shadow">
+        <div className="admin-dashboard-recent-users">
                 <h1>Recent Users</h1>
-                <div className="divider"></div>
                 <table>
                     <thead>
                         <tr>

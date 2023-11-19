@@ -64,7 +64,7 @@ function UserFeedback() {
                     <button onClick={() => setSearchTerm('')}>Clear</button>
                 </div>
 
-                <div className="admin-dashboard-recent-users mb-4 shadow">
+                <div className="admin-dashboard-recent-users">
                     <h2>Recent Feedbacks</h2>
                     <div className="divider"></div>
                     <div className="user-feedback-list">

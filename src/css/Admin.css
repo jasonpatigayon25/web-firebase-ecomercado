@@ -1,14 +1,19 @@
+body {
+  background-color: #333; 
+}
+
 :root {
-  --primary-color: #E3FCE9;
-  --secondary-color: #05652D;
-  --background-color: #fff;
-  --text-color: #333;
+  --primary-color: #05652D;
+  --secondary-color: #E3FCE9;
+  --background-color: #333;
+  --text-color: #fff;
 }
 
 .admin-dashboard {
   display: flex;
   height: 100%;
   margin-top: 60px;
+  background-color: var(--background-color);
 }
 
 
@@ -29,16 +34,18 @@
   margin-left: 10px;
   font-weight: bold;
   font-size: 18px;
-  color: black;
+  color: white;
 }
 
 .admin-dashboard-nav {
+  color: white;
   list-style: none;
   padding: 0;
 }
 
 .admin-dashboard-nav li {
   padding: 15px;
+  color: white;
 }
 
 .admin-dashboard-nav li a {
@@ -51,8 +58,8 @@
 }
 
 .admin-dashboard-nav li a:hover {
-  background-color: #05652D; 
-  color: white; 
+  background-color: #E3FCE9; 
+  color: 05652D; 
   border-radius: 5px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -182,18 +189,18 @@
 
 .admin-dashboard-card {
   flex: 1;
-  background: #fff;
+  background: var(--background-color);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.5);
 }
 
 .admin-dashboard-card:hover {
-  background-color: #05652D; 
+  background-color: #E3FCE9; 
 }
 
 .title-label {
@@ -208,7 +215,7 @@
 .stats-number {
   font-size: 30px;
   font-weight: bold;
-  color: #05652D;   
+  color: var(--text-color); 
   margin-bottom: 10px;
 }
 
@@ -220,18 +227,19 @@
 
 .stats-label {
   font-size: 16px;
-  color: #05652D; 
+  color: var(--text-color);
 }
 
 .admin-dashboard-card:hover .stats-number, 
 .admin-dashboard-card:hover .stats-icon, 
 .admin-dashboard-card:hover .stats-label {
-    color: white;
+    color: var(--primary-color);
 }
 
 .admin-dashboard-recent-users {
   padding: 20px;
   border-radius: 5px;
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.5);
 }
 
 .admin-dashboard-recent-users h2 {
@@ -312,7 +320,7 @@
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.5);
   margin-bottom: 20px;
   color: var(--text-color);
 }
@@ -321,6 +329,14 @@
   width: 100%;
   border-collapse: collapse;
   font-family: Arial, sans-serif; 
+}
+
+.admin-dashboard-recent-users table thead th {
+  color: white;
+}
+
+.admin-dashboard-recent-users table tbody td {
+  color: white;
 }
 
 .admin-dashboard-recent-users table th, 
@@ -337,6 +353,10 @@
 
 .admin-dashboard-recent-users table tr:hover {
   background-color: #f5f5f5; 
+}
+
+.admin-dashboard-recent-users table tbody tr:hover td {
+  color: black;
 }
 
 table {
@@ -383,30 +403,6 @@ td:nth-child(5) {
   text-align: right;
 }
 
-.donation-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.donation-table th,
-.donation-table td {
-  padding: 12px;
-  text-align: left;
-}
-
-.donation-table th {
-  background-color: #05652d;
-  color: #fff;
-}
-
-.donation-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.donation-table tr:hover {
-  background-color: #ddd;
-}
-
 .user-image img {
   width: 50px;
   height: 50px;
@@ -426,10 +422,36 @@ td:nth-child(5) {
 
 .user-feedback-list {
   overflow-y: auto;
+
+}
+
+.user-feedback-list .user-feedback-item {
+  color: white;
 }
 
 .user-feedback-item:hover {
   background-color: #f0f0f0;
+}
+
+.user-feedback-list .user-feedback-item:hover {
+  color: black;
+}
+
+.user-feedback-list .user-feedback-item {
+  color: white;
+}
+
+.user-feedback-list .user-feedback-item:hover .feedback-content,
+.user-feedback-list .user-feedback-item:hover .feedback-date {
+  color: black; 
+}
+
+.user-feedback-list .user-feedback-item .delete-icon svg {
+  fill: #ff0000; 
+}
+
+.user-feedback-list .user-feedback-item .delete-icon:hover svg {
+  fill: #ff0000;
 }
 
 .user-feedback-item {
@@ -456,6 +478,7 @@ td:nth-child(5) {
 
 .feedback-content {
   flex: 1;
+  color: #f0f0f0;
 }
 
 .feedback-date {
@@ -637,7 +660,7 @@ td:nth-child(5) {
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
-  background-color: #caf8d5;
+  background-color: #05652D;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   position: fixed;
@@ -757,13 +780,13 @@ td:nth-child(5) {
   color: #888;
 }
 .styled-bell {
-  color: #05652D;
+  color: #E3FCE9;
   font-size: 25px;  
 }
 
 .logout-link {
-  background-color: #05652D;
-  color: #ffffff;
+  background-color: #E3FCE9;
+  color: #05652D;
   padding: 5px 10px;
   border-radius: 5px;
   text-decoration: none;
@@ -786,10 +809,12 @@ td:nth-child(5) {
 .settings-dropdown a {
   color: inherit; 
   text-decoration: none;
+  color: #fff;
 }
 
 .settings-dropdown-icon {
   cursor: pointer;
+  color: var(--text-color);
 }
 
 .settings-icon-container {
@@ -829,7 +854,7 @@ td:nth-child(5) {
 }
 .admin-username {
   font-size: smaller; 
-  display: block; 
+  display: block;
 }
 
 .admin-firstname {  
