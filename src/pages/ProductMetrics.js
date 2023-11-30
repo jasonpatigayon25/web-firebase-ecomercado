@@ -72,7 +72,7 @@ function ProductMetrics() {
             <tbody>
               {products.map((product, index) => (
                 <tr key={index}>
-                  <td><img src={product.photo} alt={product.name} width="50" height="50"/></td>
+                  <td className="user-image"><img src={product.photo} alt={product.name} width="50" height="50"/></td>
                   <td>{product.name}</td>
                   <td>{product.seller_email}</td>
                   <td>{product.category}</td>

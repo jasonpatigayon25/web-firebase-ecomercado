@@ -52,7 +52,7 @@ function Welcome() {
               className="mx-2 px-4 py-3 hover-effect"
               variant="primary"
               as={Link}
-              to="/signup"
+              to="/login"
               size="lg"
               style={{ backgroundColor: '#fff', borderColor: '#ffff', color: '#05652D' }}
             >
