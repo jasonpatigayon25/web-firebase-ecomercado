@@ -11,6 +11,7 @@ function AdminDashboard() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalDonation, setTotalDonation] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
+  const [totalProductsSold, setTotalProductsSold] = useState(0);
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -52,6 +53,33 @@ function AdminDashboard() {
 
   }, []);
 
+   /*  useEffect(() => {
+    const fetchTotalProductsSold = async () => {
+      const ordersCollection = collection(db, 'orders');
+      const ordersSnapshot = await getDocs(ordersCollection);
+      let totalSold = 0;
+      ordersSnapshot.forEach(doc => {
+        const orderDetails = doc.data().productDetails;
+        if (orderDetails && Array.isArray(orderDetails)) {
+          orderDetails.forEach(item => {
+            totalSold += item.quantity ? item.quantity : 0;
+          });
+        }
+      });
+      setTotalProductsSold(totalSold);
+    };
+    fetchTotalProductsSold();
+  }, []); */
+
+  useEffect(() => {
+    const fetchTotalProductsSold = async () => {
+      const ordersCollection = collection(db, 'orders');
+      const ordersSnapshot = await getDocs(ordersCollection);
+      setTotalProductsSold(ordersSnapshot.size);
+    };
+    fetchTotalProductsSold();
+  }, []);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -68,7 +96,7 @@ function AdminDashboard() {
             <div className="stats-label">Total Product Published</div>
           </div>
           <div className="admin-dashboard-card">
-            <div className="stats-number"><span>0</span></div>
+            <div className="stats-number"><span>{totalProductsSold}</span></div>
             <div className="stats-icon"><FaShoppingBag /></div>
             <div className="stats-label">Total Product Sold</div>
           </div>

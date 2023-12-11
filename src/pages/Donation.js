@@ -48,23 +48,23 @@ function Donation() {
           <table className="admin-dashboard-recent-users">
             <thead>
               <tr>
-                <th>Image</th>
-                <th>Product</th>
-                <th>Donor</th>
-                <th>Location</th>
-                <th>View</th>
+                <th style={{ width: '80px' }}>Image</th>
+                <th style={{ width: '100px' }}>Product</th>
+                <th style={{ width: '100px' }}>Donor</th>
+                <th style={{ width: '300px' }}>Location</th>
+                <th style={{ width: '80px' }}>View</th>
               </tr>
             </thead>
             <tbody>
               {donations.map((donation, index) => (
                 <tr key={index}>
-                  <td className="user-image">
+                  <td className="user-image" style={{ width: '80px' }}> 
                     <img src={donation.photo} alt="Donation" width="50" height="50"/>
                   </td>
-                  <td>{donation.name}</td>
-                  <td>{donation.donor_email}</td>
-                  <td>{donation.location}</td>
-                  <button className="view-link" onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer' }}>
+                  <td style={{ width: '100px' }}>{donation.name}</td>
+                  <td style={{ width: '100px' }}>{donation.donor_email}</td>
+                  <td style={{ width: '300px' }}>{donation.location}</td>
+                  <button  className="view-link" onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer' }}>
                     View
                   </button>
                 </tr>
