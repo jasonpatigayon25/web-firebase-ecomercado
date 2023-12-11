@@ -3,9 +3,10 @@ import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import '../css/ButtonAnimation.css';
 import { Modal } from "react-bootstrap";
-import { FaUser, FaTrashAlt } from "react-icons/fa";
+import { FaUser, FaArchive } from "react-icons/fa";
 import { db } from '../config/firebase'; 
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 function UserFeedback() {
     const [feedbacks, setFeedbacks] = useState([]);
@@ -13,21 +14,25 @@ function UserFeedback() {
     const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
     const [selectedFeedback, setSelectedFeedback] = useState(null);
 
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user ? user.uid : null;
+
     useEffect(() => {
         const fetchData = async () => {
             const feedbackCollection = collection(db, 'feedback');
-            const feedbackData = await getDocs(feedbackCollection);
-            const feedbacks = feedbackData.docs.map(doc => ({
-                id: doc.id,
-                uid: doc.data().uid,
-                email: doc.data().email,
-                description: doc.data().description,
-                date: doc.data().timestamp.toDate().toLocaleDateString()
-            }));
+            const querySnapshot = await getDocs(feedbackCollection);
+            const feedbacks = querySnapshot.docs
+                .map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    date: doc.data().timestamp.toDate().toLocaleDateString()
+                }))
+                .filter(feedback => !feedback.archivedBy || !feedback.archivedBy.includes(userId)); 
             setFeedbacks(feedbacks);
         };
         fetchData();
-    }, []);
+    }, [userId]); 
 
     useEffect(() => {
         setFilteredFeedbacks(feedbacks.filter(feedback => 
@@ -44,8 +49,11 @@ function UserFeedback() {
         setSelectedFeedback(null);
     };
 
-    const handleDeleteFeedback = async (id) => {
-        await deleteDoc(doc(db, 'feedback', id));
+    const handleArchiveFeedback = async (id) => {
+        const feedbackRef = doc(db, 'feedback', id);
+        await updateDoc(feedbackRef, {
+            archivedBy: arrayUnion(userId) 
+        });
         setFeedbacks(currentFeedbacks => currentFeedbacks.filter(feedback => feedback.id !== id));
         setSelectedFeedback(null);
     };
@@ -84,11 +92,11 @@ function UserFeedback() {
                                 <div className="feedback-date">
                                     <i>{feedback.date}</i>
                                 </div>
-                                <div className="delete-icon" onClick={(e) => {
+                                <div className="archive-icon" onClick={(e) => {
                                         e.stopPropagation();
-                                        handleDeleteFeedback(feedback.id);
+                                        handleArchiveFeedback(feedback.id);
                                     }}>
-                                    <FaTrashAlt size={20} color="#ff0000"/>
+                                    <FaArchive size={20} color="#f0ad4e"/> 
                                 </div>
                             </div>
                         ))}
@@ -108,10 +116,10 @@ function UserFeedback() {
                                 </p>
                                 <p>{selectedFeedback.description}</p>
                                 <button 
-                                    onClick={() => handleDeleteFeedback(selectedFeedback.id)}
-                                    className="btn btn-danger"
+                                    onClick={() => handleArchiveFeedback(selectedFeedback.id)}
+                                    className="btn btn-warning"
                                 >
-                                    <FaTrashAlt /> Delete Feedback
+                                    Archive Feedback
                                 </button>
                             </>
                         )}

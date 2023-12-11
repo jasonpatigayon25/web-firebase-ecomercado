@@ -490,6 +490,10 @@ td:nth-child(5) {
   margin-left: 10px;
 }
 
+.archive-icon {
+  margin-left: 10px;
+}
+
 .search-feedback {
   display: flex;
   align-items: center;
