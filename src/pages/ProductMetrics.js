@@ -109,8 +109,7 @@ function ProductMetrics() {
               ))}
             </tbody>
           </table>
-        </div>
-        <div className="pagination-controls">
+          <div className="pagination-controls">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i + 1}
@@ -125,6 +124,8 @@ function ProductMetrics() {
           <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
         )}
       </div>
+        </div>
+        
     </div>
   );
 }
