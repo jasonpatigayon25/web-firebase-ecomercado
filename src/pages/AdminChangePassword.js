@@ -51,7 +51,7 @@ function AdminChangePassword() {
                 <Row className="justify-content-center">
                     <Col md="6">
                         <Card className="card p-4 shadow">
-                            <h2 className="change-password-title">Change Password for Admin {adminEmail}</h2>
+                            <h3 className="change-password-title">Change Password for Admin {adminEmail}</h3>
                             {error && <p className="text-danger">{error}</p>}
                             <Form onSubmit={handleSubmit}>
                                 <div className="txtinput mb-4">

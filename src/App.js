@@ -12,11 +12,11 @@ import Donation from "./pages/Donation"
 import UserFeedback from "./pages/UserFeedback"
 import ProductMetrics from "./pages/ProductMetrics"
 import ForgotPassword from "./pages/ForgotPassword"
-import DeleteProfile from "./pages/DeleteProfile"
 import Notification from "./pages/Notification"
 import SwitchAccount from "./pages/SwitchAccount"
 import AdminChangePassword from "./pages/AdminChangePassword"
 import AdminProfile from "./pages/AdminProfile"
+import BanUser from "./pages/BanUser"
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
           <Route path="/user-feedback" element={<UserFeedback/>}/>
           <Route path="/product-metrics" element={<ProductMetrics/>}/>
           <Route path="/forgot-password" element={<ForgotPassword/>}/>
-          <Route path="/delete-profile" element={<DeleteProfile/>}/>
+          <Route path="/delete-profile" element={<BanUser/>}/>
           <Route path="/notification" element={<Notification/>}/>
           <Route path="/switch-account" element={<SwitchAccount/>}/>
           <Route path="/change-password" element={<AdminChangePassword/>}/>
