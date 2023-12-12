@@ -1050,5 +1050,14 @@ td:nth-child(5) {
   font-size: 14px;
   margin-top: 5px;
 }
+.donation-item img {
+  width: 100px; /* Or any other size */
+  height: auto;
+  border-radius: 4px;
+}
+
+.donation-item {
+  margin-bottom: 20px;
+}
 
 
