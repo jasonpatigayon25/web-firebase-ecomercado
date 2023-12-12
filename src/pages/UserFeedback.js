@@ -10,7 +10,6 @@ import { getAuth } from "firebase/auth";
 
 function UserFeedback() {
     const [feedbacks, setFeedbacks] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
     const [selectedFeedback, setSelectedFeedback] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -70,18 +69,6 @@ function UserFeedback() {
         <div className="admin-dashboard">
             <SidebarOptions />
             <div className="admin-dashboard-content">
-                <div className="search-feedback">
-                    <input
-                        type="text"
-                        placeholder="Search feedback..."
-                        value={searchTerm}
-                        onChange={(e) => {
-                            setSearchTerm(e.target.value);
-                            setCurrentPage(1); // Reset to first page with new search term
-                        }}
-                    />
-                    <button onClick={() => setSearchTerm('')}>Clear</button>
-                </div>
 
                 <div className="admin-dashboard-recent-users">
                     <h2>Recent Feedbacks</h2>
