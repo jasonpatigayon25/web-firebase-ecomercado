@@ -903,4 +903,35 @@ td:nth-child(5) {
   color: #05652D;
   transform: scale(1.05); 
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #E3FCE9;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #05652D;
+  color: white; 
+}
+
+.pagination span {
+  margin: 0 10px;
+}
 

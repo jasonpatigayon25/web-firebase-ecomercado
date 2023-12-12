@@ -13,6 +13,9 @@ function UserFeedback() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
     const [selectedFeedback, setSelectedFeedback] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const itemsPerPage = 5;
 
     const auth = getAuth();
     const user = auth.currentUser;
@@ -22,24 +25,24 @@ function UserFeedback() {
         const fetchData = async () => {
             const feedbackCollection = collection(db, 'feedback');
             const querySnapshot = await getDocs(feedbackCollection);
-            const feedbacks = querySnapshot.docs
+            const feedbacksData = querySnapshot.docs
                 .map(doc => ({
                     id: doc.id,
                     ...doc.data(),
                     date: doc.data().timestamp.toDate().toLocaleDateString()
                 }))
                 .filter(feedback => !feedback.archivedBy || !feedback.archivedBy.includes(userId)); 
-            setFeedbacks(feedbacks);
+            setFeedbacks(feedbacksData);
         };
         fetchData();
     }, [userId]); 
 
     useEffect(() => {
-        setFilteredFeedbacks(feedbacks.filter(feedback => 
-            feedback.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            feedback.description.toLowerCase().includes(searchTerm.toLowerCase())
-        ));
-    }, [feedbacks, searchTerm]);
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        setFilteredFeedbacks(feedbacks.slice(start, end));
+        setTotalPages(Math.ceil(feedbacks.length / itemsPerPage));
+    }, [feedbacks, currentPage]);
 
     const handleFeedbackClick = (feedback) => {
         setSelectedFeedback(feedback);
@@ -58,6 +61,11 @@ function UserFeedback() {
         setSelectedFeedback(null);
     };
 
+    const handlePageChange = (newPage) => {
+        if (newPage < 1 || newPage > totalPages) return;
+        setCurrentPage(newPage);
+    };
+
     return (
         <div className="admin-dashboard">
             <SidebarOptions />
@@ -67,7 +75,10 @@ function UserFeedback() {
                         type="text"
                         placeholder="Search feedback..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1); // Reset to first page with new search term
+                        }}
                     />
                     <button onClick={() => setSearchTerm('')}>Clear</button>
                 </div>
@@ -100,6 +111,15 @@ function UserFeedback() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="pagination">
+                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                            Previous
+                        </button>
+                        <span>Page {currentPage} of {totalPages}</span>
+                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
                     </div>
                 </div>
 
