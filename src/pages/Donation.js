@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
@@ -6,10 +6,12 @@ import { collection, getDocs } from "firebase/firestore";
 
 function Donation() {
   const [donations, setDonations] = useState([]);
-
   const [totalDonation, setTotalDonation] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedDonation, setSelectedDonation] = useState(null);
+
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleOpenModal = (donation) => {
     setSelectedDonation(donation);
@@ -39,6 +41,16 @@ function Donation() {
     fetchData();
   }, []);
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const totalPages = Math.ceil(donations.length / itemsPerPage);
+  const currentDonations = donations.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -56,7 +68,7 @@ function Donation() {
               </tr>
             </thead>
             <tbody>
-              {donations.map((donation, index) => (
+              {currentDonations.map((donation, index) => (
                 <tr key={index}>
                   <td className="user-image" style={{ width: '80px' }}> 
                     <img src={donation.photo} alt="Donation" width="50" height="50"/>
@@ -71,6 +83,17 @@ function Donation() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="pagination-controls">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => handlePageChange(i + 1)}
+              disabled={currentPage === i + 1}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
         {isModalVisible && (
           <DonationDetailsModal donation={selectedDonation} onClose={handleCloseModal} />

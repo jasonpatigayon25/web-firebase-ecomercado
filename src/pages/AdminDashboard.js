@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { FaUserCheck, FaBoxOpen, FaShoppingBag, FaHeart } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
-import { collection, getDocs, limit, orderBy, query} from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import "../css/Admin.css";
 
 function AdminDashboard() {
-
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalDonation, setTotalDonation] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [totalProductsSold, setTotalProductsSold] = useState(0);
+
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -30,7 +32,7 @@ function AdminDashboard() {
         console.error("Error fetching products: ", err);
       });
 
-      getDocs(collection(db, 'donation'))
+    getDocs(collection(db, 'donation'))
       .then(snapshot => {
         setTotalDonation(snapshot.size);
       })
@@ -38,38 +40,20 @@ function AdminDashboard() {
         console.error("Error fetching donation: ", err);
       });
 
-      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
-        .then(snapshot => {
-            const fetchedUsers = snapshot.docs.map(doc => ({
-                email: doc.data().email,
-                fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-                dateRegistered: doc.data().dateRegistered
-            }));
-            setRecentFetchedUsers(fetchedUsers);
-        })
-        .catch(err => {
-            console.error("Error fetching recent users: ", err);
-        });
+    getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
+      .then(snapshot => {
+          const fetchedUsers = snapshot.docs.map(doc => ({
+              email: doc.data().email,
+              fullName: `${doc.data().firstName} ${doc.data().lastName}`,
+              dateRegistered: doc.data().dateRegistered
+          }));
+          setRecentFetchedUsers(fetchedUsers);
+      })
+      .catch(err => {
+          console.error("Error fetching recent users: ", err);
+      });
 
   }, []);
-
-   /*  useEffect(() => {
-    const fetchTotalProductsSold = async () => {
-      const ordersCollection = collection(db, 'orders');
-      const ordersSnapshot = await getDocs(ordersCollection);
-      let totalSold = 0;
-      ordersSnapshot.forEach(doc => {
-        const orderDetails = doc.data().productDetails;
-        if (orderDetails && Array.isArray(orderDetails)) {
-          orderDetails.forEach(item => {
-            totalSold += item.quantity ? item.quantity : 0;
-          });
-        }
-      });
-      setTotalProductsSold(totalSold);
-    };
-    fetchTotalProductsSold();
-  }, []); */
 
   useEffect(() => {
     const fetchTotalProductsSold = async () => {
@@ -79,6 +63,16 @@ function AdminDashboard() {
     };
     fetchTotalProductsSold();
   }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const totalPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
+  const currentUsers = recentFetchedUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="admin-dashboard">
@@ -107,27 +101,38 @@ function AdminDashboard() {
           </div>
         </div>
 
-        <div className="admin-dashboard-recent-users">
-                <h1>Recent Users</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Email Address</th>
-                            <th>Name</th>
-                            <th>Date Registered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {recentFetchedUsers.map((user, index) => (
-                            <tr key={index}>
-                                <td>{user.email}</td>
-                                <td>{user.fullName}</td>
-                                <td>{user.dateRegistered}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+         <div className="admin-dashboard-recent-users">
+          <h1>Recent Users</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Email Address</th>
+                <th>Name</th>
+                <th>Date Registered</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentUsers.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.email}</td>
+                  <td>{user.fullName}</td>
+                  <td>{user.dateRegistered}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination-controls">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handlePageChange(i + 1)}
+                disabled={currentPage === i + 1}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

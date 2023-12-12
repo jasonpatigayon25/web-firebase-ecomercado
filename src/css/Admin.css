@@ -934,4 +934,34 @@ td:nth-child(5) {
 .pagination span {
   margin: 0 10px;
 }
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-controls button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:hover {
+  background-color: #e0e0e0;
+}
+
+.pagination-controls button:disabled {
+  color: #999;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}
+
+.pagination-controls button:disabled {
+  background-color: #05652D;
+  color: white;
+}
 

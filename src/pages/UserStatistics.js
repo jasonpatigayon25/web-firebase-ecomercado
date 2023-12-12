@@ -3,14 +3,16 @@ import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaUserCheck } from "react-icons/fa";
 import { db } from '../config/firebase';
-import { collection, getDocs, limit } from "firebase/firestore";
-import { where, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 
 function UserStatistics() {
 
   const [totalUsers, setTotalUsers] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [weeklyRegisteredUsers, setWeeklyRegisteredUsers] = useState(0);
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -45,7 +47,7 @@ function UserStatistics() {
         console.error("Error fetching weekly registered users: ", err);
       });
     
-      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
+    getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc')))
       .then(snapshot => {
           const fetchedUsers = snapshot.docs.map(doc => ({
               email: doc.data().email,
@@ -53,12 +55,21 @@ function UserStatistics() {
               dateRegistered: doc.data().dateRegistered
           }));
           setRecentFetchedUsers(fetchedUsers);
+          setTotalPages(Math.ceil(fetchedUsers.length / itemsPerPage));
       })
       .catch(err => {
           console.error("Error fetching recent users: ", err);
       });
-
   }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const currentUsers = recentFetchedUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="admin-dashboard">
@@ -87,20 +98,31 @@ function UserStatistics() {
                             <th>Date Registered</th>
                         </tr>
                     </thead>
-                      <tbody>
-                        {recentFetchedUsers.map((user, index) => (
-                          <tr key={index}>
-                              <td>{user.email}</td>
-                              <td>{user.fullName}</td>
-                              <td>{user.dateRegistered}</td>
-                          </tr>
-                      ))}
-                  </tbody>
+                    <tbody>
+              {currentUsers.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.email}</td>
+                  <td>{user.fullName}</td>
+                  <td>{user.dateRegistered}</td>
+                </tr>
+              ))}
+            </tbody>
               </table>
+              <div className="pagination-controls">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    disabled={currentPage === i + 1}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-      </div>
-    </div>
-  );
-}
+        </div>
+      );
+    }
 
-export default UserStatistics;
+    export default UserStatistics;

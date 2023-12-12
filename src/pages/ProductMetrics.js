@@ -12,6 +12,9 @@ function ProductMetrics() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [totalProductsSold, setTotalProductsSold] = useState(0);
 
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
     setModalVisible(true);
@@ -43,24 +46,6 @@ function ProductMetrics() {
     fetchProducts();
   }, []);
 
- /*  useEffect(() => {
-    const fetchTotalProductsSold = async () => {
-      const ordersCollection = collection(db, 'orders');
-      const ordersSnapshot = await getDocs(ordersCollection);
-      let totalSold = 0;
-      ordersSnapshot.forEach(doc => {
-        const orderDetails = doc.data().productDetails;
-        if (orderDetails && Array.isArray(orderDetails)) {
-          orderDetails.forEach(item => {
-            totalSold += item.quantity ? item.quantity : 0;
-          });
-        }
-      });
-      setTotalProductsSold(totalSold);
-    };
-    fetchTotalProductsSold();
-  }, []); */
-
   useEffect(() => {
     const fetchTotalProductsSold = async () => {
       const ordersCollection = collection(db, 'orders');
@@ -69,6 +54,16 @@ function ProductMetrics() {
     };
     fetchTotalProductsSold();
   }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const currentProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="admin-dashboard">
@@ -100,7 +95,7 @@ function ProductMetrics() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product, index) => (
+              {currentProducts.map((product, index) => (
                 <tr key={index}>
                   <td style={{ width: '80px' }} className="user-image"><img src={product.photo} alt={product.name} width="50" height="50"/></td>
                   <td>{product.name}</td>
@@ -114,6 +109,17 @@ function ProductMetrics() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="pagination-controls">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => handlePageChange(i + 1)}
+              disabled={currentPage === i + 1}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
         {isModalVisible && (
           <ProductDetailsModal product={selectedProduct} onClose={handleCloseModal} />
