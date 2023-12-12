@@ -135,14 +135,14 @@ function ProductDetailsModal({ product, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={product.photo} alt={product.name} width="100%" />
-        <h2>{product.name}</h2>
+        <h2 style={{ color: 'black' }}>{product.name}</h2>
         <p>Seller Email: {product.seller_email}</p>
         <p>Category: {product.category}</p>
         <p>Price: ₱{product.price}</p>
         <p>Quantity: {product.quantity}</p>
         <p>Location: {product.location}</p>
         <p>Description: {product.description}</p>
-        <button className= "modal-close-button" onClick={onClose}>Close</button>
+        <button className= "modal-close-button" onClick={onClose}>✕</button>
       </div>
     </div>
   );

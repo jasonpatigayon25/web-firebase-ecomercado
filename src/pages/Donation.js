@@ -108,11 +108,11 @@ function DonationDetailsModal({ donation, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={donation.photo} alt={donation.name} width="100%" />
-        <h2>{donation.name}</h2>
+        <h2 style={{ color: 'black' }}>{donation.name}</h2>
         <p>Donor Email: {donation.donor_email}</p>
         <p>Location: {donation.location}</p>
         <p>Message: {donation.message}</p>
-        <button className="modal-close-button" onClick={onClose}>Close</button>
+        <button className="modal-close-button" onClick={onClose}>✕</button>
       </div>
     </div>
   );

@@ -4,6 +4,9 @@ import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import "../css/Admin.css";
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function AdminDashboard() {
   const [totalUsers, setTotalUsers] = useState(0);
@@ -11,6 +14,9 @@ function AdminDashboard() {
   const [totalDonation, setTotalDonation] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [totalProductsSold, setTotalProductsSold] = useState(0);
+
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productModalContent, setProductModalContent] = useState([]);
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,6 +80,23 @@ function AdminDashboard() {
     currentPage * itemsPerPage
   );
 
+  useEffect(() => {
+    const fetchProductsForModal = async () => {
+      const productsCollection = collection(db, 'products');
+      const productsSnapshot = await getDocs(productsCollection);
+      const productsData = productsSnapshot.docs.map(doc => ({
+        name: doc.data().name,
+        category: doc.data().category,
+        photo: doc.data().photo
+      }));
+      setProductModalContent(productsData);
+    };
+
+    if (isProductModalOpen) {
+      fetchProductsForModal();
+    }
+  }, [isProductModalOpen]);
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -84,7 +107,10 @@ function AdminDashboard() {
             <div className="stats-icon"><FaUserCheck /></div>
             <div className="stats-label">Total Users</div>
           </div>
-          <div className="admin-dashboard-card">
+          <div
+              className="admin-dashboard-card"
+              onClick={() => setIsProductModalOpen(true)} 
+            >
             <div className="stats-number"><span>{totalProducts}</span></div>
             <div className="stats-icon"><FaBoxOpen /></div>
             <div className="stats-label">Total Product Published</div>
@@ -134,6 +160,27 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isProductModalOpen}
+        onRequestClose={() => setIsProductModalOpen(false)}
+        contentLabel="Product Modal"
+        className="ReactModal__Content"
+        overlayClassName="ReactModal__Overlay"
+      >
+        <div className="modal-header">
+          <h2 className="modal-title">Published Products</h2>
+          <button className="modal-close-button" onClick={() => setIsProductModalOpen(false)}>✕</button>
+        </div>
+        <div className="product-list">
+          {productModalContent.map((product, index) => (
+            <div key={index} className="product-card">
+              <img src={product.photo} alt={product.name} className="product-image" />
+              <p className="product-name">{product.name}</p>
+              <p className="product-category">{product.category}</p>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 }
