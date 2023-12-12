@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUserCheck } from "react-icons/fa";
+import { FaUserCheck, FaUser} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import Modal from 'react-modal';
 
 function UserStatistics() {
 
@@ -13,6 +14,12 @@ function UserStatistics() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [userModalContent, setUserModalContent] = useState([]);
+
+  const [isWeeklyUserModalOpen, setIsWeeklyUserModalOpen] = useState(false);
+  const [weeklyUserModalContent, setWeeklyUserModalContent] = useState([]);
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -71,17 +78,79 @@ function UserStatistics() {
     currentPage * itemsPerPage
   );
 
+  const fetchUsers = async () => {
+    try {
+      const userSnapshot = await getDocs(collection(db, 'users'));
+      const users = userSnapshot.docs.map(doc => {
+        const userData = doc.data();
+        return {
+          photoUrl: userData.photoUrl,
+          email: userData.email,
+          fullName: `${userData.firstName} ${userData.lastName}`
+        };
+      });
+      setUserModalContent(users);
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+    }
+  };
+
+  const fetchWeeklyUsers = async () => {
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1)); 
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+  
+    const q = query(
+      collection(db, 'users'),
+      where('dateRegistered', '>=', startOfWeek),
+      where('dateRegistered', '<=', endOfWeek),
+      orderBy('dateRegistered', 'desc')
+    );
+  
+    try {
+      const snapshot = await getDocs(q);
+      if (snapshot.empty) {
+        setWeeklyUserModalContent([{ message: 'No registered users this week.' }]);
+      } else {
+        const users = snapshot.docs.map(doc => ({
+          photoUrl: doc.data().photoUrl,
+          email: doc.data().email,
+          fullName: `${doc.data().firstName} ${doc.data().lastName}`,
+          dateRegistered: doc.data().dateRegistered.toDate().toLocaleString()
+        }));
+        setWeeklyUserModalContent(users);
+      }
+    } catch (error) {
+      console.error("Error fetching weekly registered users: ", error);
+    }
+  };
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
         <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card">
+          <div 
+          className="admin-dashboard-card"
+          onClick={() => {
+            setIsUserModalOpen(true);
+            fetchUsers();
+          }}>
             <div className="stats-number"><span>{totalUsers}</span></div>
             <div className="stats-icon"><FaUserCheck /></div>
             <div className="stats-label">Total Users</div>
           </div>
-          <div className="admin-dashboard-card">
+          <div 
+            className="admin-dashboard-card"
+            onClick={() => {
+              setIsWeeklyUserModalOpen(true);
+              fetchWeeklyUsers();
+            }}
+          >
             <div className="stats-number"><span>{weeklyRegisteredUsers}</span></div>
             <div className="stats-icon"><FaUserCheck /></div>
             <div className="stats-label">Weekly Registered Users</div>
@@ -121,6 +190,61 @@ function UserStatistics() {
               </div>
             </div>
           </div>
+          <Modal
+          isOpen={isUserModalOpen}
+          onRequestClose={() => setIsUserModalOpen(false)}
+          contentLabel="User Modal"
+          className="ReactModal__Content"
+          overlayClassName="ReactModal__Overlay"
+        >
+          <div className="modal-header">
+            <h2 className="modal-title">Users</h2>
+            <button className="modal-close-button" onClick={() => setIsUserModalOpen(false)}>✕</button>
+          </div>
+          <div className="product-list">
+            {userModalContent.map((user, index) => (
+              <div key={index} className="product-card">
+            {user.photoUrl
+                    ? <img src={user.photoUrl} alt={user.fullName} className="product-image" />
+                    : <FaUser size="3em" /> 
+                  }
+                <p className="product-name">{user.email}</p>
+                <p className="product-category">{user.fullName}</p>
+              </div>
+            ))}
+          </div>
+        </Modal>
+        <Modal
+          isOpen={isWeeklyUserModalOpen}
+          onRequestClose={() => setIsWeeklyUserModalOpen(false)}
+          contentLabel="Weekly Registered Users"
+          className="ReactModal__Content"
+          overlayClassName="ReactModal__Overlay"
+        >
+          <div className="modal-header">
+            <h2 className="modal-title">Weekly Registered Users</h2>
+            <button className="modal-close-button" onClick={() => setIsWeeklyUserModalOpen(false)}>✕</button>
+          </div>
+          <div className="product-list">
+            {weeklyUserModalContent.length === 0 || weeklyUserModalContent[0].message ? (
+              <div className="no-users-message">
+                {weeklyUserModalContent[0]?.message || 'No users registered this week.'}
+              </div>
+            ) : (
+              weeklyUserModalContent.map((user, index) => (
+                <div key={index} className="product-card">
+                  {user.photoUrl
+                    ? <img src={user.photoUrl} alt={user.fullName} className="product-image" />
+                    : <FaUser size="3em" />
+                  }
+                  <p className="product-name">{user.email}</p>
+                  <p className="product-category">{user.fullName}</p>
+                  <p className="product-date">{user.dateRegistered}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </Modal>
         </div>
       );
     }
