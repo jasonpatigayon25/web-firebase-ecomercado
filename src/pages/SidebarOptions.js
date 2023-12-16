@@ -5,8 +5,8 @@ import {
   deleteDoc, 
   doc,
   writeBatch,
-  getDoc,
-  updateDoc
+  updateDoc,
+  collection
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
 import { notificationForAdminCollection } from '../config/firebase'; 
@@ -28,6 +28,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 
 function SidebarOptions() {
   const [notifications, setNotifications] = useState([]);
+  const [isMuted, setIsMuted] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
 
@@ -35,34 +36,40 @@ function SidebarOptions() {
     const fetchAdminMuteStatus = async () => {
       const currentUser = auth.currentUser;
       if (currentUser) {
-        const adminDocRef = doc(db, "admin", currentUser.uid);
-        const adminDocSnap = await getDoc(adminDocRef);
-
-        if (adminDocSnap.exists()) {
-          setIsMuted(adminDocSnap.data().isMuted || false);
+        const adminEmail = currentUser.email; 
+        const querySnapshot = await getDocs(collection(db, "admin"));
+        
+        const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
+        
+        if (adminDoc) {
+          setIsMuted(adminDoc.data().isMuted || false);
         }
       }
     };
-
+  
     fetchAdminMuteStatus();
   }, []);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const querySnapshot = await getDocs(notificationForAdminCollection);
-        const fetchedNotifications = [];
-        querySnapshot.forEach((doc) => {
-          fetchedNotifications.push({ id: doc.id, ...doc.data() });
-        });
-        setNotifications(fetchedNotifications);
+        if (!isMuted) {
+          const querySnapshot = await getDocs(notificationForAdminCollection);
+          const fetchedNotifications = [];
+          querySnapshot.forEach((doc) => {
+            fetchedNotifications.push({ id: doc.id, ...doc.data() });
+          });
+          setNotifications(fetchedNotifications);
+        } else {
+          setNotifications([]); 
+        }
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
     };
-  
+
     fetchNotifications();
-  }, []);
+  }, [isMuted]);
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
@@ -95,27 +102,40 @@ function SidebarOptions() {
     }
   };
   
-  const [isMuted, setIsMuted] = useState(false);
 
   const muteNotificationsForCurrentUser = async () => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-      const adminDocRef = doc(db, "admin", currentUser.uid);
-      await updateDoc(adminDocRef, {
-        isMuted: true
-      });
-      setIsMuted(true);
+      const adminEmail = currentUser.email;
+      const querySnapshot = await getDocs(collection(db, "admin"));
+
+      const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
+      
+      if (adminDoc) {
+        const adminDocRef = doc(db, "admin", adminDoc.id);
+        await updateDoc(adminDocRef, {
+          isMuted: true
+        });
+        setIsMuted(true);
+      }
     }
   };
 
   const unmuteNotificationsForCurrentUser = async () => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-      const adminDocRef = doc(db, "admin", currentUser.uid);
-      await updateDoc(adminDocRef, {
-        isMuted: false
-      });
-      setIsMuted(false);
+      const adminEmail = currentUser.email;
+      const querySnapshot = await getDocs(collection(db, "admin"));
+      
+      const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
+      
+      if (adminDoc) {
+        const adminDocRef = doc(db, "admin", adminDoc.id);
+        await updateDoc(adminDocRef, {
+          isMuted: false
+        });
+        setIsMuted(false);
+      }
     }
   };
 
@@ -126,7 +146,7 @@ function SidebarOptions() {
   
   const handleUnmuteAllClick = () => {
     unmuteNotificationsForCurrentUser();
-    setIsMuted(false);
+    setIsMuted(false); 
   };
   
   const handleLogout = () => {
