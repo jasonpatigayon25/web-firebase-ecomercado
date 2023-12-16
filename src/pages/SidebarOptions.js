@@ -61,7 +61,8 @@ function SidebarOptions() {
           });
           setNotifications(fetchedNotifications);
         } else {
-          setNotifications([]); 
+          setNotifications([]);
+          setShowNotifications(false); 
         }
       } catch (error) {
         console.error('Error fetching notifications:', error);

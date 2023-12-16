@@ -742,6 +742,8 @@ td:nth-child(5) {
   overflow: hidden;
   border-radius: 5px;
   z-index: 10;
+  max-height: 600px; 
+  overflow-y: auto;
 }
 
 .notifications-list p {

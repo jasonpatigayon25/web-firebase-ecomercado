@@ -76,7 +76,7 @@ function Login() {
               </div>
               <FormControl
                 className='username'
-                type="username"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
