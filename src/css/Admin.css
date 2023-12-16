@@ -765,6 +765,15 @@ td:nth-child(5) {
   flex: 1;
   margin: 0;
   padding: 0 10px;
+  color: black;
+}
+
+.notification-item button.delete {
+  color: red;
+}
+
+.notification-item button.mute {
+  color: orange;
 }
 
 .notification-item button {
@@ -781,18 +790,29 @@ td:nth-child(5) {
   color: #0056b3;
 }
 
-.delete-all {
-  display: block;
-  width: 100%;
-  text-align: center;
-  color: #ff0000;
+.notifications-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.delete-all, .mute-all {
   cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 5px;
-  background: none;
   border: none;
+  background: none;
   font-size: 14px;
   transition: color 0.2s ease-in-out;
+  padding: 5px 10px;
+}
+
+.delete-all {
+  color: #ff0000;
+  margin-right: 10px;
+}
+
+.mute-all {
+  color: #674c1d;
 }
 
 .delete-all:hover {

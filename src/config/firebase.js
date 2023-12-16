@@ -22,4 +22,5 @@ export const facebookProvider = new FacebookAuthProvider();
 export const db = getFirestore(app);
 export const usersCollection = collection(db, "users");
 export const adminCollection = collection(db, "admin");
+export const notificationForAdminCollection = collection(db, "notificationForAdmin");
 export const storage = getStorage(app);

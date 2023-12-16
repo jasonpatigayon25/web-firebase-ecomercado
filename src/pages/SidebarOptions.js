@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  FaHome, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog
-} from "react-icons/fa";
+import { 
+  getDocs, 
+  deleteDoc, 
+  doc,
+  writeBatch,
+  getDoc,
+  updateDoc
+} from 'firebase/firestore';
+import { db } from '../config/firebase'; 
+import { notificationForAdminCollection } from '../config/firebase'; 
+import { FaHome, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <Link to="/admin-profile" onClick={onClick}>
@@ -16,32 +27,108 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 ));
 
 function SidebarOptions() {
-  const [notifications, setNotifications] = useState([
-    { message: "User1 officially registered at ECOMercado" },
-    { message: "Product ID 42 has been updated" },
-    { message: "Order ID 123 has been shipped" },
-  ]);
+  const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchAdminMuteStatus = async () => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const adminDocRef = doc(db, "admin", currentUser.uid);
+        const adminDocSnap = await getDoc(adminDocRef);
+
+        if (adminDocSnap.exists()) {
+          setIsMuted(adminDocSnap.data().isMuted || false);
+        }
+      }
+    };
+
+    fetchAdminMuteStatus();
+  }, []);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const querySnapshot = await getDocs(notificationForAdminCollection);
+        const fetchedNotifications = [];
+        querySnapshot.forEach((doc) => {
+          fetchedNotifications.push({ id: doc.id, ...doc.data() });
+        });
+        setNotifications(fetchedNotifications);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+  
+    fetchNotifications();
+  }, []);
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
 
-  const deleteNotification = (index) => {
-    const updatedNotifications = [...notifications];
-    updatedNotifications.splice(index, 1);
-    setNotifications(updatedNotifications);
+  const deleteNotification = async (notifId) => {
+    try {
+      await deleteDoc(doc(db, 'notificationForAdmin', notifId));
+      setNotifications(prevNotifications => 
+        prevNotifications.filter(notif => notif.id !== notifId)
+      );
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
   };
 
-  const deleteAllNotifications = () => {
-    setNotifications([]);
+  const deleteAllNotifications = async () => {
+    const batch = writeBatch(db);
+  
+    try {
+      const querySnapshot = await getDocs(notificationForAdminCollection);
+      querySnapshot.forEach((docSnapshot) => {
+        batch.delete(docSnapshot.ref);
+      });
+  
+      await batch.commit();
+      setNotifications([]);
+    } catch (error) {
+      console.error('Error deleting all notifications:', error);
+    }
+  };
+  
+  const [isMuted, setIsMuted] = useState(false);
+
+  const muteNotificationsForCurrentUser = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const adminDocRef = doc(db, "admin", currentUser.uid);
+      await updateDoc(adminDocRef, {
+        isMuted: true
+      });
+      setIsMuted(true);
+    }
   };
 
-  const muteNotification = (index) => {
-    //
+  const unmuteNotificationsForCurrentUser = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const adminDocRef = doc(db, "admin", currentUser.uid);
+      await updateDoc(adminDocRef, {
+        isMuted: false
+      });
+      setIsMuted(false);
+    }
   };
 
+  const handleMuteAllClick = () => {
+    muteNotificationsForCurrentUser();
+    setIsMuted(true); 
+  };
+  
+  const handleUnmuteAllClick = () => {
+    unmuteNotificationsForCurrentUser();
+    setIsMuted(false);
+  };
+  
   const handleLogout = () => {
     const confirmLogout = window.confirm("Do you really want to logout?");
     if (confirmLogout) {
@@ -57,29 +144,39 @@ function SidebarOptions() {
           <img src={`${process.env.PUBLIC_URL}/ecomercado-logo-white.png`} alt="Logo" className="admin-logo" />
         </Link>
         <div className="notification-container">
-          <div onClick={toggleNotifications} className="notification-bell styled-bell">
-            <FaBell />
-            {showNotifications && (
-              <div className="notifications-list">
-                {notifications.length === 0 ? (
-                  <p className="no-notifications">No notifications yet</p>
+        <div onClick={toggleNotifications} className="notification-bell styled-bell">
+          <FaBell />
+          {showNotifications && (
+            <div className="notifications-list">
+              {isMuted ? (
+                <p style={{ color: 'black' }}>Muted</p>
+              ) : (
+                notifications.length === 0 ? (
+                  <p style={{ color: 'black' }}>No notifications yet</p>
+                ) : (
+                  notifications.map((notif, index) => (
+                    <div key={notif.id} className="notification-item">
+                      <p style={{ color: '#000000', fontSize: '14px' }}>{notif.text}</p>
+                      <div>
+                        <button className="delete" onClick={() => deleteNotification(notif.id)}>Delete</button>
+                      </div>
+                    </div>
+                  ))
+                )
+              )}
+              <div className="notifications-actions">
+                {isMuted ? (
+                  <button className="mute-all" onClick={handleUnmuteAllClick}>Unmute All</button>
                 ) : (
                   <>
                     <button className="delete-all" onClick={deleteAllNotifications}>Delete All</button>
-                    {notifications.map((notif, index) => (
-                      <div key={index} className="notification-item">
-                        <p>{notif.message}</p>
-                        <div>
-                          <button onClick={() => deleteNotification(index)}>Delete</button>
-                          <button onClick={() => muteNotification(index)}>Mute</button>
-                        </div>
-                      </div>
-                    ))}
+                    <button className="mute-all" onClick={handleMuteAllClick}>Mute All</button>
                   </>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
           <button onClick={handleLogout} className="logout-link">Logout</button>
         </div>
       </div>
