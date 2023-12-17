@@ -200,7 +200,7 @@ function ProductMetrics() {
           overlayClassName="ReactModal__Overlay"
         >
           <div className="modal-header">
-            <h2 className="modal-title">Total Products Sold</h2>
+            <h2 className="modal-title">Total Orders</h2>
             <button className="modal-close-button" onClick={() => setIsProductsSoldModalOpen(false)}>✕</button>
           </div>
           <div className="product-list">

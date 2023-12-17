@@ -54,19 +54,24 @@ function UserStatistics() {
         console.error("Error fetching weekly registered users: ", err);
       });
     
-    getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc')))
+      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc')))
       .then(snapshot => {
-          const fetchedUsers = snapshot.docs.map(doc => ({
-              email: doc.data().email,
-              fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-              dateRegistered: doc.data().dateRegistered
-          }));
-          setRecentFetchedUsers(fetchedUsers);
-          setTotalPages(Math.ceil(fetchedUsers.length / itemsPerPage));
+        const fetchedUsers = snapshot.docs.map(doc => {
+          const userData = doc.data();
+          return {
+            email: userData.email,
+            fullName: `${userData.firstName} ${userData.lastName}`,
+            dateRegistered: userData.dateRegistered.toDate().toLocaleString()
+          };
+        });
+        setRecentFetchedUsers(fetchedUsers);
+        setTotalPages(Math.ceil(fetchedUsers.length / itemsPerPage));
       })
       .catch(err => {
-          console.error("Error fetching recent users: ", err);
+        console.error("Error fetching recent users: ", err);
       });
+
+    fetchWeeklyUsers(); 
   }, []);
 
   const handlePageChange = (newPage) => {
@@ -96,36 +101,43 @@ function UserStatistics() {
   };
 
   const fetchWeeklyUsers = async () => {
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1)); 
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
     startOfWeek.setHours(0, 0, 0, 0);
-
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
-  
+
     const q = query(
       collection(db, 'users'),
       where('dateRegistered', '>=', startOfWeek),
       where('dateRegistered', '<=', endOfWeek),
       orderBy('dateRegistered', 'desc')
     );
-  
+
     try {
       const snapshot = await getDocs(q);
       if (snapshot.empty) {
         setWeeklyUserModalContent([{ message: 'No registered users this week.' }]);
+        setWeeklyRegisteredUsers(0);
       } else {
-        const users = snapshot.docs.map(doc => ({
-          photoUrl: doc.data().photoUrl,
-          email: doc.data().email,
-          fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-          dateRegistered: doc.data().dateRegistered.toDate().toLocaleString()
-        }));
+        const users = snapshot.docs.map(doc => {
+          const userData = doc.data();
+          return {
+            photoUrl: userData.photoUrl,
+            email: userData.email,
+            fullName: `${userData.firstName} ${userData.lastName}`,
+            dateRegistered: userData.dateRegistered.toDate().toLocaleString()
+          };
+        });
         setWeeklyUserModalContent(users);
+        setWeeklyRegisteredUsers(users.length);
       }
     } catch (error) {
       console.error("Error fetching weekly registered users: ", error);
+      setWeeklyRegisteredUsers(0);
     }
   };
 

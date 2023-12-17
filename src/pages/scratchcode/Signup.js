@@ -1,7 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.css';
+/* import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { adminCollection } from '../config/firebase';
+import { adminCollection } from '../../config/firebase';
 import { addDoc, Timestamp } from 'firebase/firestore';
 import { query, where, getDocs } from "firebase/firestore";
 import { Container, Row, Col, Card, Form, FormControl, FormCheck, Button } from 'react-bootstrap';
@@ -183,3 +183,4 @@ function Signup() {
 }
 
 export default Signup;
+ */

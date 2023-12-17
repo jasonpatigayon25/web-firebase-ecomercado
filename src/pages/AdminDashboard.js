@@ -56,14 +56,18 @@
         });
 
       getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
-        .then(snapshot => {
-            const fetchedUsers = snapshot.docs.map(doc => ({
-                email: doc.data().email,
-                fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-                dateRegistered: doc.data().dateRegistered
-            }));
-            setRecentFetchedUsers(fetchedUsers);
-        })
+      .then(snapshot => {
+        const fetchedUsers = snapshot.docs.map(doc => {
+            const userData = doc.data();
+            const dateRegistered = userData.dateRegistered.toDate().toLocaleString();
+            return {
+                email: userData.email,
+                fullName: `${userData.firstName} ${userData.lastName}`,
+                dateRegistered: dateRegistered
+            };
+        });
+        setRecentFetchedUsers(fetchedUsers);
+    })
         .catch(err => {
             console.error("Error fetching recent users: ", err);
         });
@@ -183,7 +187,7 @@
             >
               <div className="stats-number"><span>{totalProductsSold}</span></div>
               <div className="stats-icon"><FaShoppingBag /></div>
-              <div className="stats-label">Total Product Sold</div>
+              <div className="stats-label">Total Orders</div>
             </div>
             <div
               className="admin-dashboard-card"

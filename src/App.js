@@ -1,7 +1,7 @@
 // import './App.css'
 import Welcome from "./pages/Welcome"
 import Login from "./pages/Login"
-import Signup from "./pages/Signup"
+//import Signup from "./pages/Signup"           <Route path="/signup" element={<Signup/>}/>
 import ContactUs from "./pages/ContactUs"
 import AboutUs from "./pages/AboutUs"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -27,7 +27,6 @@ function App() {
           <Route path="/about-us" element={<AboutUs/>}/>
           <Route path="/contact-us" element={<ContactUs/>}/>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/signup" element={<Signup/>}/>
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/user-statistics" element={<UserStatistics/>}/>
           <Route path="/donations" element={<Donation/>}/>
