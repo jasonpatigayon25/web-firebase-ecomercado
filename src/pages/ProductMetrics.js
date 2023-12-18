@@ -124,7 +124,7 @@ function ProductMetrics() {
           }}>
             <div className="stats-number"><span>{totalProductsSold}</span></div>
             <div className="stats-icon"><FaShoppingBag /></div>
-            <div className="stats-label">Total Product Sold</div>
+            <div className="stats-label">Total Orders</div>
           </div>
         </div>
         <div className="admin-dashboard-recent-users">
