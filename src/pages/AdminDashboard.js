@@ -5,6 +5,20 @@ import { db } from '../config/firebase';
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
+function StatisticsChart({ data, isHovered }) {
+  return (
+    <BarChart width={500} height={300} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="total" fill={isHovered ? '#008000' : '#ffffff'} />
+    </BarChart>
+  );
+}
 
 Modal.setAppElement('#root');
 
@@ -37,6 +51,7 @@ function AdminDashboard() {
   const [donations, setDonations] = useState([]);
   const [selectedDonation, setSelectedDonation] = useState(null);
 
+  const [isStatsCardHovered, setIsStatsCardHovered] = useState(false);
   
   const itemsPerPageDonations = 10;
   const [currentPageDonations, setCurrentPageDonations] = useState(1);
@@ -275,6 +290,13 @@ function AdminDashboard() {
     setModalVisible(false);
   }
 
+  const chartData = [
+    { name: 'Users', total: totalUsers },
+    { name: 'Products', total: totalProducts },
+    { name: 'Donations', total: totalDonation },
+    { name: 'Orders', total: totalProductsSold },
+  ];
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -323,6 +345,17 @@ function AdminDashboard() {
           </div>
         </div>
 
+        <div className="admin-dashboard-statistics-row">
+        <div 
+          className="admin-dashboard-card"
+          onMouseEnter={() => setIsStatsCardHovered(true)}
+          onMouseLeave={() => setIsStatsCardHovered(false)}
+        >
+          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Statistics</h1>
+          <StatisticsChart data={chartData} isHovered={isStatsCardHovered} />
+        </div>
+      </div>
+        
         <div className="admin-dashboard-recent-users">
           <h1>Recent Users</h1>
           <table>

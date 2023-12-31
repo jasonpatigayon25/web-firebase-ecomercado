@@ -1077,13 +1077,22 @@ td:nth-child(5) {
   margin-top: 5px;
 }
 .donation-item img {
-  width: 100px; /* Or any other size */
+  width: 100px; 
   height: auto;
   border-radius: 4px;
 }
 
 .donation-item {
   margin-bottom: 20px;
+}
+
+.statistics-title {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.statistics-title:hover {
+  color: #008000;
 }
 
 
