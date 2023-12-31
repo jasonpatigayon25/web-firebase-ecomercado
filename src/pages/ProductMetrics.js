@@ -30,27 +30,26 @@ function renderPieChart(data) {
   );
 }
 
-function getLastSevenDaysDates() {
+function getLastWeekDates() {
   const dates = [];
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
+  const today = new Date();
+  const firstDayOfWeek = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1); 
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today.getFullYear(), today.getMonth(), firstDayOfWeek + i);
     dates.push(date.toLocaleDateString());
   }
   return dates;
 }
 
-function OrdersPerDayChart({ orders }) {
-  const lastSevenDays = getLastSevenDaysDates();
-  const orderCounts = lastSevenDays.map(date => ({ date, count: 0 }));
+function OrdersPerWeekChart({ orders }) {
+  const currentWeekDates = getLastWeekDates();
+  const orderCounts = currentWeekDates.map(date => ({ date, count: 0 }));
 
   orders.forEach(order => {
-    if (order.createdAt && order.createdAt.toDate) {
-      const orderDate = order.createdAt.toDate().toLocaleDateString();
+    if (order.dateOrdered && order.dateOrdered.toDate) {
+      const orderDate = order.dateOrdered.toDate().toLocaleDateString();
       const orderDay = orderCounts.find(day => day.date === orderDate);
-      if (orderDay) {
-        orderDay.count++;
-      }
+      if (orderDay) orderDay.count++;
     }
   });
 
@@ -246,10 +245,12 @@ function ProductMetrics() {
             onMouseEnter={() => setIsStatsCardHovered(true)}
             onMouseLeave={() => setIsStatsCardHovered(false)}
           >
-          <div className="bar-chart-container">
-          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Orders in Last 7 Days</h1>
-            <OrdersPerDayChart orders={orders} />
-          </div>
+        <div className="bar-chart-container">
+          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>
+            Orders This Week
+          </h1>
+          <OrdersPerWeekChart orders={orders} />
+        </div>
         </div>
         </div>
         <div className="admin-dashboard-recent-users">
