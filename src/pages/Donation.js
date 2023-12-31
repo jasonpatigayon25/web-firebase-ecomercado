@@ -74,14 +74,19 @@ function Donation() {
     { name: 'Approved Donations', value: approvedDonations },
   ];
 
+  const [isStatsCardHovered, setIsStatsCardHovered] = useState(false);
 
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
       <div className="admin-dashboard-cards">
-      <div className="admin-dashboard-card">
-          <h2>Donation Overview</h2>
+      <div 
+          className="admin-dashboard-card"
+          onMouseEnter={() => setIsStatsCardHovered(true)}
+          onMouseLeave={() => setIsStatsCardHovered(false)}
+        >
+        <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Donation Overview</h1>
           <BarChart width={600} height={300} data={donationChartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
