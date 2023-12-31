@@ -18,10 +18,33 @@ import AdminChangePassword from "./pages/AdminChangePassword"
 import AdminProfile from "./pages/AdminProfile"
 import BanUser from "./pages/BanUser"
 
+import { auth } from "./config/firebase"; 
+import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function AuthRedirect() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        navigate('/admin-dashboard');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  return null;
+}
+
 function App() {
+  
   return (
     <div className="App">
       <Router>
+      <AuthRedirect />
         <Routes>
           <Route path="/" element={<Welcome />}/>
           <Route path="/about-us" element={<AboutUs/>}/>

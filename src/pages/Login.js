@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, InputGroup, FormControl, Form, Button, Card } from 'react-bootstrap';
 import '../css/Login.css';
 import { auth } from "../config/firebase";
 import {
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
+
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        navigate('/admin-dashboard', { state: { id: user.email } });
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   async function submit(e) {
     e.preventDefault();

@@ -65,9 +65,6 @@ function Welcome() {
                 <img src="/img-1.jpg" alt="1" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
-                <img src="/img-2.jpg" alt="2" style={{ height: '360px', width: '600px' }} />
-              </div>
-              <div>
                 <img src="/img-3.png" alt="3" style={{ height: '360px', width: '600px' }} />
               </div>
               <div>
@@ -75,9 +72,6 @@ function Welcome() {
               </div>
               <div>
                 <img src="/img-5.gif" alt="5" style={{ height: '360px', width: '600px' }} />
-              </div>
-              <div>
-                <img src="/img-6.gif" alt="6" style={{ height: '360px', width: '600px' }} />
               </div>
             </Carousel>
           </Col>

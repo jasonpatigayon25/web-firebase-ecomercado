@@ -15,6 +15,7 @@ import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getAuth } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 const auth = getAuth();
 
@@ -153,8 +154,13 @@ function SidebarOptions() {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Do you really want to logout?");
     if (confirmLogout) {
-      //
-      window.location.href = "/";
+      signOut(auth).then(() => {
+
+        window.location.href = "/";
+      }).catch((error) => {
+
+        console.error('Logout error:', error);
+      });
     }
   };
 
