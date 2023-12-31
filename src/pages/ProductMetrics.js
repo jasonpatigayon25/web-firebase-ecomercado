@@ -5,7 +5,7 @@ import { db } from '../config/firebase';
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid  } from 'recharts';
 
 function renderPieChart(data) {
   return (
@@ -30,6 +30,40 @@ function renderPieChart(data) {
   );
 }
 
+function getLastSevenDaysDates() {
+  const dates = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    dates.push(date.toLocaleDateString());
+  }
+  return dates;
+}
+
+function OrdersPerDayChart({ orders }) {
+  const lastSevenDays = getLastSevenDaysDates();
+  const orderCounts = lastSevenDays.map(date => ({ date, count: 0 }));
+
+  orders.forEach(order => {
+    if (order.createdAt && 'seconds' in order.createdAt) {
+      const orderDate = new Date(order.createdAt.seconds * 1000).toLocaleDateString();
+      const orderDay = orderCounts.find(day => day.date === orderDate);
+      if (orderDay) orderDay.count++;
+    }
+  });
+
+  return (
+    <BarChart width={600} height={300} data={orderCounts}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="count" fill="#82ca9d" />
+    </BarChart>
+  );
+}
+
 function ProductMetrics() {
   const [products, setProducts] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -48,6 +82,8 @@ function ProductMetrics() {
 
   const [pieChartData, setPieChartData] = useState([]);
 
+  const [isStatsCardHovered, setIsStatsCardHovered] = useState(false);
+
   useEffect(() => {
 
     const categoryCounts = {};
@@ -63,6 +99,18 @@ function ProductMetrics() {
   
     setPieChartData(chartData);
   }, [products]);
+
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const ordersSnapshot = await getDocs(collection(db, 'orders'));
+      const fetchedOrders = ordersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      setOrders(fetchedOrders);
+    };
+
+    fetchOrders();
+  }, []);
 
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
@@ -181,12 +229,26 @@ function ProductMetrics() {
           </div>
         </div>
         <div className="admin-dashboard-cards">
-        <div className="admin-dashboard-card">
+        <div 
+          className="admin-dashboard-card"
+          onMouseEnter={() => setIsStatsCardHovered(true)}
+          onMouseLeave={() => setIsStatsCardHovered(false)}
+        >
           <div className="pie-chart-container">
-            <h2>Product Categories Distribution</h2>
+          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Product Categories Distribution</h1>
             {renderPieChart(pieChartData)}
           </div>
           </div>
+          <div 
+            className="admin-dashboard-card"
+            onMouseEnter={() => setIsStatsCardHovered(true)}
+            onMouseLeave={() => setIsStatsCardHovered(false)}
+          >
+          <div className="bar-chart-container">
+          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Orders in Last 7 Days</h1>
+            <OrdersPerDayChart orders={orders} />
+          </div>
+        </div>
         </div>
         <div className="admin-dashboard-recent-users">
           <h1>Recent Products Published</h1>
