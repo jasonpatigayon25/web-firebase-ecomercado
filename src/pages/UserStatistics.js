@@ -5,7 +5,7 @@ import { FaUserCheck, FaUser} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Modal from 'react-modal';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function UserStatistics() {
 
@@ -251,14 +251,14 @@ function UserStatistics() {
                 Next Month
               </button>
             </div>
-            <BarChart width={600} height={300} data={monthlyRegistrationData}>
+            <LineChart width={600} height={300} data={monthlyRegistrationData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="registrations" fill={isChartHovered ? '#4CAF50' : 'white'} />
-          </BarChart>
+            <Line type="monotone" dataKey="registrations" stroke={isChartHovered ? '#4CAF50' : '#ffffff'} />
+          </LineChart>
         </div>
       </div>
 
