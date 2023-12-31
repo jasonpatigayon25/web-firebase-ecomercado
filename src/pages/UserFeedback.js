@@ -30,11 +30,12 @@ function UserFeedback() {
                     ...doc.data(),
                     date: doc.data().timestamp.toDate().toLocaleDateString()
                 }))
-                .filter(feedback => !feedback.archivedBy || !feedback.archivedBy.includes(userId)); 
+                .filter(feedback => !feedback.archivedBy || !feedback.archivedBy.includes(userId))
+                .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds); 
             setFeedbacks(feedbacksData);
         };
         fetchData();
-    }, [userId]); 
+    }, [userId]);
 
     useEffect(() => {
         const start = (currentPage - 1) * itemsPerPage;

@@ -21,20 +21,22 @@ import BanUser from "./pages/BanUser"
 import { auth } from "./config/firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function AuthRedirect() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user) {
+
+      if (user && (location.pathname === '/' || location.pathname === '/login')) {
         navigate('/admin-dashboard');
       }
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   return null;
 }
