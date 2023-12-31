@@ -5,6 +5,7 @@ import { FaUserCheck, FaUser} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Modal from 'react-modal';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function UserStatistics() {
 
@@ -20,6 +21,67 @@ function UserStatistics() {
 
   const [isWeeklyUserModalOpen, setIsWeeklyUserModalOpen] = useState(false);
   const [weeklyUserModalContent, setWeeklyUserModalContent] = useState([]);
+
+  const [monthlyRegistrationData, setMonthlyRegistrationData] = useState([]);
+
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const [isChartHovered, setIsChartHovered] = useState(false);
+
+  const fetchUserRegistrations = async (year, month) => {
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0);
+
+    const qMonth = query(
+      collection(db, 'users'),
+      where('dateRegistered', '>=', startOfMonth),
+      where('dateRegistered', '<=', endOfMonth)
+    );
+
+    try {
+      const snapshotMonth = await getDocs(qMonth);
+      const monthlyCounts = Array(endOfMonth.getDate()).fill(0);
+      snapshotMonth.forEach(doc => {
+        const regDate = doc.data().dateRegistered.toDate();
+        monthlyCounts[regDate.getDate() - 1]++;
+      });
+
+      const monthlyChartData = monthlyCounts.map((count, index) => ({
+        day: index + 1,
+        registrations: count
+      }));
+      setMonthlyRegistrationData(monthlyChartData);
+    } catch (error) {
+      console.error("Error fetching user registrations: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserRegistrations(selectedYear, selectedMonth);
+  }, [selectedYear, selectedMonth]);
+
+
+  const handleMonthChange = (delta) => {
+    let newMonth = selectedMonth + delta;
+    let newYear = selectedYear;
+
+    if (newMonth > 11) {
+      newMonth = 0;
+      newYear++;
+    } else if (newMonth < 0) {
+      newMonth = 11;
+      newYear--;
+    }
+
+    const currentDate = new Date();
+    if (newYear > currentDate.getFullYear() || (newYear === currentDate.getFullYear() && newMonth > currentDate.getMonth())) {
+      return;
+    }
+
+    setSelectedMonth(newMonth);
+    setSelectedYear(newYear);
+  };
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -168,6 +230,37 @@ function UserStatistics() {
             <div className="stats-label">Weekly Registered Users</div>
           </div>
         </div>
+        <div className="admin-dashboard-cards">
+          <div 
+            className="admin-dashboard-card"
+            onMouseEnter={() => setIsChartHovered(true)}
+            onMouseLeave={() => setIsChartHovered(false)}
+          >
+            <h1 style={{ color: isChartHovered ? '#4CAF50' : '#ffffff' }}>
+              {`User Registrations - ${new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long' })} ${selectedYear}`}
+            </h1>
+            <div className="month-navigation">
+              <button className="month-button" 
+                      style={{ backgroundColor: isChartHovered ? '#4CAF50' : 'initial' }} 
+                      onClick={() => handleMonthChange(-1)}>
+                Previous Month
+              </button>
+              <button className="month-button" 
+                      style={{ backgroundColor: isChartHovered ? '#4CAF50' : 'initial' }} 
+                      onClick={() => handleMonthChange(1)}>
+                Next Month
+              </button>
+            </div>
+            <BarChart width={600} height={300} data={monthlyRegistrationData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="registrations" fill={isChartHovered ? '#4CAF50' : 'white'} />
+          </BarChart>
+        </div>
+      </div>
 
         <div className="admin-dashboard-recent-users">
                 <h1>Recent Users</h1>

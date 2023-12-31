@@ -45,10 +45,12 @@ function OrdersPerDayChart({ orders }) {
   const orderCounts = lastSevenDays.map(date => ({ date, count: 0 }));
 
   orders.forEach(order => {
-    if (order.createdAt && 'seconds' in order.createdAt) {
-      const orderDate = new Date(order.createdAt.seconds * 1000).toLocaleDateString();
+    if (order.createdAt && order.createdAt.toDate) {
+      const orderDate = order.createdAt.toDate().toLocaleDateString();
       const orderDay = orderCounts.find(day => day.date === orderDate);
-      if (orderDay) orderDay.count++;
+      if (orderDay) {
+        orderDay.count++;
+      }
     }
   });
 
