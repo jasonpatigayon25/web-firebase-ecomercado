@@ -5,6 +5,30 @@ import { db } from '../config/firebase';
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
+function renderPieChart(data) {
+  return (
+    <PieChart width={400} height={400}>
+      <Pie 
+        data={data} 
+        dataKey="value" 
+        nameKey="name" 
+        cx="50%" 
+        cy="50%" 
+        outerRadius={150} 
+        fill="#8884d8" 
+        label
+      >
+        {
+          data.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color}/>)
+        }
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  );
+}
 
 function ProductMetrics() {
   const [products, setProducts] = useState([]);
@@ -21,6 +45,24 @@ function ProductMetrics() {
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [pieChartData, setPieChartData] = useState([]);
+
+  useEffect(() => {
+
+    const categoryCounts = {};
+    products.forEach(product => {
+      categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
+    });
+  
+    const chartData = Object.keys(categoryCounts).map(category => ({
+      name: category,
+      value: categoryCounts[category],
+      color: getRandomColor()
+    }));
+  
+    setPieChartData(chartData);
+  }, [products]);
 
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
@@ -108,6 +150,15 @@ function ProductMetrics() {
     }
   };
 
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -127,6 +178,14 @@ function ProductMetrics() {
             <div className="stats-number"><span>{totalProductsSold}</span></div>
             <div className="stats-icon"><FaShoppingBag /></div>
             <div className="stats-label">Total Orders</div>
+          </div>
+        </div>
+        <div className="admin-dashboard-cards">
+        <div className="admin-dashboard-card">
+          <div className="pie-chart-container">
+            <h2>Product Categories Distribution</h2>
+            {renderPieChart(pieChartData)}
+          </div>
           </div>
         </div>
         <div className="admin-dashboard-recent-users">
