@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, orderBy} from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function Donation() {
   const [donations, setDonations] = useState([]);
   const [totalDonation, setTotalDonation] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedDonation, setSelectedDonation] = useState(null);
+
+  const [approvedDonations, setApprovedDonations] = useState(0);
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +27,7 @@ function Donation() {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDonations = async () => {
       const donationCollection = collection(db, 'donation');
       const donationQuery = query(donationCollection, orderBy('createdAt', 'desc'));
       const donationData = await getDocs(donationQuery);
@@ -40,7 +43,20 @@ function Donation() {
       setDonations(donations);
       setTotalDonation(donationData.size);
     };
-    fetchData();
+  
+    const fetchApprovedDonations = async () => {
+      const donationCollection = collection(db, 'donation');
+      const approvedDonationsQuery = query(donationCollection, where('isDonated', '==', true));
+      try {
+        const querySnapshot = await getDocs(approvedDonationsQuery);
+        setApprovedDonations(querySnapshot.size); 
+      } catch (error) {
+        console.error("Error fetching approved donations: ", error);
+      }
+    };
+
+    fetchDonations();
+    fetchApprovedDonations();
   }, []);
 
   const handlePageChange = (newPage) => {
@@ -53,10 +69,29 @@ function Donation() {
     currentPage * itemsPerPage
   );
 
+  const donationChartData = [
+    { name: 'Total Donations', value: totalDonation },
+    { name: 'Approved Donations', value: approvedDonations },
+  ];
+
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
+      <div className="admin-dashboard-cards">
+      <div className="admin-dashboard-card">
+          <h2>Donation Overview</h2>
+          <BarChart width={600} height={300} data={donationChartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="value" fill="#4CAF50" />
+          </BarChart>
+        </div>
+        </div>
         <div className="admin-dashboard-recent-users">
           <h2>Total Donations: {totalDonation}</h2>
           <table className="admin-dashboard-recent-users">
