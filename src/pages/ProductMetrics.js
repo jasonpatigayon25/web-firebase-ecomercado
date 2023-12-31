@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
 
@@ -35,7 +35,8 @@ function ProductMetrics() {
   useEffect(() => {
     const fetchProducts = async () => {
       const productCollection = collection(db, 'products');
-      const productData = await getDocs(productCollection);
+      const productQuery = query(productCollection, orderBy('createdAt', 'desc'));
+      const productData = await getDocs(productQuery);
       const products = productData.docs.map(doc => ({
         id: doc.id,
         photo: doc.data().photo,
@@ -45,7 +46,8 @@ function ProductMetrics() {
         location: doc.data().location,
         quantity: doc.data().quantity,
         description: doc.data().description,
-        seller_email: doc.data().seller_email 
+        seller_email: doc.data().seller_email,
+        createdAt: doc.data().createdAt 
       }));
       setProducts(products);
       setTotalProducts(productData.size);

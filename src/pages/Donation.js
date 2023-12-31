@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy} from "firebase/firestore";
 
 function Donation() {
   const [donations, setDonations] = useState([]);
@@ -26,14 +26,16 @@ function Donation() {
   useEffect(() => {
     const fetchData = async () => {
       const donationCollection = collection(db, 'donation');
-      const donationData = await getDocs(donationCollection);
+      const donationQuery = query(donationCollection, orderBy('createdAt', 'desc'));
+      const donationData = await getDocs(donationQuery);
       const donations = donationData.docs.map(doc => ({
         id: doc.id,
         name: doc.data().name,
         photo: doc.data().photo,
         location: doc.data().location,
         message: doc.data().message,
-        donor_email: doc.data().donor_email 
+        donor_email: doc.data().donor_email,
+        createdAt: doc.data().createdAt
       }));
       setDonations(donations);
       setTotalDonation(donationData.size);
