@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { 
   getDocs, 
   deleteDoc, 
@@ -33,6 +34,8 @@ function SidebarOptions() {
   const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
 
+   const [unreadCount, setUnreadCount] = useState(0);
+
   useEffect(() => {
     const fetchAdminMuteStatus = async () => {
       const currentUser = auth.currentUser;
@@ -57,24 +60,83 @@ function SidebarOptions() {
         if (!isMuted) {
           const querySnapshot = await getDocs(notificationForAdminCollection);
           const fetchedNotifications = [];
+          let unread = 0;
+  
           querySnapshot.forEach((doc) => {
-            fetchedNotifications.push({ id: doc.id, ...doc.data() });
+            const notificationData = { id: doc.id, ...doc.data() };
+            fetchedNotifications.push(notificationData);
+            if (!notificationData.isRead) {
+              unread++;
+            }
           });
+  
+          fetchedNotifications.sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
+  
           setNotifications(fetchedNotifications);
+          setUnreadCount(unread);
         } else {
           setNotifications([]);
-          setShowNotifications(false); 
+          setShowNotifications(false);
+          setUnreadCount(0);
         }
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
     };
-
+  
     fetchNotifications();
   }, [isMuted]);
 
-  const toggleNotifications = () => {
+  const toggleNotifications = async () => {
     setShowNotifications(!showNotifications);
+
+    if (!showNotifications) {
+      const batch = writeBatch(db);
+      let updatedNotifications = notifications.map(notif => {
+        if (!notif.isRead) {
+          const notifRef = doc(db, 'notificationForAdmin', notif.id);
+          batch.update(notifRef, { isRead: true });
+          return { ...notif, isRead: true };
+        }
+        return notif;
+      });
+
+      try {
+        await batch.commit();
+        setNotifications(updatedNotifications);
+        setUnreadCount(0); 
+      } catch (error) {
+        console.error('Error updating notifications:', error);
+      }
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleNotificationClick = (notifId) => {
+    markNotificationAsRead(notifId);
+    navigate('/user-feedback');
+  };
+
+  const markNotificationAsRead = async (notifId) => {
+    const notifRef = doc(db, 'notificationForAdmin', notifId);
+    await updateDoc(notifRef, {
+      isRead: true
+    });
+  
+    setNotifications(prevNotifications =>
+      prevNotifications.map(notif => {
+        if (notif.id === notifId) {
+          return { ...notif, isRead: true };
+        }
+        return notif;
+      })
+    );
+  
+    const notification = notifications.find(notif => notif.id === notifId);
+    if (notification && !notification.isRead) {
+      setUnreadCount(prevUnreadCount => prevUnreadCount - 1);
+    }
   };
 
   const deleteNotification = async (notifId) => {
@@ -173,6 +235,7 @@ function SidebarOptions() {
         <div className="notification-container">
         <div onClick={toggleNotifications} className="notification-bell styled-bell">
           <FaBell />
+          {unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
           {showNotifications && (
             <div className="notifications-list">
               {isMuted ? (
@@ -182,7 +245,11 @@ function SidebarOptions() {
                   <p style={{ color: 'black' }}>No notifications yet</p>
                 ) : (
                   notifications.map((notif, index) => (
-                    <div key={notif.id} className="notification-item">
+                    <div 
+                        key={notif.id} 
+                        className={`notification-item ${notif.isRead ? 'read' : 'unread'}`}
+                        onClick={() => handleNotificationClick(notif.id)}
+                      >
                       <p style={{ color: '#000000', fontSize: '14px' }}>{notif.text}</p>
                       <div>
                         <button className="delete" onClick={() => deleteNotification(notif.id)}>Delete</button>
