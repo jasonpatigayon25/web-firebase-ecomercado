@@ -1136,3 +1136,14 @@ td:nth-child(5) {
   border-left: 4px solid red;
 }
 
+.disable-product-button {
+  background: #05652D;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  }
