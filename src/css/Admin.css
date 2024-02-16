@@ -1223,3 +1223,8 @@ td:nth-child(5) {
 .admin-dashboard-nav li a, .dropdown-item, .admin-icon, .search-feedback button, .pagination button, .modal-close-button {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
+
+.sales-dashboard-card, .admin-dashboard-recent-users, .featured-picture, .top-picked-picture, .posted-photo {
+  box-shadow: none;
+  border: 1px solid var(--secondary-color);
+}
