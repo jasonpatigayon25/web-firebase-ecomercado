@@ -1153,25 +1153,130 @@ td:nth-child(5) {
     text-align: center;
   }
 
+  .container-of-scrollable-users-list {
+    overflow: visible;
+  }
+
   .scrollable-users-list {
     display: flex;
     overflow-x: auto;
+    overflow: visible;
     padding: 10px;
     gap: 10px;
   }
   
   .user-item {
-    flex: 0 0 auto; 
-    width: 100px; 
+    position: relative;
+    flex: 0 0 auto;
+    width: 160px;
     text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .user-item:hover {
+    transform: scale(1.1);
+    z-index: 2;
   }
   
-  .user-item img {
-    width: 50px; 
-    height: 50px; 
-    border-radius: 50%; 
-    object-fit: cover;
-    margin-bottom: 5px;
+ .user-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+
+.user-hover-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: bottom center;
+  background-color: #05652D; 
+  color: #fff; 
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  width: 250px;
+  z-index: 100;
+  transition: transform 0.3s ease-out, opacity 0.2s;
+  opacity: 0;
+}
+
+.user-hover-info::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #05652D transparent transparent transparent;
+}
+
+.user-item:hover .user-hover-info {
+  display: flex;
+  opacity: 1;
+  transform: translateX(-50%) scaleY(1);
+}
+
+.user-hover-info p {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 500; 
+}
+
+.user-email {
+  font-size: 0.9em;
+  color: #e1e1e1;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+  }
+  85% {
+    transform: translateX(-50%) scaleY(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 1;
+  }
+}
+
+.user-item:hover .user-hover-info {
+  animation: pop-in 0.3s ease-out forwards;
+}
+
+.user-item:hover {
+  transform: scale(1.05); 
+}
+
+.scrollable-users-list .user-item img,
+.scrollable-users-list .user-item .FaUser {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.scrollable-users-list .user-item:hover .user-hover-info {
+  display: block;
+  z-index: 1000;
+}
+  
+  .user-icon:hover {
+    background-color: var(--primary-color);
+    color: white;
   }
   
   .user-item span {

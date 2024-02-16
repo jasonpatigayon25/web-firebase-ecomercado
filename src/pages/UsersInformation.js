@@ -180,7 +180,11 @@ function UsersInformation() {
                 ? <img src={user.photoUrl} alt={user.fullName} />
                 : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
               }
-              <span>{user.email}</span>
+              <div className="user-hover-info">
+                <p>{user.fullName}</p>
+                <p>{user.email}</p>
+              </div>
+              <span className="user-email">{user.email}</span> 
             </div>
           ))}
         </div>
