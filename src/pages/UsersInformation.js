@@ -5,7 +5,6 @@ import { FaUserCheck, FaUser} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Modal from 'react-modal';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function UsersInformation() {
 
@@ -22,66 +21,7 @@ function UsersInformation() {
   const [isWeeklyUserModalOpen, setIsWeeklyUserModalOpen] = useState(false);
   const [weeklyUserModalContent, setWeeklyUserModalContent] = useState([]);
 
-  const [monthlyRegistrationData, setMonthlyRegistrationData] = useState([]);
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  const [isChartHovered, setIsChartHovered] = useState(false);
-
-  const fetchUserRegistrations = async (year, month) => {
-    const startOfMonth = new Date(year, month, 1);
-    const endOfMonth = new Date(year, month + 1, 0);
-
-    const qMonth = query(
-      collection(db, 'users'),
-      where('dateRegistered', '>=', startOfMonth),
-      where('dateRegistered', '<=', endOfMonth)
-    );
-
-    try {
-      const snapshotMonth = await getDocs(qMonth);
-      const monthlyCounts = Array(endOfMonth.getDate()).fill(0);
-      snapshotMonth.forEach(doc => {
-        const regDate = doc.data().dateRegistered.toDate();
-        monthlyCounts[regDate.getDate() - 1]++;
-      });
-
-      const monthlyChartData = monthlyCounts.map((count, index) => ({
-        day: index + 1,
-        registrations: count
-      }));
-      setMonthlyRegistrationData(monthlyChartData);
-    } catch (error) {
-      console.error("Error fetching user registrations: ", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserRegistrations(selectedYear, selectedMonth);
-  }, [selectedYear, selectedMonth]);
-
-
-  const handleMonthChange = (delta) => {
-    let newMonth = selectedMonth + delta;
-    let newYear = selectedYear;
-
-    if (newMonth > 11) {
-      newMonth = 0;
-      newYear++;
-    } else if (newMonth < 0) {
-      newMonth = 11;
-      newYear--;
-    }
-
-    const currentDate = new Date();
-    if (newYear > currentDate.getFullYear() || (newYear === currentDate.getFullYear() && newMonth > currentDate.getMonth())) {
-      return;
-    }
-
-    setSelectedMonth(newMonth);
-    setSelectedYear(newYear);
-  };
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -123,7 +63,9 @@ function UsersInformation() {
           return {
             email: userData.email,
             fullName: `${userData.firstName} ${userData.lastName}`,
-            dateRegistered: userData.dateRegistered.toDate().toLocaleString()
+            dateRegistered: userData.dateRegistered.toDate().toLocaleString(),
+            photoUrl: userData.photoUrl, 
+            address: userData.address, 
           };
         });
         setRecentFetchedUsers(fetchedUsers);
@@ -230,54 +172,31 @@ function UsersInformation() {
             <div className="stats-label">Weekly Registered Users</div>
           </div>
         </div>
-        <div className="admin-dashboard-cards">
-          <div 
-            className="admin-dashboard-card"
-            onMouseEnter={() => setIsChartHovered(true)}
-            onMouseLeave={() => setIsChartHovered(false)}
-          >
-            <h1 style={{ color: isChartHovered ? '#4CAF50' : '#ffffff' }}>
-              {`User Registrations - ${new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long' })} ${selectedYear}`}
-            </h1>
-            <div className="month-navigation">
-              <button className="month-button" 
-                      style={{ backgroundColor: isChartHovered ? '#4CAF50' : 'initial' }} 
-                      onClick={() => handleMonthChange(-1)}>
-                Previous Month
-              </button>
-              <button className="month-button" 
-                      style={{ backgroundColor: isChartHovered ? '#4CAF50' : 'initial' }} 
-                      onClick={() => handleMonthChange(1)}>
-                Next Month
-              </button>
-            </div>
-            <LineChart width={600} height={300} data={monthlyRegistrationData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="registrations" stroke={isChartHovered ? '#4CAF50' : '#ffffff'} />
-          </LineChart>
-        </div>
-      </div>
-
         <div className="admin-dashboard-recent-users">
                 <h1>Recent Users</h1>
                 <table>
                     <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Name</th>
-                            <th>Date Registered</th>
+                          <th style={{ width: '80px' }}>Photo</th>
+                            <th style={{ width: '25%' }}>Username</th>
+                            <th style={{ width: '25%' }}>Name</th>
+                            <th style={{ width: '40%' }}>Address</th>    
+                            <th style={{ width: '25%' }}>Date Registered</th>
                         </tr>
                     </thead>
                     <tbody>
               {currentUsers.map((user, index) => (
                 <tr key={index}>
-                  <td>{user.email}</td>
-                  <td>{user.fullName}</td>
-                  <td>{user.dateRegistered}</td>
+                  <td style={{ width: '80px' }}>
+                    {user.photoUrl 
+                      ? <img src={user.photoUrl} alt="Profile" className="user-profile-pic" />
+                      : <FaUser size={40} />
+                    }
+                  </td>
+                  <td style={{ width: '25%' }}>{user.email}</td>
+                  <td style={{ width: '25%' }}>{user.fullName}</td>
+                  <td style={{ width: '40%' }}>{user.address}</td> 
+                  <td style={{ width: '25%' }}>{user.dateRegistered}</td>
                 </tr>
               ))}
             </tbody>
