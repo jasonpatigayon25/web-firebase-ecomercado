@@ -11,7 +11,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
 import { notificationForAdminCollection } from '../config/firebase'; 
-import { FaHome, FaUsers, FaCogs, FaComment, FaHandHoldingHeart, FaUser, FaBell, FaCog } from "react-icons/fa";
+import { FaHome , FaUsersCog, FaHistory, FaUserFriends, FaChartBar, FaComments, FaBell, FaCog, 
+        FaUser, FaRegListAlt, FaClipboardCheck, FaClipboardList, FaHandHoldingHeart } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -274,101 +275,101 @@ function SidebarOptions() {
           <button onClick={handleLogout} className="logout-link">Logout</button>
         </div>
       </div>
-    <div className="admin-dashboard-sidebar">
-      <div className="admin-user">
+      <div className="admin-dashboard-sidebar">
         <div className="admin-user">
-          <CustomToggle/>
-          <span className="admin-dashboard-divider-alt"></span> 
+          <div className="admin-user">
+            <CustomToggle />
+            <span className="admin-dashboard-divider-alt"></span> 
+          </div>
+          <span className="admin-username">ADMIN</span>
         </div>
-        <span className="admin-username">ADMIN</span>
-      </div>
-      <div className="divider"></div>
-      <ul className="admin-dashboard-nav">
-        <li className={location.pathname === "/admin-dashboard" ? "active" : ""}>
-          <Link to="/admin-dashboard">
-            <FaHome />
-            Home
-          </Link>
-        </li>
-        <li className={location.pathname === "/users-information" ? "active" : ""}>
-          <Link to="/users-information">
-            <FaUsers />
-            Users Information
-          </Link>
-        </li>
-        <li className={location.pathname === "/approved-seller" ? "active" : ""}>
-          <Link to="/approved-seller">
-            <FaUsers />
-            Approved Posts - SELLER
-          </Link>
-        </li>
-        <li className={location.pathname === "/pending-seller" ? "active" : ""}>
-          <Link to="/pending-seller">
-            <FaUsers />
-            Pending for Approval - SELLER
-          </Link>
-        </li>
-        <li className={location.pathname === "/item-history" ? "active" : ""}>
-          <Link to="/item-history">
-            <FaUsers />
-            Items History
-          </Link>
-        </li>
-        <li className={location.pathname === "/approved-donor" ? "active" : ""}>
-          <Link to="/approved-donor">
-            <FaUsers />
-            Approved Posts - DONOR
-          </Link>
-        </li>
-        <li className={location.pathname === "/pending-donor" ? "active" : ""}>
-          <Link to="/pending-donor">
-            <FaUsers />
-            Pending for Approval - DONOR
-          </Link>
-        </li>
-        <li className={location.pathname === "/donation-history" ? "active" : ""}>
-          <Link to="/donation-history">
-            <FaUsers />
-            Donation History
-          </Link>
-        </li>
-        <li className={location.pathname === "/user-statistics" ? "active" : ""}>
-          <Link to="/user-statistics">
-            <FaUsers />
-            User Statistics
-          </Link>
-        </li>
-        <li className={location.pathname === "/product-metrics" ? "active" : ""}>
-          <Link to="/product-metrics">
-            <FaCogs />
-            Product Metrics
-          </Link>
-        </li>
-        <li className={location.pathname === "/donations" ? "active" : ""}>
-          <Link to="/donations">
-            <FaHandHoldingHeart />
-            Donations
-          </Link>
-        </li>
-        <li className={location.pathname === "/user-feedback" ? "active" : ""}>
-          <Link to="/user-feedback">
-            <FaComment />
-            User Feedback
-          </Link>
-        </li>
-      </ul>
-      <div className="settings-dropdown settings-icon-container">
-        <Dropdown drop="up">
-          <Dropdown.Toggle as="div" className="settings-dropdown-icon" id="settings-dropdown-custom-components">
-            <FaCog />
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+        <div className="divider"></div>
+        <ul className="admin-dashboard-nav">
+          <li className={location.pathname === "/admin-dashboard" ? "active" : ""}>
+            <Link to="/admin-dashboard">
+              <FaHome />
+              Dashboard
+            </Link>
+          </li>
+          <li className={location.pathname === "/users-information" ? "active" : ""}>
+            <Link to="/users-information">
+              <FaUserFriends />
+              Users Information
+            </Link>
+          </li>
+          <li className={location.pathname === "/approved-seller" ? "active" : ""}>
+            <Link to="/approved-seller">
+              <FaClipboardCheck />
+              Approved Posts - SELLER
+            </Link>
+          </li>
+          <li className={location.pathname === "/pending-seller" ? "active" : ""}>
+            <Link to="/pending-seller">
+              <FaClipboardList />
+              Pending for Approval - SELLER
+            </Link>
+          </li>
+          <li className={location.pathname === "/item-history" ? "active" : ""}>
+            <Link to="/item-history">
+              <FaHistory />
+              Items History
+            </Link>
+          </li>
+          <li className={location.pathname === "/approved-donor" ? "active" : ""}>
+            <Link to="/approved-donor">
+              <FaRegListAlt />
+              Approved Posts - DONOR
+            </Link>
+          </li>
+          <li className={location.pathname === "/pending-donor" ? "active" : ""}>
+            <Link to="/pending-donor">
+              <FaClipboardList />
+              Pending for Approval - DONOR
+            </Link>
+          </li>
+          <li className={location.pathname === "/donation-history" ? "active" : ""}>
+            <Link to="/donation-history">
+              <FaHistory />
+              Donation History
+            </Link>
+          </li>
+          <li className={location.pathname === "/user-statistics" ? "active" : ""}>
+            <Link to="/user-statistics">
+              <FaChartBar />
+              User Statistics
+            </Link>
+          </li>
+          <li className={location.pathname === "/product-metrics" ? "active" : ""}>
+            <Link to="/product-metrics">
+              <FaUsersCog />
+              Product Metrics
+            </Link>
+          </li>
+          <li className={location.pathname === "/donations" ? "active" : ""}>
+            <Link to="/donations">
+              <FaHandHoldingHeart />
+              Donations
+            </Link>
+          </li>
+          <li className={location.pathname === "/user-feedback" ? "active" : ""}>
+            <Link to="/user-feedback">
+              <FaComments />
+              User Feedback
+            </Link>
+          </li>
+        </ul>
+        <div className="settings-dropdown settings-icon-container">
+          <Dropdown drop="up">
+            <Dropdown.Toggle as="div" className="settings-dropdown-icon" id="settings-dropdown-custom-components">
+              <FaCog />
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
     </div>
     </div>
   );
