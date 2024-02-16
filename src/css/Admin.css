@@ -461,18 +461,6 @@ td:nth-child(5) {
   cursor: pointer;
 }
 
-.user-icon {
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 15px;
-}
-
-.user-icon img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
 .feedback-content {
   flex: 1;
   color: #f0f0f0;
@@ -1154,3 +1142,57 @@ td:nth-child(5) {
     width: 70px;
     text-align: center;
   }
+
+  .scrollable-users-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .user-item {
+    flex: 0 0 auto; 
+    width: 100px; 
+    text-align: center;
+  }
+  
+  .user-item img {
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    object-fit: cover;
+    margin-bottom: 5px;
+  }
+  
+  .user-item span {
+    display: block; 
+    font-size: 0.8em;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+  }
+
+  .user-icon {
+    color: black;
+    background-color: white; 
+    border-radius: 50%; 
+    padding: 5px; 
+    transition: background-color 0.3s, color 0.3s; 
+  }
+  
+  .user-icon:hover {
+    color: white; 
+    background-color: black;
+  }
+/* 
+  .user-icon {
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+  }
+  
+  .user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  } */

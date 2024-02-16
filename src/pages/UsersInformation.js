@@ -173,6 +173,20 @@ function UsersInformation() {
           </div>
         </div>
         <div className="admin-dashboard-recent-users">
+        <div className="scrollable-users-list">
+          {recentFetchedUsers.map((user, index) => (
+            <div key={index} className="user-item">
+              {user.photoUrl
+                ? <img src={user.photoUrl} alt={user.fullName} />
+                : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
+              }
+              <span>{user.email}</span>
+            </div>
+          ))}
+        </div>
+        </div>
+
+        <div className="admin-dashboard-recent-users">
                 <h1>Recent Users</h1>
                 <table>
                     <thead>
@@ -190,7 +204,7 @@ function UsersInformation() {
                   <td style={{ width: '80px' }}>
                     {user.photoUrl 
                       ? <img src={user.photoUrl} alt="Profile" className="user-profile-pic" />
-                      : <FaUser size={40} />
+                      : <FaUser size={40} className="user-icon" />
                     }
                   </td>
                   <td style={{ width: '25%' }}>{user.email}</td>
