@@ -7,6 +7,7 @@ import AboutUs from "./pages/AboutUs"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminDashboard from "./pages/AdminDashboard"
+import UsersInformation from "./pages/UsersInformation"
 import UserStatistics from "./pages/UserStatistics"
 import Donation from "./pages/Donation"
 import UserFeedback from "./pages/UserFeedback"
@@ -17,6 +18,13 @@ import SwitchAccount from "./pages/SwitchAccount"
 import AdminChangePassword from "./pages/AdminChangePassword"
 import AdminProfile from "./pages/AdminProfile"
 import BanUser from "./pages/BanUser"
+
+import PendingPostDonor from "./pages/PendingPostDonor";
+import PendingPostSeller from "./pages/PendingPostSeller";
+import ApprovedPostDonor from "./pages/ApprovedPostDonor";
+import ApprovedPostSeller from "./pages/ApprovedPostSeller";
+import ItemHistory from "./pages/ItemHistory";
+import DonationHistory from "./pages/DonationHistory";
 
 import { auth } from "./config/firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
@@ -54,6 +62,13 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/user-statistics" element={<UserStatistics/>}/>
+          <Route path="/users-information" element={<UsersInformation/>}/>
+          <Route path="/pending-donor" element={<PendingPostDonor/>}/>
+          <Route path="/pending-seller" element={<PendingPostSeller/>}/>
+          <Route path="/approved-donor" element={<ApprovedPostDonor/>}/>
+          <Route path="/approved-seller" element={<ApprovedPostSeller/>}/>
+          <Route path="/item-history" element={<ItemHistory/>}/>
+          <Route path="/donation-history" element={<DonationHistory/>}/>
           <Route path="/donations" element={<Donation/>}/>
           <Route path="/user-feedback" element={<UserFeedback/>}/>
           <Route path="/product-metrics" element={<ProductMetrics/>}/>

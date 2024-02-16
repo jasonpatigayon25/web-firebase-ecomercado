@@ -4,12 +4,12 @@ import { getFirestore, collection } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDCUavEb7yfRFQh0rG1AvhSiynoSHRCWno",
-  authDomain: "ecomercado-app-project.firebaseapp.com",
-  projectId: "ecomercado-app-project",
-  storageBucket: "ecomercado-app-project.appspot.com",
-  messagingSenderId: "828207316801",
-  appId: "1:828207316801:web:c04f99a616755668d6ebc0"
+  apiKey: "AIzaSyCSgcQeQFuvSftwNiUbDYYoU9qIr-c7GBs",
+  authDomain: "ecomercado-app-99021.firebaseapp.com",
+  projectId: "ecomercado-app-99021",
+  storageBucket: "ecomercado-app-99021.appspot.com",
+  messagingSenderId: "701447751931",
+  appId: "1:701447751931:web:1756c058f376035ba3c85e"
 };
 
 const app = initializeApp(firebaseConfig);
