@@ -7,8 +7,8 @@ import '../css/Welcome.css';
 
 function Welcome() {
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #333, #05652D)', height: '100vh' }}>
-      <nav className="navbar navbar-expand-lg navbar-light" style={{ background: '#333' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #0000, #808080)', height: '100vh' }}>
+      <nav className="navbar navbar-expand-lg navbar-light" style={{ background: 'linear-gradient(to right, #05652D, #E3FCE9)' }}>
         <div className="container d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <Link className="navbar-brand" to="/">

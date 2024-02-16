@@ -58,7 +58,7 @@ function Login() {
   };
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #333, #05652D)', height: '100vh' }} onKeyPress={handleKeyPress}>
+    <div style={{ background: 'linear-gradient(to bottom, #05652D, #E3FCE9)', height: '100vh' }} onKeyPress={handleKeyPress}>
       <div className="d-flex align-items-center">
         <Link className="navbar-brand" to="/" style={{ marginLeft: '50px' }}>
           <img

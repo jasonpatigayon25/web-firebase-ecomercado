@@ -7,6 +7,8 @@ body {
   --secondary-color: #E3FCE9;
   --background-color: #333;
   --text-color: #fff;
+  --black: #000;
+  --grey: #808080;
 }
 
 .admin-dashboard {
@@ -41,7 +43,8 @@ body {
 }
 
 .admin-dashboard-nav li {
-  padding: 5px;
+  padding-left: 5px;
+  transition: background-color 0.5s ease, color 0.3s ease;
   color: white;
 }
 
@@ -145,8 +148,10 @@ body {
 }
 
 .admin-dashboard-nav li a:hover {
+  background-color: var(--secondary-color);
   color: var(--primary-color);
   font-size: 18px;
+  padding-left: 20px;
 }
 
 .admin-dashboard-content {
@@ -186,18 +191,23 @@ body {
 
 .admin-dashboard-card {
   flex: 1;
-  background: var(--background-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.admin-dashboard-cards, .sales-dashboard-card, .admin-dashboard-recent-users {
+  box-shadow: none;
 }
 
 .admin-dashboard-card:hover {
-  background-color: #E3FCE9; 
+  transform: scale(1.05);
 }
 
 .title-label {
@@ -649,7 +659,7 @@ td:nth-child(5) {
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
-  background-color: #05652D;
+  background: linear-gradient(135deg, var(--black), var(--grey));
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   position: fixed;
@@ -694,7 +704,7 @@ td:nth-child(5) {
 }
 
 .admin-dashboard-sidebar {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--black), var(--grey));
   color: black;
   width: 250px;
   height: calc(100% - 60px);
@@ -1184,15 +1194,32 @@ td:nth-child(5) {
     color: white; 
     background-color: black;
   }
-/* 
-  .user-icon {
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-  }
-  
-  .user-icon img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  } */
+
+  .admin-dashboard-card .title-label, 
+  .admin-dashboard-card .stats, 
+  .admin-dashboard-card .stats-number, 
+  .admin-dashboard-card .stats-icon, 
+  .admin-dashboard-card .stats-label {
+  transition: color 0.3s ease-in-out;
+}
+
+.admin-dashboard-card:hover .stats-number, 
+.admin-dashboard-card:hover .stats-icon, 
+.admin-dashboard-card:hover .stats-label {
+  color: var(--secondary-color);
+}
+
+.admin-dashboard-card:hover, .sales-dashboard-card:hover {
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  color: var(--background-color);
+}
+
+.admin-dashboard-nav li a:hover, .dropdown-item:hover, .admin-icon:hover, .search-feedback button:hover, .pagination button:hover:not(:disabled), .modal-close-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.admin-dashboard-nav li a, .dropdown-item, .admin-icon, .search-feedback button, .pagination button, .modal-close-button {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
