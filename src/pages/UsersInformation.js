@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUserCheck, FaUser} from "react-icons/fa";
+import { FaUserCheck, FaUser, FaUserFriends} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Modal from 'react-modal';
@@ -11,7 +11,7 @@ function UsersInformation() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [weeklyRegisteredUsers, setWeeklyRegisteredUsers] = useState(0);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -21,7 +21,7 @@ function UsersInformation() {
   const [isWeeklyUserModalOpen, setIsWeeklyUserModalOpen] = useState(false);
   const [weeklyUserModalContent, setWeeklyUserModalContent] = useState([]);
 
-
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     getDocs(collection(db, 'users'))
@@ -78,11 +78,25 @@ function UsersInformation() {
     fetchWeeklyUsers(); 
   }, []);
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const filteredUsers = searchTerm
+    ? recentFetchedUsers.filter(user =>
+        user.email.toLowerCase().includes(searchTerm) ||
+        user.fullName.toLowerCase().includes(searchTerm))
+    : recentFetchedUsers;
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
+  }, [filteredUsers, itemsPerPage]);
+
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 
-  const currentUsers = recentFetchedUsers.slice(
+  const currentUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -172,26 +186,36 @@ function UsersInformation() {
             <div className="stats-label">Weekly Registered Users</div>
           </div>
         </div>
-        <div className="admin-dashboard-recent-users">
-        <div className="scrollable-users-list">
-          {recentFetchedUsers.map((user, index) => (
-            <div key={index} className="user-item">
-              {user.photoUrl
-                ? <img src={user.photoUrl} alt={user.fullName} />
-                : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
-              }
-              <div className="user-hover-info">
-                <p>{user.fullName}</p>
-                <p>{user.email}</p>
-              </div>
-              <span className="user-email">{user.email}</span> 
-            </div>
-          ))}
+        <div className="admin-dashboard-recent-users-header">
+          <h1 className="recent-users-title"><FaUserFriends style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Users</h1>
+          <div className="search-bar-container">
+            <input
+              type="text"
+              placeholder="Search users..."
+              onChange={handleSearchChange}
+              className="search-bar"
+            />
+          </div>
         </div>
+        <div className="admin-dashboard-recent-users">
+          <div className="scrollable-users-list">
+            {currentUsers.map((user, index) => (
+              <div key={index} className="user-item">
+                {user.photoUrl
+                  ? <img src={user.photoUrl} alt={user.fullName} />
+                  : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
+                }
+                <div className="user-hover-info">
+                  <p>{user.fullName}</p>
+                  <p>{user.email}</p>
+                </div>
+                <span className="user-email">{user.email}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="admin-dashboard-recent-users">
-                <h1>Recent Users</h1>
                 <table>
                     <thead>
                         <tr>
@@ -220,17 +244,17 @@ function UsersInformation() {
             </tbody>
               </table>
               <div className="pagination-controls">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => handlePageChange(i + 1)}
-                    disabled={currentPage === i + 1}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handlePageChange(i + 1)}
+                disabled={currentPage === i + 1}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
           </div>
           <Modal
           isOpen={isUserModalOpen}

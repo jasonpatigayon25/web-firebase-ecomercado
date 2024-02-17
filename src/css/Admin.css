@@ -1162,7 +1162,8 @@ td:nth-child(5) {
     overflow-x: auto;
     overflow: visible;
     padding: 10px;
-    gap: 10px;
+    gap: 30px;
+    justify-content: center;
   }
   
   .user-item {
@@ -1255,7 +1256,7 @@ td:nth-child(5) {
 }
 
 .user-item:hover {
-  transform: scale(1.05); 
+  transform: scale(1.5); 
 }
 
 .scrollable-users-list .user-item img,
@@ -1332,4 +1333,32 @@ td:nth-child(5) {
 .sales-dashboard-card, .admin-dashboard-recent-users, .featured-picture, .top-picked-picture, .posted-photo {
   box-shadow: none;
   border: 1px solid var(--secondary-color);
+}
+
+
+.search-bar-container {
+  flex-grow: 1;
+  text-align: right;
+}
+
+.search-bar {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 50%;
+}
+
+.admin-dashboard-recent-users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.recent-users-title {
+  font-weight: bold;
+  margin-right: 20px; 
+  padding-left: 10px;
 }
