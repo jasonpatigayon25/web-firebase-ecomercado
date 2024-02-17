@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUser, FaTimes } from "react-icons/fa";
+import { FaUser, FaBan } from "react-icons/fa";
 
 function UserActivity() {
   const { email } = useParams();
@@ -50,16 +50,19 @@ function UserActivity() {
     return <div>No user found.</div>;
   }
 
-  const handleClose = () => {
-    // Logic to close the card or navigate back
+  const handleBanUser = () => {
+    const confirmBan = window.confirm(`Are you sure you want to ban ${userDetails.firstName} ${userDetails.lastName}?`);
+    if (confirmBan) {
+      console.log('User banned:', userDetails.email);
+    }
   };
-  
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
         <div className="user-details-card">
-          <FaTimes className="card-close-icon" onClick={handleClose} />
+        <FaBan className="card-ban-icon" onClick={handleBanUser} />
           <div className="card-avatar">
             {userDetails.photoUrl ? (
               <img src={userDetails.photoUrl} alt="Profile" />
