@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUser, FaBan } from "react-icons/fa";
+import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 
 function UserActivity() {
   const { email } = useParams();
@@ -61,22 +61,22 @@ function UserActivity() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="user-details-card">
+      <div className="user-details-card">
         <FaBan className="card-ban-icon" onClick={handleBanUser} />
-          <div className="card-avatar">
-            {userDetails.photoUrl ? (
-              <img src={userDetails.photoUrl} alt="Profile" />
-            ) : (
-              <FaUser size={50} />
-            )}
-          </div>
-          <div className="card-info">
-            <h2>{userDetails.firstName} {userDetails.lastName}</h2>
-            <p>{userDetails.email}</p>
-            <p>{userDetails.address}</p>
-            <p>{userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
-          </div>
+        <div className="card-avatar">
+          {userDetails.photoUrl ? (
+            <img src={userDetails.photoUrl} alt="Profile" />
+          ) : (
+            <FaUser size={50} />
+          )}
         </div>
+        <div className="card-info">
+          <h1><FaUserAlt className="info-icon" /> {userDetails.firstName} {userDetails.lastName}</h1>
+          <p><FaEnvelope className="info-icon" /> {userDetails.email}</p>
+          <p><FaMapMarkerAlt className="info-icon" /> {userDetails.address}</p>
+          <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
+        </div>
+      </div>
       </div>
     </div>
   );
