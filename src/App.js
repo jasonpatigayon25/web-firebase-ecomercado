@@ -25,12 +25,12 @@ import ApprovedPostDonor from "./pages/ApprovedPostDonor";
 import ApprovedPostSeller from "./pages/ApprovedPostSeller";
 import ItemHistory from "./pages/ItemHistory";
 import DonationHistory from "./pages/DonationHistory";
+import UserActivity from "./pages/UserActivity";
 
 import { auth } from "./config/firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 function AuthRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,6 +63,7 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/user-statistics" element={<UserStatistics/>}/>
           <Route path="/users-information" element={<UsersInformation/>}/>
+          <Route path="/user-activity/:email" element={<UserActivity />} />
           <Route path="/pending-donor" element={<PendingPostDonor/>}/>
           <Route path="/pending-seller" element={<PendingPostSeller/>}/>
           <Route path="/approved-donor" element={<ApprovedPostDonor/>}/>

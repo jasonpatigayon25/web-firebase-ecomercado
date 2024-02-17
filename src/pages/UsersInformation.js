@@ -80,17 +80,23 @@ function UsersInformation() {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
+    setCurrentPage(1); 
   };
 
   const filteredUsers = searchTerm
-    ? recentFetchedUsers.filter(user =>
-        user.email.toLowerCase().includes(searchTerm) ||
-        user.fullName.toLowerCase().includes(searchTerm))
-    : recentFetchedUsers;
+  ? recentFetchedUsers.filter(user =>
+      user.email.toLowerCase().includes(searchTerm) ||
+      user.fullName.toLowerCase().includes(searchTerm) ||
+      (user.address && user.address.toLowerCase().includes(searchTerm))
+    )
+  : recentFetchedUsers;
 
   useEffect(() => {
     setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
-  }, [filteredUsers, itemsPerPage]);
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [filteredUsers, itemsPerPage, currentPage, totalPages]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
