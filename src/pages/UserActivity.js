@@ -5,6 +5,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import ActivityNavbar from './ActivityNavbar';
 
 function UserActivity() {
   const { email } = useParams();
@@ -77,6 +78,7 @@ function UserActivity() {
           <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
         </div>
       </div>
+      <ActivityNavbar />
       </div>
     </div>
   );

@@ -1,0 +1,53 @@
+.activity-navbar {
+    display: flex;
+    justify-content: space-between; 
+    background: #333;
+    padding: 10px 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .activity-navbar-nav {
+    list-style: none;
+    display: flex;
+    width: 100%;
+    padding-left: 0;
+    transform: translateZ(0);
+  }
+  
+  .activity-navbar-nav li {
+    margin-right: 20px;
+    transform: translateZ(0);
+    flex-grow: 1; 
+    text-align: center; 
+  }
+  
+  .activity-navbar-nav li:not(:last-child)::after {
+    color: #ccc;
+    margin-left: 20px;
+    font-weight: bold; 
+  }
+  
+  .activity-navbar-nav li a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    transition: transform 0.3s, color 0.3s;
+    border-radius: 5px;
+    font-size: 1.1rem; 
+    font-weight: 500;
+  }
+  
+  .activity-navbar-nav li a:hover {
+    color: #fff;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .activity-navbar-nav li.active a {
+    color: #fff;
+    background: #4CAF50;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  }
+  
