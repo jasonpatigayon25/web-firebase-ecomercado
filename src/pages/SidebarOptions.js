@@ -291,7 +291,7 @@ function SidebarOptions() {
               Dashboard
             </Link>
           </li>
-          <li className={location.pathname === "/users-information" ? "active" : ""}>
+          <li className={location.pathname === "/users-information" || location.pathname.startsWith("/user-activity/") ? "active" : ""}>
             <Link to="/users-information">
               <FaUserFriends />
               Users Information
