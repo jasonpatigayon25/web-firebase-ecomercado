@@ -5,9 +5,10 @@ import { FaUserCheck, FaUser, FaUserFriends} from "react-icons/fa";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 
 function UsersInformation() {
-
+  const navigate = useNavigate();
   const [totalUsers, setTotalUsers] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [weeklyRegisteredUsers, setWeeklyRegisteredUsers] = useState(0);
@@ -165,6 +166,10 @@ function UsersInformation() {
     }
   };
 
+  const handleUserClick = (email) => {
+    navigate(`/user-activity/${email}`); 
+  };
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -206,7 +211,7 @@ function UsersInformation() {
         <div className="admin-dashboard-recent-users">
           <div className="scrollable-users-list">
             {currentUsers.map((user, index) => (
-              <div key={index} className="user-item">
+              <div key={index} className="user-item" onClick={() => handleUserClick(user.email)} style={{cursor: 'pointer'}}>
                 {user.photoUrl
                   ? <img src={user.photoUrl} alt={user.fullName} />
                   : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
@@ -234,7 +239,7 @@ function UsersInformation() {
                     </thead>
                     <tbody>
               {currentUsers.map((user, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleUserClick(user.email)} style={{cursor: 'pointer'}}>
                   <td style={{ width: '80px' }}>
                     {user.photoUrl 
                       ? <img src={user.photoUrl} alt="Profile" className="user-profile-pic" />
