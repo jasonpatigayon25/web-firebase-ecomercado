@@ -7,8 +7,9 @@ import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 import ActivityNavbar from './ActivityNavbar';
 
+
 function UserActivity() {
-  const { email } = useParams();
+  const { email } = useParams();  
   const [userDetails, setUserDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -78,7 +79,10 @@ function UserActivity() {
           <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
         </div>
       </div>
-      <ActivityNavbar />
+      <ActivityNavbar email={email} />
+      <div className="admin-dashboard-recent-users">
+        </div>
+
       </div>
     </div>
   );
