@@ -18,15 +18,40 @@ function ActivityNavbar({ email }) {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (activeTab === 'user-approved-posts') {
-        const q = query(collection(db, 'products'), where('seller_email', '==', email));
-        const querySnapshot = await getDocs(q);
-        setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      let q;
+      switch (activeTab) {
+        case 'user-approved-posts':
+          q = query(
+            collection(db, 'products'), 
+            where('seller_email', '==', email),
+            where('publicationStatus', '==', 'approved')
+          );
+          break;
+        case 'user-pending-products':
+          q = query(
+            collection(db, 'products'), 
+            where('seller_email', '==', email),
+            where('publicationStatus', '==', 'pending')
+          );
+          break;
+        case 'user-declined-posts':
+          q = query(
+            collection(db, 'products'), 
+            where('seller_email', '==', email),
+            where('publicationStatus', '==', 'declined')
+          );
+          break;
+        default:
+          setProducts([]);
+          return;
       }
+      
+      const querySnapshot = await getDocs(q);
+      setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
-
+  
     fetchProducts();
-  }, [email, activeTab]); 
+  }, [email, activeTab]);
 
   const handleButtonClick = (tabName) => {
     setActiveTab(tabName);
@@ -44,7 +69,72 @@ function ActivityNavbar({ email }) {
   }
 
 
-  const renderProductsTable = () => (
+  const renderProductApproved = () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Date Published</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length ? (
+          products.map(product => (
+            <tr key={product.id} onClick={() => openModal(product)}>
+              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
+              <td>{product.name}</td>
+              <td>{product.category}</td>
+              <td>{product.quantity}</td>
+              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
+
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No approved posts yet.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
+
+  const renderProductDeclined= () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Date Published</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length ? (
+          products.map(product => (
+            <tr key={product.id} onClick={() => openModal(product)}>
+              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
+              <td>{product.name}</td>
+              <td>{product.category}</td>
+              <td>{product.quantity}</td>
+              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
+
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No approved posts yet.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
+
+
+  const renderPendingProducts= () => (
     <table>
       <thead>
         <tr>
@@ -79,13 +169,13 @@ function ActivityNavbar({ email }) {
   const renderContent = () => {
     switch(activeTab) {
       case 'user-approved-posts':
-        return renderProductsTable();
+        return renderProductApproved();
       case 'user-pending-products':
-        return <p>No pending products yet.</p>;
+        return renderPendingProducts();
       case 'user-pending-donations':
         return <p>No pending donations yet.</p>;
       case 'user-declined-posts':
-        return <p>No declined posts yet.</p>;
+        return renderProductDeclined();
       case 'user-donation-history':
         return <p>No donation history yet.</p>;
       default:
@@ -118,28 +208,28 @@ function ActivityNavbar({ email }) {
         {renderContent()}
       </div>
       <Modal
-  isOpen={modalIsOpen}
-  onRequestClose={closeModal}
-  contentLabel="Item Details"
-  className="Modal"
-  overlayClassName="Overlay"
->
-  <div className="modal-content">
-  <button onClick={closeModal} className="modal-close-btn">
-      <FontAwesomeIcon icon={faTimes} />
-    </button>
-    <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
-    <h2>{currentItem?.name}</h2>
-    <div className="modal-details">
-      <p><strong>Category:</strong> {currentItem?.category}</p>
-      <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
-      <p><strong>Date Published:</strong> {currentItem?.createdAt.toDate().toLocaleDateString()}</p>
-      <p><strong>Price:</strong> {currentItem?.price}</p>
-      <p><strong>Description:</strong> {currentItem?.description}</p>
-      <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
-    </div>
-  </div>
-</Modal>
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Item Details"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <div className="modal-content">
+        <button onClick={closeModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
+          <h2>{currentItem?.name}</h2>
+          <div className="modal-details">
+            <p><strong>Category:</strong> {currentItem?.category}</p>
+            <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
+            <p><strong>Date Published:</strong> {currentItem?.createdAt.toDate().toLocaleDateString()}</p>
+            <p><strong>Price:</strong> {currentItem?.price}</p>
+            <p><strong>Description:</strong> {currentItem?.description}</p>
+            <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
