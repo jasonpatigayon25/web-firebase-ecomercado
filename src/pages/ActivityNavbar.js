@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -133,8 +133,27 @@ function ActivityNavbar({ email }) {
     </table>
   );
 
+  const handleApprove = async (productId) => {
+    // Logicapprove
+  };
 
-  const renderPendingProducts= () => (
+  const handleDecline = async (productId) => {
+    // Logicdecline
+  };
+
+
+  const renderActionButtons = (productId) => (
+    <td className="action-buttons">
+      <button className="button-approve" onClick={() => handleApprove(productId)}>
+        <FontAwesomeIcon icon={faCheck} />
+      </button>
+      <button className="button-decline" onClick={() => handleDecline(productId)}>
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </td>
+  );
+
+  const renderPendingProducts = () => (
     <table>
       <thead>
         <tr>
@@ -143,6 +162,7 @@ function ActivityNavbar({ email }) {
           <th>Category</th>
           <th>Quantity</th>
           <th>Date Published</th>
+          <th>Actions</th> 
         </tr>
       </thead>
       <tbody>
@@ -154,12 +174,12 @@ function ActivityNavbar({ email }) {
               <td>{product.category}</td>
               <td>{product.quantity}</td>
               <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-
+              {renderActionButtons(product.id)}
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="5">No approved posts yet.</td>
+            <td colSpan="6">No pending products yet.</td>
           </tr>
         )}
       </tbody>

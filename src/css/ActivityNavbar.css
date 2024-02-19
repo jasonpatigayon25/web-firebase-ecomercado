@@ -180,3 +180,42 @@ tbody tr:hover td {
 .modal-close-btn:hover {
   color: #ccc; 
 }
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.button-approve, .button-decline {
+  border: none;
+  cursor: pointer;
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  font-size: 18px; 
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.button-approve {
+  background-color: #4CAF50;
+}
+
+.button-approve:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.button-decline {
+  background-color: #F44336;
+}
+
+.button-decline:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
