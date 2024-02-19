@@ -43,7 +43,8 @@ function ActivityNavbar({ email }) {
               <td>{product.name}</td>
               <td>{product.category}</td>
               <td>{product.quantity}</td>
-              <td>{new Date(product.createdAt).toLocaleDateString()}</td>
+              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
+
             </tr>
           ))
         ) : (
