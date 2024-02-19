@@ -109,3 +109,65 @@ tbody tr:hover {
 tbody tr:hover td {
   color: #000;
 }
+
+.Modal {
+  background: linear-gradient(135deg, black, gray);
+  color: #000;
+  padding: 30px; 
+  border-radius: 10px; 
+  max-width: 600px; 
+  width: 90%;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  overflow-y: auto; 
+}
+
+.Overlay {
+  background-color: rgba(0, 0, 0, 0.85); 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; 
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: left; 
+  color:white;
+  background: linear-gradient(135deg, black, gray);
+}
+
+.modal-image {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0; 
+  border-radius: 10px;
+}
+
+.modal-close-btn {
+  background-color: #343a40;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px; 
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px; 
+  cursor: pointer;
+  transition: background-color 0.2s; 
+}
+
+.modal-close-btn:hover {
+  background-color: #495057; 
+}

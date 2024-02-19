@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import "../css/ActivityNavbar.css";
 import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function ActivityNavbar({ email }) {
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+
   const [activeTab, setActiveTab] = useState('user-approved-posts');
   const [products, setProducts] = useState([]);
 
@@ -24,6 +31,17 @@ function ActivityNavbar({ email }) {
     setProducts([]);
   };
 
+  
+  function openModal(item) {
+    setCurrentItem(item);
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+
   const renderProductsTable = () => (
     <table>
       <thead>
@@ -38,7 +56,7 @@ function ActivityNavbar({ email }) {
       <tbody>
         {products.length ? (
           products.map(product => (
-            <tr key={product.id}>
+            <tr key={product.id} onClick={() => openModal(product)}>
               <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
               <td>{product.name}</td>
               <td>{product.category}</td>
@@ -97,6 +115,27 @@ function ActivityNavbar({ email }) {
       <div className="content-display">
         {renderContent()}
       </div>
+      <Modal
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  contentLabel="Item Details"
+  className="Modal"
+  overlayClassName="Overlay"
+>
+  <div className="modal-content">
+    <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
+    <h2>{currentItem?.name}</h2>
+    <div className="modal-details">
+      <p><strong>Category:</strong> {currentItem?.category}</p>
+      <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
+      <p><strong>Date Published:</strong> {currentItem?.createdAt.toDate().toLocaleDateString()}</p>
+      <p><strong>Price:</strong> {currentItem?.price}</p>
+      <p><strong>Description:</strong> {currentItem?.description}</p>
+      <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
+    </div>
+    <button onClick={closeModal} className="modal-close-btn">Close</button>
+  </div>
+</Modal>
     </div>
   );
 }
