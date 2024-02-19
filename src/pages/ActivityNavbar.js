@@ -3,6 +3,8 @@ import "../css/ActivityNavbar.css";
 import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -123,6 +125,9 @@ function ActivityNavbar({ email }) {
   overlayClassName="Overlay"
 >
   <div className="modal-content">
+  <button onClick={closeModal} className="modal-close-btn">
+      <FontAwesomeIcon icon={faTimes} />
+    </button>
     <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
     <h2>{currentItem?.name}</h2>
     <div className="modal-details">
@@ -133,7 +138,6 @@ function ActivityNavbar({ email }) {
       <p><strong>Description:</strong> {currentItem?.description}</p>
       <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
     </div>
-    <button onClick={closeModal} className="modal-close-btn">Close</button>
   </div>
 </Modal>
     </div>

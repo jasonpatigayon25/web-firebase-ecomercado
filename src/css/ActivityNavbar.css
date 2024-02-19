@@ -111,19 +111,22 @@ tbody tr:hover td {
 }
 
 .Modal {
-  background: linear-gradient(135deg, black, gray);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(128, 128, 128, 0.8));
   color: #000;
-  padding: 30px; 
-  border-radius: 10px; 
-  max-width: 600px; 
-  width: 90%;
+  padding: 10;
+  border-radius: 10px;
+  max-width: 900px;
+  width: 100%;
+  height: 100vh;
+  max-height: 80%; 
   margin: auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
-  overflow-y: auto; 
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  position: relative;
 }
 
 .Overlay {
@@ -140,34 +143,40 @@ tbody tr:hover td {
 }
 
 .modal-content {
+  max-width: 900px;
+  height: calc(100vh - 60px);
+  background: linear-gradient(135deg, black, gray);
+  padding: 30px; 
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  text-align: left; 
-  color:white;
-  background: linear-gradient(135deg, black, gray);
+  align-items: center;
+  text-align: left;
+  color: white;
+  overflow-y: auto; 
 }
 
 .modal-image {
-  max-width: 100%;
+  width: 300px;
+  height: 210px;
   height: auto;
   margin: 20px 0; 
   border-radius: 10px;
 }
 
 .modal-close-btn {
-  background-color: #343a40;
-  color: #fff;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
   border: none;
-  padding: 10px 20px;
-  margin-top: 20px; 
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 5px; 
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.2s; 
+  padding: 10px; 
+  font-size: 30px; 
+  z-index: 10; 
 }
 
 .modal-close-btn:hover {
-  background-color: #495057; 
+  color: #ccc; 
 }
