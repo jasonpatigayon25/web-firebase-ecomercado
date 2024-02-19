@@ -80,9 +80,6 @@ function UserActivity() {
         </div>
       </div>
       <ActivityNavbar email={email} />
-      <div className="admin-dashboard-recent-users">
-        </div>
-
       </div>
     </div>
   );

@@ -1,53 +1,64 @@
+
 .activity-navbar {
-    display: flex;
-    justify-content: space-between; 
-    background: #333;
-    padding: 10px 0;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .activity-navbar-nav {
-    list-style: none;
-    display: flex;
-    width: 100%;
-    padding-left: 0;
-    transform: translateZ(0);
-  }
-  
-  .activity-navbar-nav li {
-    margin-right: 20px;
-    transform: translateZ(0);
-    flex-grow: 1; 
-    text-align: center; 
-  }
-  
-  .activity-navbar-nav li:not(:last-child)::after {
-    color: #ccc;
-    margin-left: 20px;
-    font-weight: bold; 
-  }
-  
-  .activity-navbar-nav li a {
-    color: #ccc;
-    text-decoration: none;
-    padding: 10px 15px;
-    display: block;
-    transition: transform 0.3s, color 0.3s;
-    border-radius: 5px;
-    font-size: 1.1rem; 
-    font-weight: 500;
-  }
-  
-  .activity-navbar-nav li a:hover {
-    color: #fff;
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .activity-navbar-nav li.active a {
-    color: #fff;
-    background: #4CAF50;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-  }
-  
+  background-color: #333;
+  padding: 10px 0;
+  border-radius: 0; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; 
+}
+
+.activity-navbar-nav {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  width: 100%; 
+}
+
+.activity-navbar-nav li {
+  flex: 1;
+}
+
+.activity-navbar-nav button {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #555;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold; 
+  width: 100%; 
+  transition: all 0.3s ease;
+  outline: none;
+  box-sizing: border-box; 
+  font-family: 'Arial', sans-serif;
+  border-radius: 0; 
+}
+
+.activity-navbar-nav button:hover {
+  background-color: #6c757d; 
+  color: #e2e6ea;
+}
+
+.activity-navbar-nav .active button {
+  background: linear-gradient(45deg, #28a745, #218838); 
+  border-color: #1e7e34;
+  color: #fff;
+}
+
+.content-display {
+  padding: 20px;
+  border-radius: 0; 
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; 
+}
+
+.content-display p {
+  font-size: 16px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.content-display p:not(:last-child) {
+  display: none;
+}
