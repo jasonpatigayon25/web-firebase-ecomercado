@@ -1,17 +1,64 @@
-import React, { useState } from 'react';
-import "../css/ActivityNavbar.css"; 
+import React, { useState, useEffect } from 'react';
+import "../css/ActivityNavbar.css";
+import { db } from '../config/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function ActivityNavbar({ email }) {
-  const [activeTab, setActiveTab] = useState('');
+  const [activeTab, setActiveTab] = useState('user-approved-posts');
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (activeTab === 'user-approved-posts') {
+        const q = query(collection(db, 'products'), where('seller_email', '==', email));
+        const querySnapshot = await getDocs(q);
+        setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      }
+    };
+
+    fetchProducts();
+  }, [email, activeTab]); 
 
   const handleButtonClick = (tabName) => {
     setActiveTab(tabName);
+    setProducts([]);
   };
+
+  const renderProductsTable = () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Date Published</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length ? (
+          products.map(product => (
+            <tr key={product.id}>
+              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
+              <td>{product.name}</td>
+              <td>{product.category}</td>
+              <td>{product.quantity}</td>
+              <td>{new Date(product.createdAt).toLocaleDateString()}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No approved posts yet.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
 
   const renderContent = () => {
     switch(activeTab) {
       case 'user-approved-posts':
-        return <p>No approved posts yet.</p>;
+        return renderProductsTable();
       case 'user-pending-products':
         return <p>No pending products yet.</p>;
       case 'user-pending-donations':

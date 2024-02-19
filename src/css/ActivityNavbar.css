@@ -17,7 +17,9 @@
 
 .activity-navbar-nav li {
   flex: 1;
+  color: #fff;
 }
+
 
 .activity-navbar-nav button {
   background-color: transparent;
@@ -61,4 +63,49 @@
 
 .content-display p:not(:last-child) {
   display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #fff;
+}
+
+th {
+  text-align: center;
+}
+
+
+th:nth-child(1), td:nth-child(1) {
+  width: 8%;
+}
+
+th:nth-child(4), td:nth-child(4) {
+  width: 8%;
+}
+
+img.rounded-image {
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+tbody tr:hover {
+  background-color: #eaeaea;
+  color: #333;
+}
+
+tbody tr:hover {
+  background-color: #eaeaea;
+}
+
+tbody tr:hover td {
+  color: #000;
 }
