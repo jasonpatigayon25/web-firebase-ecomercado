@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "../css/ActivityNavbar.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -16,42 +16,42 @@ function ActivityNavbar({ email }) {
   const [activeTab, setActiveTab] = useState('user-approved-posts');
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      let q;
-      switch (activeTab) {
-        case 'user-approved-posts':
-          q = query(
-            collection(db, 'products'), 
-            where('seller_email', '==', email),
-            where('publicationStatus', '==', 'approved')
-          );
-          break;
-        case 'user-pending-products':
-          q = query(
-            collection(db, 'products'), 
-            where('seller_email', '==', email),
-            where('publicationStatus', '==', 'pending')
-          );
-          break;
-        case 'user-declined-posts':
-          q = query(
-            collection(db, 'products'), 
-            where('seller_email', '==', email),
-            where('publicationStatus', '==', 'declined')
-          );
-          break;
-        default:
-          setProducts([]);
-          return;
-      }
-      
-      const querySnapshot = await getDocs(q);
-      setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    };
-  
-    fetchProducts();
+  const fetchProducts = useCallback(async () => {
+    let q;
+    switch (activeTab) {
+      case 'user-approved-posts':
+        q = query(
+          collection(db, 'products'), 
+          where('seller_email', '==', email),
+          where('publicationStatus', '==', 'approved')
+        );
+        break;
+      case 'user-pending-products':
+        q = query(
+          collection(db, 'products'), 
+          where('seller_email', '==', email),
+          where('publicationStatus', '==', 'pending')
+        );
+        break;
+      case 'user-declined-posts':
+        q = query(
+          collection(db, 'products'), 
+          where('seller_email', '==', email),
+          where('publicationStatus', '==', 'declined')
+        );
+        break;
+      default:
+        setProducts([]);
+        return;
+    }
+    
+    const querySnapshot = await getDocs(q);
+    setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   }, [email, activeTab]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [email, activeTab, fetchProducts]); 
 
   const handleButtonClick = (tabName) => {
     setActiveTab(tabName);
@@ -134,20 +134,38 @@ function ActivityNavbar({ email }) {
   );
 
   const handleApprove = async (productId) => {
-    // Logicapprove
+    const productRef = doc(db, 'products', productId);
+    try {
+      await updateDoc(productRef, {
+        publicationStatus: 'approved'
+      });
+      console.log('Product approved successfully');
+      fetchProducts();
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
 
   const handleDecline = async (productId) => {
-    // Logicdecline
+    const productRef = doc(db, 'products', productId);
+    try {
+      await updateDoc(productRef, {
+        publicationStatus: 'declined'
+      });
+      console.log('Product declined successfully');
+      fetchProducts(); 
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
 
 
   const renderActionButtons = (productId) => (
     <td className="action-buttons">
-      <button className="button-approve" onClick={() => handleApprove(productId)}>
+      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApprove(productId); }}>
         <FontAwesomeIcon icon={faCheck} />
       </button>
-      <button className="button-decline" onClick={() => handleDecline(productId)}>
+      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDecline(productId); }}>
         <FontAwesomeIcon icon={faTimes} />
       </button>
     </td>
