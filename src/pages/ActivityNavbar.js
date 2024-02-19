@@ -54,10 +54,11 @@ function ActivityNavbar({ email }) {
   }, [email, activeTab, fetchProducts]); 
 
   const handleButtonClick = (tabName) => {
-    setActiveTab(tabName);
-    setProducts([]);
+    if (activeTab !== tabName) {
+      setActiveTab(tabName);
+      setProducts([]);
+    }
   };
-
   
   function openModal(item) {
     setCurrentItem(item);
@@ -225,20 +226,20 @@ function ActivityNavbar({ email }) {
     <div>
       <div className="activity-navbar">
         <ul className="activity-navbar-nav">
-          <li className={activeTab === 'user-approved-posts' ? 'active' : ''}>
-              <button onClick={() => handleButtonClick('user-approved-posts')}>Approved Posts</button>
+        <li className={activeTab === 'user-approved-posts' ? 'active' : ''}>
+              <button disabled={activeTab === 'user-approved-posts'} onClick={() => handleButtonClick('user-approved-posts')}>Approved Posts</button>
           </li>
           <li className={activeTab === 'user-pending-products' ? 'active' : ''}>
-            <button onClick={() => handleButtonClick('user-pending-products')}>Pending Products</button>
+            <button disabled={activeTab === 'user-pending-products'} onClick={() => handleButtonClick('user-pending-products')}>Pending Products</button>
           </li>
           <li className={activeTab === 'user-pending-donations' ? 'active' : ''}>
-            <button onClick={() => handleButtonClick('user-pending-donations')}>Pending Donations</button>
+            <button disabled={activeTab === 'user-pending-donations'} onClick={() => handleButtonClick('user-pending-donations')}>Pending Donations</button>
           </li>
           <li className={activeTab === 'user-declined-posts' ? 'active' : ''}>
-            <button onClick={() => handleButtonClick('user-declined-posts')}>Declined Posts</button>
+            <button disabled={activeTab === 'user-declined-posts'} onClick={() => handleButtonClick('user-declined-posts')}>Declined Posts</button>
           </li>
           <li className={activeTab === 'user-donation-history' ? 'active' : ''}>
-            <button onClick={() => handleButtonClick('user-donation-history')}>Donation History</button>
+            <button disabled={activeTab === 'user-donation-history'} onClick={() => handleButtonClick('user-donation-history')}>Donation History</button>
           </li>
         </ul>
       </div>
