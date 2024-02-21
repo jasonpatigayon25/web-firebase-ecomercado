@@ -7,30 +7,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function UserPendingDonation() {
-  const [products, setProducts] = useState([]);
+  const [donations, setDonations] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
   useEffect(() => {
-    const fetchApprovedProducts = async () => {
-      const productsRef = collection(db, "products");
-      const q = query(productsRef, where("publicationStatus", "==", "pending"));
+    const fetchApprovedDonations = async () => {
+      const donationsRef = collection(db, "donation");
+      const q = query(donationsRef, where("publicationStatus", "==", "pending"));
       const querySnapshot = await getDocs(q);
-      const productList = querySnapshot.docs
+      const donationList = querySnapshot.docs
         .map(doc => ({
           id: doc.id,
           ...doc.data(),
           createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
         }))
         .sort((a, b) => b.createdAt - a.createdAt);
-      setProducts(productList);
+      setDonations(donationList);
     };
 
-    fetchApprovedProducts();
+    fetchApprovedDonations();
   }, []);
 
-  const openModal = (product) => {
-    setCurrentItem(product);
+  const openModal = (donation) => {
+    setCurrentItem(donation);
     setModalIsOpen(true);
   };
 
@@ -38,30 +38,28 @@ function UserPendingDonation() {
     setModalIsOpen(false);
   };
 
-  const renderProductApproved = () => (
+  const renderDonationsApproved = () => (
     <table>
       <thead>
         <tr>
           <th>Image</th>
           <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Seller</th>
-          <th>Date Published</th>
+          <th>Location</th>
+          <th>Message</th>
+          <th>Donor</th>
+          <th>Date Offered</th>
         </tr>
       </thead>
       <tbody>
-        {products.length > 0 ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>₱{product.price}</td>
-              <td>{product.quantity}</td>
-              <td>{product.seller_email}</td>
-              <td>{product.createdAt.toLocaleDateString()}</td>
+        {donations.length > 0 ? (
+          donations.map(donation => (
+            <tr key={donation.id} onClick={() => openModal(donation)}>
+              <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
+              <td>{donation.name}</td>
+              <td>{donation.location}</td>
+              <td>{donation.message}</td>
+              <td>{donation.donor_email}</td>
+              <td>{donation.createdAt.toLocaleDateString()}</td>
             </tr>
           ))
         ) : (
@@ -75,8 +73,8 @@ function UserPendingDonation() {
 
   return (
     <div className="approved-products-container">
-      <h2>Approved Products</h2>
-      {renderProductApproved()}
+      <h2>Approved Donations</h2>
+      {renderDonationsApproved()}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -91,12 +89,10 @@ function UserPendingDonation() {
           <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
           <h2>{currentItem?.name}</h2>
           <div className="modal-details">
-            <p><strong>Category:</strong> {currentItem?.category}</p>
-            <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
+            <p><strong>Category:</strong> {currentItem?.location}</p>
+            <p><strong>Quantity:</strong> {currentItem?.message}</p>
             <p><strong>Date Published:</strong> {currentItem?.createdAt.toLocaleDateString()}</p>
-            <p><strong>Price:</strong> ₱{currentItem?.price}</p>
-            <p><strong>Description:</strong> {currentItem?.description}</p>
-            <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
+            <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
           </div>
         </div>
       </Modal>
