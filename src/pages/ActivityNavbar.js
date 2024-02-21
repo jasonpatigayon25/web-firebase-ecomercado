@@ -11,6 +11,7 @@ Modal.setAppElement('#root');
 function ActivityNavbar({ email }) {
 
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpenDonation, setIsOpenDonation] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [currentDonation, setCurrentDonation] = useState(null);
 
@@ -111,11 +112,11 @@ function ActivityNavbar({ email }) {
 
   function openDonationModal(donation) {
     setCurrentDonation(donation);
-    setIsOpen(true);
+    setIsOpenDonation(true);
   }
 
   function closeDonationModal() {
-    setIsOpen(false);
+    setIsOpenDonation(false);
   }
 
   const renderProductApproved = () => (
@@ -457,7 +458,7 @@ function ActivityNavbar({ email }) {
         </div>
       </Modal>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={modalIsOpenDonation}
         onRequestClose={closeDonationModal}
         contentLabel="Donation Details"
         className="Modal"
