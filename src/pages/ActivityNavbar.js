@@ -12,9 +12,12 @@ function ActivityNavbar({ email }) {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [currentDonation, setCurrentDonation] = useState(null);
 
   const [activeTab, setActiveTab] = useState('user-approved-products');
   const [products, setProducts] = useState([]);
+
+  const [donations, setDonations] = useState([]);
 
   const fetchProducts = useCallback(async () => {
     let q;
@@ -79,7 +82,7 @@ function ActivityNavbar({ email }) {
     }
   
     const querySnapshot = await getDocs(q);
-    setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    setDonations(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   }, [email, activeTab]);
   
   useEffect(() => {
@@ -106,6 +109,15 @@ function ActivityNavbar({ email }) {
     setIsOpen(false);
   }
 
+  function openDonationModal(donation) {
+    setCurrentDonation(donation);
+    setIsOpen(true);
+  }
+
+  function closeDonationModal() {
+    setIsOpen(false);
+  }
+
   const renderProductApproved = () => (
     <table>
       <thead>
@@ -126,7 +138,6 @@ function ActivityNavbar({ email }) {
               <td>{product.category}</td>
               <td>{product.quantity}</td>
               <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-
             </tr>
           ))
         ) : (
@@ -172,64 +183,64 @@ function ActivityNavbar({ email }) {
 
   const renderApprovedDonations = () => (
     <table className="donation-table">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Message</th>
-          <th>Date Offered</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length ? (
-          products.map(donation => (
-            <tr key={donation.id} onClick={() => openModal(donation)}>
-              <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
-              <td>{donation.name}</td>
-              <td>{donation.location}</td>
-              <td>{donation.message}</td>
-              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
-            </tr>
-          ))
-        ) : (
+        <thead>
           <tr>
-            <td colSpan="4">No pending donations yet.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Date Offered</th>
+            <th>Message</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {donations.length ? (
+            donations.map(donation => (
+              <tr key={donation.id} onClick={() => openDonationModal(donation)}>
+                <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
+                <td>{donation.name}</td>
+                <td>{donation.location}</td>
+                <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
+                <td>{donation.message}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">No donations yet.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
   );
   
   const renderDeclinedDonations = () => (
     <table className="donation-table">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Message</th>
-          <th>Date Offered</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length ? (
-          products.map(donation => (
-            <tr key={donation.id} onClick={() => openModal(donation)}>
-              <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
-              <td>{donation.name}</td>
-              <td>{donation.location}</td>
-              <td>{donation.message}</td>
-              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
-            </tr>
-          ))
-        ) : (
+        <thead>
           <tr>
-            <td colSpan="4">No pending donations yet.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Date Offered</th>
+            <th>Message</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {donations.length ? (
+            donations.map(donation => (
+              <tr key={donation.id} onClick={() => openDonationModal(donation)}>
+                <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
+                <td>{donation.name}</td>
+                <td>{donation.location}</td>
+                <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
+                <td>{donation.message}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">No donations yet.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
   );
 
   const handleApprove = async (productId) => {
@@ -296,7 +307,7 @@ function ActivityNavbar({ email }) {
   );
 
   const renderActionButtonsDonations = (donationId) => (
-    <td className="action-buttons">
+    <td className="action-buttons-donation">
       <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApproveDonation(donationId); }}>
         <FontAwesomeIcon icon={faCheck} />
       </button>
@@ -342,33 +353,33 @@ function ActivityNavbar({ email }) {
 
   const renderPendingDonations = () => (
     <table className="donation-table">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Date Offered</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length ? (
-          products.map(donation => (
-            <tr key={donation.id} onClick={() => openModal(donation)}>
-              <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
-              <td>{donation.name}</td>
-              <td>{donation.location}</td>
-              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
-              {renderActionButtonsDonations(donation.id)}
-            </tr>
-          ))
-        ) : (
+        <thead>
           <tr>
-            <td colSpan="4">No pending donations yet.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Date Offered</th>
+            <th>Actions</th> 
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {donations.length ? (
+            donations.map(donation => (
+              <tr key={donation.id} onClick={() => openDonationModal(donation)}>
+                <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
+                <td>{donation.name}</td>
+                <td>{donation.location}</td>
+                <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
+                {renderActionButtonsDonations(donation.id)}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">No donations yet.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
   );
 
   const renderContent = () => {
@@ -445,7 +456,31 @@ function ActivityNavbar({ email }) {
           </div>
         </div>
       </Modal>
-      
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeDonationModal}
+        contentLabel="Donation Details"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <div className="modal-content">
+          <button onClick={closeDonationModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          {currentDonation && (
+            <>
+              <img src={currentDonation.photo} alt={currentDonation.name} className="modal-image" />
+              <h2>{currentDonation.name}</h2>
+              <div className="modal-details">
+                <p><strong>Location:</strong> {currentDonation.location}</p>
+                <p><strong>Message:</strong> {currentDonation.message}</p>
+                <p><strong>Date Offered:</strong> {currentDonation.createdAt.toDate().toLocaleDateString()}</p>
+                <p><strong>Donor Email:</strong> {currentDonation.donor_email}</p>
+              </div>
+            </>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }

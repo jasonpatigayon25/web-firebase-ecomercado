@@ -181,13 +181,6 @@ tbody tr:hover td {
   color: #ccc; 
 }
 
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-}
-
 .button-approve, .button-decline {
   border: none;
   cursor: pointer;
@@ -196,13 +189,13 @@ tbody tr:hover td {
   border-radius: 50%; 
   font-size: 18px; 
   color: white;
-  display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .button-approve {
+  margin-right: 15px;
   background-color: #4CAF50;
 }
 
@@ -212,6 +205,7 @@ tbody tr:hover td {
 }
 
 .button-decline {
+  margin-right: 0;
   background-color: #F44336;
 }
 
@@ -220,3 +214,15 @@ tbody tr:hover td {
   box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
 }
 
+.action-buttons-donation {
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
