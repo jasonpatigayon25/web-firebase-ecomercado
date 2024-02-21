@@ -31,7 +31,7 @@ import { auth } from "./config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import UserApproved from "./pages/UserApproved";
+
 function AuthRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,7 +65,6 @@ function App() {
           <Route path="/user-statistics" element={<UserStatistics/>}/>
           <Route path="/users-information" element={<UsersInformation/>}/>
           <Route path="/user-activity/:email" element={<UserActivity />} />
-          <Route path="/user-approved-posts" element={<UserApproved />} />
           <Route path="/pending-donor" element={<PendingPostDonor/>}/>
           <Route path="/pending-seller" element={<PendingPostSeller/>}/>
           <Route path="/approved-donor" element={<ApprovedPostDonor/>}/>

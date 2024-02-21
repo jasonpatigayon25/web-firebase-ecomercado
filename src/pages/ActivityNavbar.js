@@ -126,6 +126,7 @@ function ActivityNavbar({ email }) {
           <th>Image</th>
           <th>Name</th>
           <th>Category</th>
+          <th>Price</th>
           <th>Quantity</th>
           <th>Date Published</th>
         </tr>
@@ -137,6 +138,7 @@ function ActivityNavbar({ email }) {
               <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
               <td>{product.name}</td>
               <td>{product.category}</td>
+              <td>₱ {product.price}</td>
               <td>{product.quantity}</td>
               <td>{product.createdAt.toDate().toLocaleDateString()}</td>
             </tr>
@@ -157,6 +159,7 @@ function ActivityNavbar({ email }) {
           <th>Image</th>
           <th>Name</th>
           <th>Category</th>
+          <th>Price</th>
           <th>Quantity</th>
           <th>Date Published</th>
         </tr>
@@ -168,9 +171,9 @@ function ActivityNavbar({ email }) {
               <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
               <td>{product.name}</td>
               <td>{product.category}</td>
+              <td>₱ {product.price}</td>
               <td>{product.quantity}</td>
               <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-
             </tr>
           ))
         ) : (
@@ -325,6 +328,7 @@ function ActivityNavbar({ email }) {
           <th>Image</th>
           <th>Name</th>
           <th>Category</th>
+          <th>Price</th>
           <th>Quantity</th>
           <th>Date Published</th>
           <th>Actions</th> 
@@ -337,6 +341,7 @@ function ActivityNavbar({ email }) {
               <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
               <td>{product.name}</td>
               <td>{product.category}</td>
+              <td>₱ {product.price}</td>
               <td>{product.quantity}</td>
               <td>{product.createdAt.toDate().toLocaleDateString()}</td>
               {renderActionButtons(product.id)}

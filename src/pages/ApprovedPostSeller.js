@@ -5,65 +5,7 @@ import { db } from '../config/firebase';
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
-import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid  } from 'recharts';
-
-function renderPieChart(data) {
-  return (
-    <PieChart width={400} height={400}>
-      <Pie 
-        data={data} 
-        dataKey="value" 
-        nameKey="name" 
-        cx="50%" 
-        cy="50%" 
-        outerRadius={150} 
-        fill="#8884d8" 
-        label
-      >
-        {
-          data.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color}/>)
-        }
-      </Pie>
-      <Tooltip />
-      <Legend />
-    </PieChart>
-  );
-}
-
-function getLastWeekDates() {
-  const dates = [];
-  const today = new Date();
-  const firstDayOfWeek = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1); 
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today.getFullYear(), today.getMonth(), firstDayOfWeek + i);
-    dates.push(date.toLocaleDateString());
-  }
-  return dates;
-}
-
-function OrdersPerWeekChart({ orders }) {
-  const currentWeekDates = getLastWeekDates();
-  const orderCounts = currentWeekDates.map(date => ({ date, count: 0 }));
-
-  orders.forEach(order => {
-    if (order.dateOrdered && order.dateOrdered.toDate) {
-      const orderDate = order.dateOrdered.toDate().toLocaleDateString();
-      const orderDay = orderCounts.find(day => day.date === orderDate);
-      if (orderDay) orderDay.count++;
-    }
-  });
-
-  return (
-    <BarChart width={600} height={300} data={orderCounts}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="count" fill="#82ca9d" />
-    </BarChart>
-  );
-}
+import UserApprovedSeller from "./UserApprovedSeller";
 
 function ApprovedPostSeller() {
   const [products, setProducts] = useState([]);
@@ -80,38 +22,6 @@ function ApprovedPostSeller() {
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [pieChartData, setPieChartData] = useState([]);
-
-  const [isStatsCardHovered, setIsStatsCardHovered] = useState(false);
-
-  useEffect(() => {
-
-    const categoryCounts = {};
-    products.forEach(product => {
-      categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
-    });
-  
-    const chartData = Object.keys(categoryCounts).map(category => ({
-      name: category,
-      value: categoryCounts[category],
-      color: getRandomColor()
-    }));
-  
-    setPieChartData(chartData);
-  }, [products]);
-
-  const [orders, setOrders] = useState([]);
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const ordersSnapshot = await getDocs(collection(db, 'orders'));
-      const fetchedOrders = ordersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      setOrders(fetchedOrders);
-    };
-
-    fetchOrders();
-  }, []);
 
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
@@ -199,15 +109,6 @@ function ApprovedPostSeller() {
     }
   };
 
-  function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -229,29 +130,8 @@ function ApprovedPostSeller() {
             <div className="stats-label">Total Orders</div>
           </div>
         </div>
-        <div className="admin-dashboard-cards">
-        <div 
-          className="admin-dashboard-card"
-          onMouseEnter={() => setIsStatsCardHovered(true)}
-          onMouseLeave={() => setIsStatsCardHovered(false)}
-        >
-          <div className="pie-chart-container">
-          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Product Categories Distribution</h1>
-            {renderPieChart(pieChartData)}
-          </div>
-          </div>
-          <div 
-            className="admin-dashboard-card"
-            onMouseEnter={() => setIsStatsCardHovered(true)}
-            onMouseLeave={() => setIsStatsCardHovered(false)}
-          >
-        <div className="bar-chart-container">
-          <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>
-            Orders This Week
-          </h1>
-          <OrdersPerWeekChart orders={orders} />
-        </div>
-        </div>
+        <div>
+        <UserApprovedSeller/>
         </div>
         <div className="admin-dashboard-recent-users">
           <h1>Recent Products Published</h1>
