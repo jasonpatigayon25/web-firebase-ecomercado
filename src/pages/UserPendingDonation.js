@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import "../css/ActivityNavbar.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 function UserPendingDonation() {
   const [donations, setDonations] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
-  useEffect(() => {
-    const fetchApprovedDonations = async () => {
-      const donationsRef = collection(db, "donation");
-      const q = query(donationsRef, where("publicationStatus", "==", "pending"));
-      const querySnapshot = await getDocs(q);
-      const donationList = querySnapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
-        }))
-        .sort((a, b) => b.createdAt - a.createdAt);
+  const fetchDonations = async () => {
+    const donationsRef = collection(db, "donation");
+    const q = query(donationsRef, where("publicationStatus", "==", "pending"));
+    const querySnapshot = await getDocs(q);
+    const donationList = querySnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+      }))
+      .sort((a, b) => b.createdAt - a.createdAt);
       setDonations(donationList);
-    };
+  };
 
-    fetchApprovedDonations();
+  useEffect(() => {
+    fetchDonations();
   }, []);
 
   const openModal = (donation) => {
@@ -38,6 +38,43 @@ function UserPendingDonation() {
     setModalIsOpen(false);
   };
 
+  const handleApproveDonation = async (donationId) => {
+    const donationRef = doc(db, 'donation', donationId);
+    try {
+      await updateDoc(donationRef, {
+        publicationStatus: 'approved'
+      });
+      console.log('Donation approved successfully');
+      fetchDonations();
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const handleDeclineDonation = async (donationId) => {
+    const donationRef = doc(db, 'donation', donationId);
+    try {
+      await updateDoc(donationRef, {
+        publicationStatus: 'declined'
+      });
+      console.log('Donation declined successfully');
+      fetchDonations(); 
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const renderActionButtonsDonations = (donationId) => (
+    <td className="action-buttons-donation">
+      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApproveDonation(donationId); }}>
+        <FontAwesomeIcon icon={faCheck} />
+      </button>
+      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDeclineDonation(donationId); }}>
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </td>
+  );
+
   const renderDonationsApproved = () => (
     <table>
       <thead>
@@ -48,6 +85,7 @@ function UserPendingDonation() {
           <th>Message</th>
           <th>Donor</th>
           <th>Date Offered</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -60,6 +98,7 @@ function UserPendingDonation() {
               <td>{donation.message}</td>
               <td>{donation.donor_email}</td>
               <td>{donation.createdAt.toLocaleDateString()}</td>
+              {renderActionButtonsDonations(donation.id)}
             </tr>
           ))
         ) : (
@@ -73,7 +112,7 @@ function UserPendingDonation() {
 
   return (
     <div className="approved-products-container">
-      <h2>Approved Donations</h2>
+      <h2>Pending for Approval - Donations</h2>
       {renderDonationsApproved()}
       <Modal
         isOpen={modalIsOpen}

@@ -115,7 +115,7 @@ function UserPendingProduct() {
 
   return (
     <div className="approved-products-container">
-      <h2>Approved Products</h2>
+      <h2>Pending for Approval - Products</h2>
       {renderProductApproved()}
       <Modal
         isOpen={modalIsOpen}
