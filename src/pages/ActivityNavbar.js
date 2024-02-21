@@ -13,19 +13,19 @@ function ActivityNavbar({ email }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
-  const [activeTab, setActiveTab] = useState('user-approved-posts');
+  const [activeTab, setActiveTab] = useState('user-approved-products');
   const [products, setProducts] = useState([]);
 
   const fetchProducts = useCallback(async () => {
     let q;
     switch (activeTab) {
-      case 'user-approved-posts':
+      case 'user-approved-products':
         q = query(
           collection(db, 'products'), 
           where('seller_email', '==', email),
           where('publicationStatus', '==', 'approved')
         );
-        break;
+        break;  
       case 'user-pending-products':
         q = query(
           collection(db, 'products'), 
@@ -33,7 +33,7 @@ function ActivityNavbar({ email }) {
           where('publicationStatus', '==', 'pending')
         );
         break;
-      case 'user-declined-posts':
+      case 'user-declined-products':
         q = query(
           collection(db, 'products'), 
           where('seller_email', '==', email),
@@ -51,18 +51,39 @@ function ActivityNavbar({ email }) {
 
   
   const fetchDonations = useCallback(async () => {
-    const q = query(
-      collection(db, 'donation'),
-      where('donor_email', '==', email),
-      where('publicationStatus', '==', 'pending')
-    );
-    
+    let q;
+    switch (activeTab) {
+      case 'user-approved-donations':
+        q = query(
+          collection(db, 'donation'),
+          where('donor_email', '==', email),
+          where('publicationStatus', '==', 'approved')
+        );
+        break;
+      case 'user-pending-donations':
+        q = query(
+          collection(db, 'donation'),
+          where('donor_email', '==', email),
+          where('publicationStatus', '==', 'pending')
+        );
+        break;
+      case 'user-declined-donations':
+        q = query(
+          collection(db, 'donation'),
+          where('donor_email', '==', email),
+          where('publicationStatus', '==', 'declined')
+        );
+        break;
+      default:
+        return; 
+    }
+  
     const querySnapshot = await getDocs(q);
     setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-  }, [email]);
-
+  }, [email, activeTab]);
+  
   useEffect(() => {
-    if (activeTab === 'user-pending-donations') {
+    if (activeTab === 'user-approved-donations' || activeTab === 'user-declined-donations' || activeTab === 'user-pending-donations') {
       fetchDonations();
     } else {
       fetchProducts();
@@ -84,7 +105,6 @@ function ActivityNavbar({ email }) {
   function closeModal() {
     setIsOpen(false);
   }
-
 
   const renderProductApproved = () => (
     <table>
@@ -119,6 +139,70 @@ function ActivityNavbar({ email }) {
   );
 
   const renderProductDeclined= () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Date Published</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length ? (
+          products.map(product => (
+            <tr key={product.id} onClick={() => openModal(product)}>
+              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
+              <td>{product.name}</td>
+              <td>{product.category}</td>
+              <td>{product.quantity}</td>
+              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
+
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No approved posts yet.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
+
+  const renderApprovedDonations = () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Message</th>
+          <th>Date Published</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length ? (
+          products.map(product => (
+            <tr key={product.id} onClick={() => openModal(product)}>
+              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
+              <td>{product.name}</td>
+              <td>{product.category}</td>
+              <td>{product.quantity}</td>
+              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
+
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No approved posts yet.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
+  
+  const renderDeclinedDonations = () => (
     <table>
       <thead>
         <tr>
@@ -252,14 +336,18 @@ function ActivityNavbar({ email }) {
 
   const renderContent = () => {
     switch(activeTab) {
-      case 'user-approved-posts':
+      case 'user-approved-products':
         return renderProductApproved();
       case 'user-pending-products':
         return renderPendingProducts();
       case 'user-pending-donations':
         return renderPendingDonations();
-      case 'user-declined-posts':
+      case 'user-declined-products':
         return renderProductDeclined();
+      case 'user-approved-donations':
+        return renderApprovedDonations(); 
+      case 'user-declined-donations':
+        return renderDeclinedDonations(); 
       case 'user-donation-history':
         return <p>No donation history yet.</p>;
       default:
@@ -271,8 +359,11 @@ function ActivityNavbar({ email }) {
     <div>
       <div className="activity-navbar">
         <ul className="activity-navbar-nav">
-          <li className={activeTab === 'user-approved-posts' ? 'active' : ''}>
-              <button disabled={activeTab === 'user-approved-posts'} onClick={() => handleButtonClick('user-approved-posts')}>Approved Posts</button>
+          <li className={activeTab === 'user-approved-products' ? 'active' : ''}>
+              <button disabled={activeTab === 'user-approved-products]'} onClick={() => handleButtonClick('user-approved-products')}>Approved Products</button>
+          </li>
+          <li className={activeTab === 'user-approved-donations' ? 'active' : ''}>
+            <button disabled={activeTab === 'user-approved-donations'} onClick={() => handleButtonClick('user-approved-donations')}>Approved Donations</button>
           </li>
           <li className={activeTab === 'user-pending-products' ? 'active' : ''}>
             <button disabled={activeTab === 'user-pending-products'} onClick={() => handleButtonClick('user-pending-products')}>Pending Products</button>
@@ -280,8 +371,11 @@ function ActivityNavbar({ email }) {
           <li className={activeTab === 'user-pending-donations' ? 'active' : ''}>
             <button disabled={activeTab === 'user-pending-donations'} onClick={() => handleButtonClick('user-pending-donations')}>Pending Donations</button>
           </li>
-          <li className={activeTab === 'user-declined-posts' ? 'active' : ''}>
-            <button disabled={activeTab === 'user-declined-posts'} onClick={() => handleButtonClick('user-declined-posts')}>Declined Posts</button>
+          <li className={activeTab === 'user-declined-products' ? 'active' : ''}>
+            <button disabled={activeTab === 'user-declined-products'} onClick={() => handleButtonClick('user-declined-products')}>Declined Products</button>
+          </li>
+          <li className={activeTab === 'user-declined-donations' ? 'active' : ''}>
+            <button disabled={activeTab === 'user-declined-donations'} onClick={() => handleButtonClick('user-declined-donations')}>Declined Donations</button>
           </li>
           <li className={activeTab === 'user-donation-history' ? 'active' : ''}>
             <button disabled={activeTab === 'user-donation-history'} onClick={() => handleButtonClick('user-donation-history')}>Donation History</button>
