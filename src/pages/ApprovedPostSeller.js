@@ -92,6 +92,7 @@ function ApprovedPostSeller() {
           </div>
         </div>
         <div>
+          
           <UserApprovedSeller />
         </div>
       </div>

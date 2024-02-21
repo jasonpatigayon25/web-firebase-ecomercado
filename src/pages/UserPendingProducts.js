@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import "../css/ActivityNavbar.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 function UserPendingProduct() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
-  useEffect(() => {
-    const fetchApprovedProducts = async () => {
-      const productsRef = collection(db, "products");
-      const q = query(productsRef, where("publicationStatus", "==", "pending"));
-      const querySnapshot = await getDocs(q);
-      const productList = querySnapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
-        }))
-        .sort((a, b) => b.createdAt - a.createdAt);
-      setProducts(productList);
-    };
+  const fetchProducts = async () => {
+    const productsRef = collection(db, "products");
+    const q = query(productsRef, where("publicationStatus", "==", "pending"));
+    const querySnapshot = await getDocs(q);
+    const productList = querySnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+      }))
+      .sort((a, b) => b.createdAt - a.createdAt);
+    setProducts(productList);
+  };
 
-    fetchApprovedProducts();
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   const openModal = (product) => {
@@ -37,6 +37,44 @@ function UserPendingProduct() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
+  const handleApprove = async (productId) => {
+    const productRef = doc(db, 'products', productId);
+    try {
+      await updateDoc(productRef, {
+        publicationStatus: 'approved'
+      });
+      console.log('Product approved successfully');
+      fetchProducts();
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const handleDecline = async (productId) => {
+    const productRef = doc(db, 'products', productId);
+    try {
+      await updateDoc(productRef, {
+        publicationStatus: 'declined'
+      });
+      console.log('Product declined successfully');
+      fetchProducts(); 
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const renderActionButtons = (productId) => (
+    <td className="action-buttons">
+      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApprove(productId); }}>
+        <FontAwesomeIcon icon={faCheck} />
+      </button>
+      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDecline(productId); }}>
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </td>
+  );
+
 
   const renderProductApproved = () => (
     <table>
@@ -49,6 +87,7 @@ function UserPendingProduct() {
           <th>Quantity</th>
           <th>Seller</th>
           <th>Date Published</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +101,7 @@ function UserPendingProduct() {
               <td>{product.quantity}</td>
               <td>{product.seller_email}</td>
               <td>{product.createdAt.toLocaleDateString()}</td>
+              {renderActionButtons(product.id)}
             </tr>
           ))
         ) : (
