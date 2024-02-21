@@ -171,31 +171,30 @@ function ActivityNavbar({ email }) {
   );
 
   const renderApprovedDonations = () => (
-    <table>
+    <table className="donation-table">
       <thead>
         <tr>
           <th>Image</th>
           <th>Name</th>
           <th>Location</th>
           <th>Message</th>
-          <th>Date Published</th>
+          <th>Date Offered</th>
         </tr>
       </thead>
       <tbody>
         {products.length ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>{product.quantity}</td>
-              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-
+          products.map(donation => (
+            <tr key={donation.id} onClick={() => openModal(donation)}>
+              <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
+              <td>{donation.name}</td>
+              <td>{donation.location}</td>
+              <td>{donation.message}</td>
+              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="5">No approved posts yet.</td>
+            <td colSpan="4">No pending donations yet.</td>
           </tr>
         )}
       </tbody>
@@ -203,31 +202,30 @@ function ActivityNavbar({ email }) {
   );
   
   const renderDeclinedDonations = () => (
-    <table>
+    <table className="donation-table">
       <thead>
         <tr>
           <th>Image</th>
           <th>Name</th>
-          <th>Category</th>
-          <th>Quantity</th>
-          <th>Date Published</th>
+          <th>Location</th>
+          <th>Message</th>
+          <th>Date Offered</th>
         </tr>
       </thead>
       <tbody>
         {products.length ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>{product.quantity}</td>
-              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-
+          products.map(donation => (
+            <tr key={donation.id} onClick={() => openModal(donation)}>
+              <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
+              <td>{donation.name}</td>
+              <td>{donation.location}</td>
+              <td>{donation.message}</td>
+              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="5">No approved posts yet.</td>
+            <td colSpan="4">No pending donations yet.</td>
           </tr>
         )}
       </tbody>
@@ -260,12 +258,49 @@ function ActivityNavbar({ email }) {
     }
   };
 
+  const handleApproveDonation = async (donationId) => {
+    const donationRef = doc(db, 'donation', donationId);
+    try {
+      await updateDoc(donationRef, {
+        publicationStatus: 'approved'
+      });
+      console.log('Donation approved successfully');
+      fetchDonations();
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const handleDeclineDonation = async (donationId) => {
+    const donationRef = doc(db, 'donation', donationId);
+    try {
+      await updateDoc(donationRef, {
+        publicationStatus: 'declined'
+      });
+      console.log('Donation declined successfully');
+      fetchDonations(); 
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
   const renderActionButtons = (productId) => (
     <td className="action-buttons">
       <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApprove(productId); }}>
         <FontAwesomeIcon icon={faCheck} />
       </button>
       <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDecline(productId); }}>
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </td>
+  );
+
+  const renderActionButtonsDonations = (donationId) => (
+    <td className="action-buttons">
+      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApproveDonation(donationId); }}>
+        <FontAwesomeIcon icon={faCheck} />
+      </button>
+      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDeclineDonation(donationId); }}>
         <FontAwesomeIcon icon={faTimes} />
       </button>
     </td>
@@ -312,6 +347,7 @@ function ActivityNavbar({ email }) {
           <th>Image</th>
           <th>Name</th>
           <th>Location</th>
+          <th>Date Offered</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -322,7 +358,8 @@ function ActivityNavbar({ email }) {
               <td><img src={donation.photo} alt={donation.name} className="rounded-image" /></td>
               <td>{donation.name}</td>
               <td>{donation.location}</td>
-              {renderActionButtons(donation.id)}
+              <td>{donation.createdAt.toDate().toLocaleDateString()}</td>
+              {renderActionButtonsDonations(donation.id)}
             </tr>
           ))
         ) : (
@@ -408,29 +445,7 @@ function ActivityNavbar({ email }) {
           </div>
         </div>
       </Modal>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Donation Details"
-        className="Modal"
-        overlayClassName="Overlay"
-      >
-        <div className="modal-content">
-          <button onClick={closeModal} className="modal-close-btn">
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
-          <h2>{currentItem?.name}</h2>
-          <div className="modal-details">
-            <p><strong>Location:</strong> {currentItem?.location}</p>
-            <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
-            <p><strong>Date Offered:</strong> {currentItem?.createdAt.toDate().toLocaleDateString()}</p>
-            <p><strong>Description:</strong> {currentItem?.description}</p>
-            <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
-            <p><strong>Status:</strong> {currentItem?.publicationStatus}</p>
-          </div>
-        </div>
-      </Modal>
+      
     </div>
   );
 }
