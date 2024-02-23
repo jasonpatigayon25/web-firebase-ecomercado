@@ -5,11 +5,15 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardList } from 'react-icons/fa';
+
+Modal.setAppElement('#root');
 
 function UserPendingDonation() {
   const [donations, setDonations] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchDonations = async () => {
     const donationsRef = collection(db, "donation");
@@ -64,6 +68,17 @@ function UserPendingDonation() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+
+  const filteredDonations = donations.filter(donation => 
+    donation.name.toLowerCase().includes(searchQuery) ||
+    donation.donor_email.toLowerCase().includes(searchQuery) ||
+    donation.location.toLowerCase().includes(searchQuery)
+  );
+
   const renderActionButtonsDonations = (donationId) => (
     <td className="action-buttons-donation">
       <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApproveDonation(donationId); }}>
@@ -76,43 +91,56 @@ function UserPendingDonation() {
   );
 
   const renderDonationsApproved = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Message</th>
-          <th>Donor</th>
-          <th>Date Offered</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {donations.length > 0 ? (
-          donations.map(donation => (
-            <tr key={donation.id} onClick={() => openModal(donation)}>
-              <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-              <td>{donation.name}</td>
-              <td>{donation.location}</td>
-              <td>{donation.message}</td>
-              <td>{donation.donor_email}</td>
-              <td>{donation.createdAt.toLocaleDateString()}</td>
-              {renderActionButtonsDonations(donation.id)}
-            </tr>
-          ))
-        ) : (
+    <div className="search-bar-container">
+      <div className="title-and-search-container">
+        <h1 className="recent-users-title"><FaClipboardList style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Donations</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by seller email, name, or category..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td colSpan="7">No approved products found.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Message</th>
+            <th>Donor</th>
+            <th>Date Offered</th>
+            <th>Actions</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {filteredDonations.length > 0 ? (
+                filteredDonations.map(donation => (
+              <tr key={donation.id} onClick={() => openModal(donation)}>
+                <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
+                <td>{donation.name}</td>
+                <td>{donation.location}</td>
+                <td>{donation.message}</td>
+                <td>{donation.donor_email}</td>
+                <td>{donation.createdAt.toLocaleDateString()}</td>
+                {renderActionButtonsDonations(donation.id)}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No approved products found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 
   return (
     <div className="approved-products-container">
-      <h2>Pending for Approval - Donations</h2>
       {renderDonationsApproved()}
       <Modal
         isOpen={modalIsOpen}

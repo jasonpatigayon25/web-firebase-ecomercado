@@ -5,6 +5,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardCheck } from 'react-icons/fa';
 
 Modal.setAppElement('#root');
 
@@ -12,6 +13,7 @@ function UserApprovedDonor() {
   const [donations, setDonations] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchApprovedDonations = async () => {
@@ -40,7 +42,31 @@ function UserApprovedDonor() {
     setModalIsOpen(false);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+
+  const filteredDonations = donations.filter(donation => 
+    donation.name.toLowerCase().includes(searchQuery) ||
+    donation.donor_email.toLowerCase().includes(searchQuery) ||
+    donation.location.toLowerCase().includes(searchQuery)
+  );
+
   const renderDonationsApproved = () => (
+    <div className="search-bar-container">
+      <div className="title-and-search-container">
+        <h1 className="recent-users-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Donations</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by seller email, name, or category..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+      </div>
     <table>
       <thead>
         <tr>
@@ -53,8 +79,8 @@ function UserApprovedDonor() {
         </tr>
       </thead>
       <tbody>
-        {donations.length > 0 ? (
-          donations.map(donation => (
+        {filteredDonations.length > 0 ? (
+                filteredDonations.map(donation => (
             <tr key={donation.id} onClick={() => openModal(donation)}>
               <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
               <td>{donation.name}</td>
@@ -71,6 +97,7 @@ function UserApprovedDonor() {
         )}
       </tbody>
     </table>
+    </div>
   );
 
   return (
