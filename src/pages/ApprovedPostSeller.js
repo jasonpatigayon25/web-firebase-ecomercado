@@ -1,73 +1,52 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen, FaShoppingBag } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown, FaHourglassHalf } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import UserApprovedSeller from "./UserApprovedSeller";
 
+Modal.setAppElement('#root');
+
 function ApprovedPostSeller() {
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [totalProductsSold, setTotalProductsSold] = useState(0);
-
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [productModalContent, setProductModalContent] = useState([]);
-
-  const [isProductsSoldModalOpen, setIsProductsSoldModalOpen] = useState(false);
-  const [productsSoldModalContent, setProductsSoldModalContent] = useState([]);
+  const [approvedProducts, setApprovedProducts] = useState(0);
+  const [pendingProducts, setPendingProducts] = useState(0);
+  const [declinedProducts, setDeclinedProducts] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState([]);
+  const [modalTitle, setModalTitle] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductCounts = async () => {
       const productCollection = collection(db, 'products');
-      const productQuery = query(productCollection, orderBy('createdAt', 'desc'));
-      const productData = await getDocs(productQuery);
-      setTotalProducts(productData.size);
+
+      const approvedQuery = query(productCollection, where('publicationStatus', '==', 'approved'));
+      const approvedSnapshot = await getDocs(approvedQuery);
+      setApprovedProducts(approvedSnapshot.size);
+
+      const pendingQuery = query(productCollection, where('publicationStatus', '==', 'pending'));
+      const pendingSnapshot = await getDocs(pendingQuery);
+      setPendingProducts(pendingSnapshot.size);
+
+      const declinedQuery = query(productCollection, where('publicationStatus', '==', 'declined'));
+      const declinedSnapshot = await getDocs(declinedQuery);
+      setDeclinedProducts(declinedSnapshot.size);
     };
-    fetchProducts();
+
+    fetchProductCounts();
   }, []);
 
-  useEffect(() => {
-    const fetchTotalProductsSold = async () => {
-      const ordersCollection = collection(db, 'orders');
-      const ordersSnapshot = await getDocs(ordersCollection);
-      setTotalProductsSold(ordersSnapshot.size);
-    };
-    fetchTotalProductsSold();
-  }, []);
-
-  useEffect(() => {
-    const fetchProductsForModal = async () => {
-      const productsCollection = collection(db, 'products');
-      const productsSnapshot = await getDocs(productsCollection);
-      const productsData = productsSnapshot.docs.map(doc => ({
-        name: doc.data().name,
-        category: doc.data().category,
-        photo: doc.data().photo
-      }));
-      setProductModalContent(productsData);
-    };
-
-    if (isProductModalOpen) {
-      fetchProductsForModal();
-    }
-  }, [isProductModalOpen]);
-
-  const fetchProductsSold = async () => {
-    try {
-      const ordersSnapshot = await getDocs(collection(db, 'orders'));
-      const orders = ordersSnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          productDetails: data.productDetails,
-          buyer: data.buyer || 'No buyer info',
-          status: data.status
-        };
-      });
-      setProductsSoldModalContent(orders);
-    } catch (error) {
-      console.error("Error fetching orders: ", error);
-    }
+  const fetchAndShowModal = async (status) => {
+    const productCollection = collection(db, 'products');
+    const statusQuery = query(productCollection, where('publicationStatus', '==', status));
+    const snapshot = await getDocs(statusQuery);
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setModalContent(items);
+    setModalTitle(`${status.charAt(0).toUpperCase() + status.slice(1)} Products`);
+    setModalIsOpen(true);
   };
 
   return (
@@ -75,71 +54,45 @@ function ApprovedPostSeller() {
       <SidebarOptions />
       <div className="admin-dashboard-content">
         <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card"
-            onClick={() => setIsProductModalOpen(true)}>
-            <div className="stats-number"><span>{totalProducts}</span></div>
-            <div className="stats-icon"><FaBoxOpen /></div>
-            <div className="stats-label">Total Product Published</div>     
+          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('approved')}>
+            <div className="stats-number"><span>{approvedProducts}</span></div>
+            <div className="stats-icon"><FaThumbsUp /></div>
+            <div className="stats-label">Approved Products</div>
           </div>
-          <div className="admin-dashboard-card"
-            onClick={() => {
-              setIsProductsSoldModalOpen(true);
-              fetchProductsSold();
-            }}>
-            <div className="stats-number"><span>{totalProductsSold}</span></div>
-            <div className="stats-icon"><FaShoppingBag /></div>
-            <div className="stats-label">Total Orders</div>
+          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('pending')}>
+            <div className="stats-number"><span>{pendingProducts}</span></div>
+            <div className="stats-icon"><FaHourglassHalf /></div>
+            <div className="stats-label">Pending Products</div>
+          </div>
+          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('declined')}>
+            <div className="stats-number"><span>{declinedProducts}</span></div>
+            <div className="stats-icon"><FaThumbsDown /></div>
+            <div className="stats-label">Declined Products</div>
           </div>
         </div>
         <div>
-          
           <UserApprovedSeller />
         </div>
       </div>
       <Modal
-        isOpen={isProductModalOpen}
-        onRequestClose={() => setIsProductModalOpen(false)}
-        contentLabel="Product Modal"
-        className="ReactModal__Content"
-        overlayClassName="ReactModal__Overlay"
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Product Details Modal"
+        className="modal-content"
+        overlayClassName="modal-overlay"
       >
         <div className="modal-header">
-          <h2 className="modal-title">Published Products</h2>
-          <button className="modal-close-button" onClick={() => setIsProductModalOpen(false)}>✕</button>
+          <button onClick={() => setModalIsOpen(false)} className="modal-close-btn"><FontAwesomeIcon icon={faTimes} /></button>
         </div>
-        <div className="product-list">
-          {productModalContent.map((product, index) => (
-            <div key={index} className="product-card">
-              <img src={product.photo} alt={product.name} className="product-image" />
-              <p className="product-name">{product.name}</p>
-              <p className="product-category">{product.category}</p>
-            </div>
-          ))}
-        </div>
-      </Modal>
-      <Modal
-        isOpen={isProductsSoldModalOpen}
-        onRequestClose={() => setIsProductsSoldModalOpen(false)}
-        contentLabel="Products Sold Modal"
-        className="ReactModal__Content"
-        overlayClassName="ReactModal__Overlay"
-      >
-        <div className="modal-header">
-          <h2 className="modal-title">Total Orders</h2>
-          <button className="modal-close-button" onClick={() => setIsProductsSoldModalOpen(false)}>✕</button>
-        </div>
-        <div className="product-list">
-        {productsSoldModalContent.map((order, index) => (
-          <div key={index} className="product-card">
-            <img src={order.productDetails.image} alt={order.productDetails.name} className="product-image" />
-            <p className="product-name">Product ID: {order.productDetails.productId}</p>
-            <p className="product-name">Name: {order.productDetails.name}</p>
-            <p className="product-category">Buyer Email: {order.buyer.email}</p>
-            <p className="product-category">Buyer UID: {order.buyer.uid}</p>
-            <p className="product-category">Status: {order.status}</p>
+        <h2>{modalTitle}</h2>
+        {modalContent.map((item) => (
+          <div key={item.id} className="modal-item-details">
+            <h3>{item.name}</h3>
+            <p><strong>Category:</strong> {item.category}</p>
+            <p><strong>Description:</strong> {item.description || 'N/A'}</p>
+            <p><strong>Publication Status:</strong> {item.publicationStatus}</p>
           </div>
         ))}
-      </div>
       </Modal>
     </div>
   );
