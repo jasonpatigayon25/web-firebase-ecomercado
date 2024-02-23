@@ -5,11 +5,15 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardList } from 'react-icons/fa';
+
+Modal.setAppElement('#root');
 
 function UserPendingProduct() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchProducts = async () => {
     const productsRef = collection(db, "products");
@@ -64,6 +68,16 @@ function UserPendingProduct() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+  const filteredProducts = products.filter(product => 
+    product.name.toLowerCase().includes(searchQuery) ||
+    product.category.toLowerCase().includes(searchQuery) ||
+    product.seller_email.toLowerCase().includes(searchQuery)
+  );
+
   const renderActionButtons = (productId) => (
     <td className="action-buttons">
       <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApprove(productId); }}>
@@ -77,45 +91,58 @@ function UserPendingProduct() {
 
 
   const renderProductApproved = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Seller</th>
-          <th>Date Published</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length > 0 ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>₱{product.price}</td>
-              <td>{product.quantity}</td>
-              <td>{product.seller_email}</td>
-              <td>{product.createdAt.toLocaleDateString()}</td>
-              {renderActionButtons(product.id)}
-            </tr>
-          ))
-        ) : (
+    <div className="search-bar-container">
+      <div className="title-and-search-container">
+        <h1 className="recent-users-title"><FaClipboardList style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by seller email, name, or category..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td colSpan="7">No approved products found.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Seller</th>
+            <th>Date Published</th>
+            <th>Actions</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {filteredProducts.length > 0 ? (
+              filteredProducts.map(product => (
+              <tr key={product.id} onClick={() => openModal(product)}>
+                <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
+                <td>{product.name}</td>
+                <td>{product.category}</td>
+                <td>₱{product.price}</td>
+                <td>{product.quantity}</td>
+                <td>{product.seller_email}</td>
+                <td>{product.createdAt.toLocaleDateString()}</td>
+                {renderActionButtons(product.id)}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No approved products found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 
   return (
     <div className="approved-products-container">
-      <h2>Pending for Approval - Products</h2>
       {renderProductApproved()}
       <Modal
         isOpen={modalIsOpen}
