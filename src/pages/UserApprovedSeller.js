@@ -5,11 +5,13 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardCheck } from 'react-icons/fa';
 
 function UserApprovedSeller() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
     const fetchApprovedProducts = async () => {
@@ -38,44 +40,69 @@ function UserApprovedSeller() {
     setModalIsOpen(false);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredProducts = products.filter(product => {
+    return (
+      product.seller_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
   const renderProductApproved = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Seller</th>
-          <th>Date Published</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length > 0 ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>₱{product.price}</td>
-              <td>{product.quantity}</td>
-              <td>{product.seller_email}</td>
-              <td>{product.createdAt.toLocaleDateString()}</td>
-            </tr>
-          ))
-        ) : (
+    <div className="search-bar-container">
+      <div className="title-and-search-container">
+        <h1 className="recent-users-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by seller email, name, or category..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td colSpan="7">No approved products found.</td>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Seller</th>
+            <th>Date Published</th>
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map(product => (
+              <tr key={product.id} onClick={() => openModal(product)}>
+                <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
+                <td>{product.name}</td>
+                <td>{product.category}</td>
+                <td>₱{product.price}</td>
+                <td>{product.quantity}</td>
+                <td>{product.seller_email}</td>
+                <td>{product.createdAt.toLocaleDateString()}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No approved products found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 
   return (
     <div className="approved-products-container">
-      <h2>Approved Products</h2>
       {renderProductApproved()}
       <Modal
         isOpen={modalIsOpen}
