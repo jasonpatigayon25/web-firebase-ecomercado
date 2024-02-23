@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FaClipboardCheck } from 'react-icons/fa';
 
+Modal.setAppElement('#root');
+
 function UserApprovedSeller() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);

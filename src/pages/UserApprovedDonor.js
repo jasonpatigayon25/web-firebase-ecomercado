@@ -6,6 +6,8 @@ import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
+Modal.setAppElement('#root');
+
 function UserApprovedDonor() {
   const [donations, setDonations] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
