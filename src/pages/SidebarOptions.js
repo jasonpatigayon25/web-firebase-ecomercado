@@ -11,8 +11,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
 import { notificationForAdminCollection } from '../config/firebase'; 
-import { FaHome , FaUsersCog, FaHistory, FaUserFriends, FaChartBar, FaComments, FaBell, FaCog, 
-        FaUser, FaRegListAlt, FaClipboardCheck, FaClipboardList, FaHandHoldingHeart } from "react-icons/fa";
+import { FaHome , FaHistory, FaUserFriends, FaComments, FaBell, FaCog, 
+        FaUser, FaRegListAlt, FaClipboardCheck, FaClipboardList } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/Admin.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -331,24 +331,6 @@ function SidebarOptions() {
             <Link to="/donation-history">
               <FaHistory />
               Donation History
-            </Link>
-          </li>
-          <li className={location.pathname === "/user-statistics" ? "active" : ""}>
-            <Link to="/user-statistics">
-              <FaChartBar />
-              User Statistics
-            </Link>
-          </li>
-          <li className={location.pathname === "/product-metrics" ? "active" : ""}>
-            <Link to="/product-metrics">
-              <FaUsersCog />
-              Product Metrics
-            </Link>
-          </li>
-          <li className={location.pathname === "/donations" ? "active" : ""}>
-            <Link to="/donations">
-              <FaHandHoldingHeart />
-              Donations
             </Link>
           </li>
           <li className={location.pathname === "/user-feedback" ? "active" : ""}>
