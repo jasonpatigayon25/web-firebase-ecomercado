@@ -6,7 +6,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import "../css/Admin.css";
 
 
-function ItemHistory() {
+function OrdersHistory() {
 
   return (
     <div className="admin-dashboard">
@@ -19,4 +19,4 @@ function ItemHistory() {
 }
 
 
-export default ItemHistory;
+export default OrdersHistory;

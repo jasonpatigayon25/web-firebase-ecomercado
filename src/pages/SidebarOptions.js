@@ -309,10 +309,10 @@ function SidebarOptions() {
               Pending for Approval - SELLER
             </Link>
           </li>
-          <li className={location.pathname === "/item-history" ? "active" : ""}>
-            <Link to="/item-history">
+          <li className={location.pathname === "/orders-history" ? "active" : ""}>
+            <Link to="/orders-history">
               <FaHistory />
-              Items History
+              Orders History
             </Link>
           </li>
           <li className={location.pathname === "/approved-donor" ? "active" : ""}>
@@ -330,7 +330,7 @@ function SidebarOptions() {
           <li className={location.pathname === "/donation-history" ? "active" : ""}>
             <Link to="/donation-history">
               <FaHistory />
-              Donation History
+              Donation Requests History
             </Link>
           </li>
           <li className={location.pathname === "/user-feedback" ? "active" : ""}>

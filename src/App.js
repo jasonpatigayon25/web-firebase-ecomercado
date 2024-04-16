@@ -26,6 +26,7 @@ import ApprovedPostSeller from "./pages/ApprovedPostSeller";
 import ItemHistory from "./pages/ItemHistory";
 import DonationHistory from "./pages/DonationHistory";
 import UserActivity from "./pages/UserActivity";
+import OrdersHistory from "./pages/OrdersHistory";
 
 import { auth } from "./config/firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
@@ -79,6 +80,7 @@ function App() {
           <Route path="/notification" element={<Notification/>}/>
           <Route path="/switch-account" element={<SwitchAccount/>}/>
           <Route path="/change-password" element={<AdminChangePassword/>}/>
+          <Route path="/orders-history" element={<OrdersHistory/>}/>
           <Route path="/admin-profile" element={<AdminProfile/>}/>
         </Routes>
       </Router>
