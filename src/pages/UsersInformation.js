@@ -1,327 +1,215 @@
 import React, {useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaUserCheck, FaUser, FaUserFriends} from "react-icons/fa";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import Modal from 'react-modal';
+import { collection, getDocs, query, orderBy, limit, where  } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+import { FaUsers, FaStoreAlt, FaBan } from "react-icons/fa"; 
 
 function UsersInformation() {
   const navigate = useNavigate();
-  const [totalUsers, setTotalUsers] = useState(0);
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
-  const [weeklyRegisteredUsers, setWeeklyRegisteredUsers] = useState(0);
+  const [recentFetchedSellers, setRecentFetchedSellers] = useState([]);
   const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-  const [userModalContent, setUserModalContent] = useState([]);
-
-  const [isWeeklyUserModalOpen, setIsWeeklyUserModalOpen] = useState(false);
-  const [weeklyUserModalContent, setWeeklyUserModalContent] = useState([]);
-
-  const [searchTerm, setSearchTerm] = useState('');
+  const [userCurrentPage, setUserCurrentPage] = useState(1);
+  const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
+  const [userCount, setUserCount] = useState(0);
+  const [sellerCount, setSellerCount] = useState(0);
+  const [bannedCount, setBannedCount] = useState(0);
 
   useEffect(() => {
-    getDocs(collection(db, 'users'))
-      .then(snapshot => {
-        setTotalUsers(snapshot.size);
-      })
-      .catch(err => {
-        console.error("Error fetching products: ", err);
-      });
-
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - (dayOfWeek - 1));
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999);
-
-    const q = query(
-      collection(db, 'users'),
-      where('dateRegistered', '>=', startOfWeek),
-      where('dateRegistered', '<=', endOfWeek)
-    );
-
-    getDocs(q)
-      .then(snapshot => {
-        setWeeklyRegisteredUsers(snapshot.size);
-      })
-      .catch(err => {
-        console.error("Error fetching weekly registered users: ", err);
-      });
-    
-      getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc')))
+    // Fetch recent registered users
+    getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
       .then(snapshot => {
         const fetchedUsers = snapshot.docs.map(doc => {
           const userData = doc.data();
+          const dateRegistered = userData.dateRegistered.toDate().toLocaleString();
           return {
             email: userData.email,
             fullName: `${userData.firstName} ${userData.lastName}`,
-            dateRegistered: userData.dateRegistered.toDate().toLocaleString(),
-            photoUrl: userData.photoUrl, 
-            address: userData.address, 
+            dateRegistered: dateRegistered,
+            photoUrl: userData.photoUrl 
           };
         });
         setRecentFetchedUsers(fetchedUsers);
-        setTotalPages(Math.ceil(fetchedUsers.length / itemsPerPage));
       })
       .catch(err => {
         console.error("Error fetching recent users: ", err);
       });
 
-    fetchWeeklyUsers(); 
-  }, []);
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-    setCurrentPage(1); 
-  };
-
-  const filteredUsers = searchTerm
-  ? recentFetchedUsers.filter(user =>
-      user.email.toLowerCase().includes(searchTerm) ||
-      user.fullName.toLowerCase().includes(searchTerm) ||
-      (user.address && user.address.toLowerCase().includes(searchTerm))
-    )
-  : recentFetchedUsers;
-
-  useEffect(() => {
-    setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  }, [filteredUsers, itemsPerPage, currentPage, totalPages]);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
-  const currentUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const fetchUsers = async () => {
-    try {
-      const userSnapshot = await getDocs(collection(db, 'users'));
-      const users = userSnapshot.docs.map(doc => {
-        const userData = doc.data();
-        return {
-          photoUrl: userData.photoUrl,
-          email: userData.email,
-          fullName: `${userData.firstName} ${userData.lastName}`
-        };
-      });
-      setUserModalContent(users);
-    } catch (error) {
-      console.error("Error fetching users: ", error);
-    }
-  };
-
-  const fetchWeeklyUsers = async () => {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-    startOfWeek.setHours(0, 0, 0, 0);
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999);
-
-    const q = query(
-      collection(db, 'users'),
-      where('dateRegistered', '>=', startOfWeek),
-      where('dateRegistered', '<=', endOfWeek),
-      orderBy('dateRegistered', 'desc')
-    );
-
-    try {
-      const snapshot = await getDocs(q);
-      if (snapshot.empty) {
-        setWeeklyUserModalContent([{ message: 'No registered users this week.' }]);
-        setWeeklyRegisteredUsers(0);
-      } else {
-        const users = snapshot.docs.map(doc => {
-          const userData = doc.data();
+    // Fetch recent registered sellers
+    getDocs(query(collection(db, 'registeredSeller'), orderBy('registeredAt', 'desc'), limit(20)))
+      .then(snapshot => {
+        const fetchedSellers = snapshot.docs.map(doc => {
+          const sellerData = doc.data();
+          const registeredAt = sellerData.registeredAt.toDate().toLocaleString();
           return {
-            photoUrl: userData.photoUrl,
-            email: userData.email,
-            fullName: `${userData.firstName} ${userData.lastName}`,
-            dateRegistered: userData.dateRegistered.toDate().toLocaleString()
+            profilePhotoUri: sellerData.profilePhotoUri,
+            sellerName: sellerData.sellerName,
+            registeredName: sellerData.registeredName,
+            email: sellerData.email,
+            type: sellerData.type,
+            registeredAt: registeredAt
           };
         });
-        setWeeklyUserModalContent(users);
-        setWeeklyRegisteredUsers(users.length);
-      }
-    } catch (error) {
-      console.error("Error fetching weekly registered users: ", error);
-      setWeeklyRegisteredUsers(0);
-    }
+        setRecentFetchedSellers(fetchedSellers);
+      })
+      .catch(err => {
+        console.error("Error fetching recent sellers: ", err);
+      });
+  }, []);
+
+  const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
+  const totalSellersPages = Math.ceil(recentFetchedSellers.length / itemsPerPage);
+  const currentUserPageUsers = recentFetchedUsers.slice(
+    (userCurrentPage - 1) * itemsPerPage,
+    userCurrentPage * itemsPerPage
+  );
+  const currentUserPageSellers = recentFetchedSellers.slice(
+    (sellerCurrentPage - 1) * itemsPerPage,
+    sellerCurrentPage * itemsPerPage
+  );
+
+  const handleUserPageChange = (newPage) => {
+    setUserCurrentPage(newPage);
+  };
+
+  const handleSellerPageChange = (newPage) => {
+    setSellerCurrentPage(newPage);
   };
 
   const handleUserClick = (email) => {
     navigate(`/user-activity/${email}`); 
   };
 
+  useEffect(() => {
+    // Count users
+    getDocs(collection(db, 'users'))
+      .then(snapshot => {
+        setUserCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error counting users: ", err);
+      });
+
+    // Count sellers
+    getDocs(collection(db, 'registeredSeller'))
+      .then(snapshot => {
+        setSellerCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error counting sellers: ", err);
+      });
+
+    // Count banned users
+    const bannedQuery = query(collection(db, 'users'), where('isBanned', '==', true));
+    getDocs(bannedQuery)
+      .then(snapshot => {
+        setBannedCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error counting banned users: ", err);
+      });
+  }, []);
+
+  const UserCard = ({ count }) => (
+    <div className="counter-card">
+      <h2>{count}</h2>
+      <FaUsers className="icon" />
+      <p>Users</p>
+    </div>
+  );
+  
+  const SellerCard = ({ count }) => (
+    <div className="counter-card">
+      <h2>{count}</h2>
+      <FaStoreAlt className="icon" />
+      <p>Sellers</p>
+    </div>
+  );
+  
+  const BannedCard = ({ count }) => (
+    <div className="counter-card">
+      <h2>{count}</h2>
+      <FaBan className="icon" />
+      <p>Banned Users</p>
+    </div>
+  );
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-cards">
-          <div 
-          className="admin-dashboard-card"
-          onClick={() => {
-            setIsUserModalOpen(true);
-            fetchUsers();
-          }}>
-            <div className="stats-number"><span>{totalUsers}</span></div>
-            <div className="stats-icon"><FaUserCheck /></div>
-            <div className="stats-label">Total Users</div>
-          </div>
-          <div 
-            className="admin-dashboard-card"
-            onClick={() => {
-              setIsWeeklyUserModalOpen(true);
-              fetchWeeklyUsers();
-            }}
-          >
-            <div className="stats-number"><span>{weeklyRegisteredUsers}</span></div>
-            <div className="stats-icon"><FaUserCheck /></div>
-            <div className="stats-label">Weekly Registered Users</div>
-          </div>
+      <div className="admin-nav-cards">
+          <UserCard count={userCount} />
+          <SellerCard count={sellerCount} />
+          <BannedCard count={bannedCount} />
         </div>
-        <div className="admin-dashboard-recent-users-header">
-          <h1 className="recent-users-title"><FaUserFriends style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Users</h1>
-          <div className="search-bar-container">
-            <input
-              type="text"
-              placeholder="Search users..."
-              onChange={handleSearchChange}
-              className="search-bar"
-            />
-          </div>
-        </div>
-        <div className="admin-dashboard-recent-users">
-          <div className="scrollable-users-list">
-            {currentUsers.map((user, index) => (
-              <div key={index} className="user-item" onClick={() => handleUserClick(user.email)} style={{cursor: 'pointer'}}>
-                {user.photoUrl
-                  ? <img src={user.photoUrl} alt={user.fullName} />
-                  : <FaUser size={50} style={{ backgroundColor: 'white', borderRadius: '50%' }} />
-                }
-                <div className="user-hover-info">
-                  <p>{user.fullName}</p>
-                  <p>{user.email}</p>
+          <h1>Recent Registered Users</h1>
+          <div className="user-list-container">
+            {currentUserPageUsers.map((user, index) => (
+              <div key={index} className="user-list-item" onClick={() => handleUserClick(user.email)}>
+                <div className="user-info">
+                  <div className="user-detail">
+                    <img 
+                      src={user.photoUrl ? user.photoUrl : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                      alt={user.fullName}
+                      className="user-list-photo"
+                    />
+                    <div>
+                      <p className="user-full-name"><strong>{user.fullName}</strong></p>
+                      <p className="user-email">{user.email}</p>
+                    </div>
+                  </div>
+                  <p className="user-date-registered">Registered At: {user.dateRegistered}</p>
                 </div>
-                <span className="user-email">{user.email}</span>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="admin-dashboard-recent-users">
-                <table>
-                    <thead>
-                        <tr>
-                          <th style={{ width: '80px' }}>Photo</th>
-                            <th style={{ width: '25%' }}>Username</th>
-                            <th style={{ width: '25%' }}>Name</th>
-                            <th style={{ width: '40%' }}>Address</th>    
-                            <th style={{ width: '25%' }}>Date Registered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-              {currentUsers.map((user, index) => (
-                <tr key={index} onClick={() => handleUserClick(user.email)} style={{cursor: 'pointer'}}>
-                  <td style={{ width: '80px' }}>
-                    {user.photoUrl 
-                      ? <img src={user.photoUrl} alt="Profile" className="user-profile-pic" />
-                      : <FaUser size={40} className="user-icon" />
-                    }
-                  </td>
-                  <td style={{ width: '25%' }}>{user.email}</td>
-                  <td style={{ width: '25%' }}>{user.fullName}</td>
-                  <td style={{ width: '40%' }}>{user.address}</td> 
-                  <td style={{ width: '25%' }}>{user.dateRegistered}</td>
-                </tr>
+            <div className="pagination-controls">
+              {Array.from({ length: totalUsersPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handleUserPageChange(i + 1)}
+                  disabled={userCurrentPage === i + 1}
+                >
+                  {i + 1}
+                </button>
               ))}
-            </tbody>
-              </table>
-              <div className="pagination-controls">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => handlePageChange(i + 1)}
-                disabled={currentPage === i + 1}
-              >
-                {i + 1}
-              </button>
-            ))}
+            </div>
           </div>
-        </div>
-          </div>
-          <Modal
-          isOpen={isUserModalOpen}
-          onRequestClose={() => setIsUserModalOpen(false)}
-          contentLabel="User Modal"
-          className="ReactModal__Content"
-          overlayClassName="ReactModal__Overlay"
-        >
-          <div className="modal-header">
-            <h2 className="modal-title">Users</h2>
-            <button className="modal-close-button" onClick={() => setIsUserModalOpen(false)}>✕</button>
-          </div>
-          <div className="product-list">
-            {userModalContent.map((user, index) => (
-              <div key={index} className="product-card">
-            {user.photoUrl
-                    ? <img src={user.photoUrl} alt={user.fullName} className="product-image" />
-                    : <FaUser size="3em" /> 
-                  }
-                <p className="product-name">{user.email}</p>
-                <p className="product-category">{user.fullName}</p>
-              </div>
-            ))}
-          </div>
-        </Modal>
-        <Modal
-          isOpen={isWeeklyUserModalOpen}
-          onRequestClose={() => setIsWeeklyUserModalOpen(false)}
-          contentLabel="Weekly Registered Users"
-          className="ReactModal__Content"
-          overlayClassName="ReactModal__Overlay"
-        >
-          <div className="modal-header">
-            <h2 className="modal-title">Weekly Registered Users</h2>
-            <button className="modal-close-button" onClick={() => setIsWeeklyUserModalOpen(false)}>✕</button>
-          </div>
-          <div className="product-list">
-            {weeklyUserModalContent.length === 0 || weeklyUserModalContent[0].message ? (
-              <div className="no-users-message">
-                {weeklyUserModalContent[0]?.message || 'No users registered this week.'}
-              </div>
-            ) : (
-              weeklyUserModalContent.map((user, index) => (
-                <div key={index} className="product-card">
-                  {user.photoUrl
-                    ? <img src={user.photoUrl} alt={user.fullName} className="product-image" />
-                    : <FaUser size="3em" />
-                  }
-                  <p className="product-name">{user.email}</p>
-                  <p className="product-category">{user.fullName}</p>
-                  <p className="product-date">{user.dateRegistered}</p>
+          <h1>Recent Registered Sellers</h1>
+          <div className="user-list-container">
+            {currentUserPageSellers.map((seller, index) => (
+              <div key={index} className="user-list-item" onClick={() => handleUserClick(seller.email)}>
+                <div className="user-info">
+                  <div className="user-detail">
+                    <img 
+                      src={seller.profilePhotoUri ? seller.profilePhotoUri : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                      alt={seller.sellerName}
+                      className="user-list-photo"
+                    />
+                    <div>
+                      <p className="user-full-name"><strong>{seller.sellerName}</strong></p>
+                      <p className="user-email">{seller.email}</p>
+                    </div>
+                  </div>
+                  <p className="user-date-registered">Registered At: {seller.registeredAt}</p>
                 </div>
-              ))
-            )}
+              </div>
+            ))}
+            <div className="pagination-controls">
+              {Array.from({ length: totalSellersPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handleSellerPageChange(i + 1)}
+                  disabled={sellerCurrentPage === i + 1}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
-        </Modal>
+          </div>
         </div>
       );
     }
