@@ -7,10 +7,13 @@ import "../css/Admin.css";
 
 function AdminDashboard() {
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
+  const [recentFetchedSellers, setRecentFetchedSellers] = useState([]);
   const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [userCurrentPage, setUserCurrentPage] = useState(1);
+  const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
 
   useEffect(() => {
+    // Fetch recent registered users
     getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
       .then(snapshot => {
         const fetchedUsers = snapshot.docs.map(doc => {
@@ -28,16 +31,46 @@ function AdminDashboard() {
       .catch(err => {
         console.error("Error fetching recent users: ", err);
       });
+
+    // Fetch recent registered sellers
+    getDocs(query(collection(db, 'registeredSeller'), orderBy('registeredAt', 'desc'), limit(20)))
+      .then(snapshot => {
+        const fetchedSellers = snapshot.docs.map(doc => {
+          const sellerData = doc.data();
+          const registeredAt = sellerData.registeredAt.toDate().toLocaleString();
+          return {
+            profilePhotoUri: sellerData.profilePhotoUri,
+            sellerName: sellerData.sellerName,
+            registeredName: sellerData.registeredName,
+            email: sellerData.email,
+            type: sellerData.type,
+            registeredAt: registeredAt
+          };
+        });
+        setRecentFetchedSellers(fetchedSellers);
+      })
+      .catch(err => {
+        console.error("Error fetching recent sellers: ", err);
+      });
   }, []);
 
-  const totalPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
-  const currentUsers = recentFetchedUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
+  const totalSellersPages = Math.ceil(recentFetchedSellers.length / itemsPerPage);
+  const currentUserPageUsers = recentFetchedUsers.slice(
+    (userCurrentPage - 1) * itemsPerPage,
+    userCurrentPage * itemsPerPage
+  );
+  const currentUserPageSellers = recentFetchedSellers.slice(
+    (sellerCurrentPage - 1) * itemsPerPage,
+    sellerCurrentPage * itemsPerPage
   );
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handleUserPageChange = (newPage) => {
+    setUserCurrentPage(newPage);
+  };
+
+  const handleSellerPageChange = (newPage) => {
+    setSellerCurrentPage(newPage);
   };
 
   function AdminNavigation() {
@@ -74,35 +107,67 @@ function AdminDashboard() {
         <div>
           <h1>Recent Registered Users</h1>
           <div className="user-list-container">
-            {currentUsers.map((user, index) => (
+            {currentUserPageUsers.map((user, index) => (
               <div key={index} className="user-list-item">
-              <div className="user-info">
-                <div className="user-detail">
-                  <img 
-                    src={user.photoUrl ? user.photoUrl : `${process.env.PUBLIC_URL}/icons/user.png`} 
-                    alt={user.fullName}
-                    className="user-list-photo"
-                  />
-                  <div>
-                    <p className="user-full-name"><strong>{user.fullName}</strong></p>
-                    <p className="user-email">{user.email}</p>
+                <div className="user-info">
+                  <div className="user-detail">
+                    <img 
+                      src={user.photoUrl ? user.photoUrl : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                      alt={user.fullName}
+                      className="user-list-photo"
+                    />
+                    <div>
+                      <p className="user-full-name"><strong>{user.fullName}</strong></p>
+                      <p className="user-email">{user.email}</p>
+                    </div>
                   </div>
+                  <p className="user-date-registered">Registered At: {user.dateRegistered}</p>
                 </div>
-                <p className="user-date-registered">Registered At: {user.dateRegistered}</p>
               </div>
+            ))}
+            <div className="pagination-controls">
+              {Array.from({ length: totalUsersPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handleUserPageChange(i + 1)}
+                  disabled={userCurrentPage === i + 1}
+                >
+                  {i + 1}
+                </button>
+              ))}
             </div>
-            ))}
           </div>
-          <div className="pagination-controls">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => handlePageChange(i + 1)}
-                disabled={currentPage === i + 1}
-              >
-                {i + 1}
-              </button>
+          <h1>Recent Registered Sellers</h1>
+          <div className="user-list-container">
+            {currentUserPageSellers.map((seller, index) => (
+              <div key={index} className="user-list-item">
+                <div className="user-info">
+                  <div className="user-detail">
+                    <img 
+                      src={seller.profilePhotoUri ? seller.profilePhotoUri : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                      alt={seller.sellerName}
+                      className="user-list-photo"
+                    />
+                    <div>
+                      <p className="user-full-name"><strong>{seller.sellerName}</strong></p>
+                      <p className="user-email">{seller.email}</p>
+                    </div>
+                  </div>
+                  <p className="user-date-registered">Registered At: {seller.registeredAt}</p>
+                </div>
+              </div>
             ))}
+            <div className="pagination-controls">
+              {Array.from({ length: totalSellersPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handleSellerPageChange(i + 1)}
+                  disabled={sellerCurrentPage === i + 1}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

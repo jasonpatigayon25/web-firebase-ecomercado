@@ -339,7 +339,7 @@ function SidebarOptions() {
               <FaCog />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item>
+              {/* <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item> */}
               <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
               <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
             </Dropdown.Menu>
