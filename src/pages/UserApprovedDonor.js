@@ -120,10 +120,10 @@ function UserApprovedDonor() {
             )}
           </div>
           <div className="modal-details">
-            <p><strong>Quantity:</strong> {currentItem?.weight}KG</p>
+            <p><strong>Weight:</strong> {currentItem?.weight}KG</p>
             <p><strong>Date Published:</strong> {currentItem?.createdAt.toLocaleDateString()}</p>
-            <p><strong>Price:</strong> {currentItem?.purpose}</p>
-            <p><strong>Description:</strong> {currentItem?.description}</p>
+            <p><strong>Purpose:</strong> {currentItem?.purpose}</p>
+            <p><strong>Message:</strong> {currentItem?.message}</p>
             <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
             <p><strong>Category:</strong> {currentItem?.category} Bundle</p>
             {currentItem?.itemNames && currentItem.itemNames.length > 0 && (

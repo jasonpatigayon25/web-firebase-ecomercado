@@ -42,20 +42,23 @@ function UserPendingProducts() {
   };
 
   const openModal = (product) => {
-    if (currentItem) {
-      setCurrentItem(product);
-      setModalIsOpen(true);
-    }
+    // if (currentItem) {
+    //   setCurrentItem(product);
+    //   setModalIsOpen(true);
+    // }
     // if (!document.activeElement.classList.contains("product-actions")) {
     //   setCurrentItem(product);
     //   setModalIsOpen(true);
     // }
+
+    setCurrentItem(product);
+    setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
+  
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };

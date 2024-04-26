@@ -1,40 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import "../css/ActivityNavbar.css";
+import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FaClipboardList } from 'react-icons/fa';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaListAlt } from 'react-icons/fa';
 
 Modal.setAppElement('#root');
 
 function UserPendingDonation() {
-  const [donations, setDonations] = useState([]);
+  const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const fetchDonations = async () => {
-    const donationsRef = collection(db, "donation");
-    const q = query(donationsRef, where("publicationStatus", "==", "pending"));
-    const querySnapshot = await getDocs(q);
-    const donationList = querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
-      }))
-      .sort((a, b) => b.createdAt - a.createdAt);
-      setDonations(donationList);
-  };
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchDonations();
+    fetchPendingProducts();
   }, []);
 
-  const openModal = (donation) => {
-    setCurrentItem(donation);
+  const fetchPendingProducts = async () => {
+    setLoading(true);
+    try {
+      const productsRef = collection(db, "donation");
+      const q = query(productsRef, where("publicationStatus", "==", "pending"));
+      const querySnapshot = await getDocs(q);
+      const productList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setProducts(productList);
+    } catch (error) {
+      console.error("Error fetching pending products: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openModal = (product) => {
+    // if (currentItem) {
+    //   setCurrentItem(product);
+    //   setModalIsOpen(true);
+    // }
+    // if (!document.activeElement.classList.contains("product-actions")) {
+    //   setCurrentItem(product);
+    //   setModalIsOpen(true);
+    // }
+    setCurrentItem(product);
     setModalIsOpen(true);
   };
 
@@ -42,108 +58,96 @@ function UserPendingDonation() {
     setModalIsOpen(false);
   };
 
-  const handleApproveDonation = async (donationId) => {
-    const donationRef = doc(db, 'donation', donationId);
-    try {
-      await updateDoc(donationRef, {
-        publicationStatus: 'approved'
-      });
-      console.log('Donation approved successfully');
-      fetchDonations();
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
-  const handleDeclineDonation = async (donationId) => {
-    const donationRef = doc(db, 'donation', donationId);
-    try {
-      await updateDoc(donationRef, {
-        publicationStatus: 'declined'
-      });
-      console.log('Donation declined successfully');
-      fetchDonations(); 
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
+    setSearchQuery(e.target.value);
   };
 
+  const handleApprove = async (donationId) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    if (confirmApprove) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+  const handleDecline = async (donationId) => {
+    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    if (confirmDecline) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
-  const filteredDonations = donations.filter(donation => 
-    donation.name.toLowerCase().includes(searchQuery) ||
-    donation.donor_email.toLowerCase().includes(searchQuery) ||
-    donation.location.toLowerCase().includes(searchQuery)
-  );
+  const filteredProducts = products.filter(product => {
+    return (
+      product.donor_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
-  const renderActionButtonsDonations = (donationId) => (
-    <td className="action-buttons-donation">
-      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApproveDonation(donationId); }}>
-        <FontAwesomeIcon icon={faCheck} />
-      </button>
-      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDeclineDonation(donationId); }}>
-        <FontAwesomeIcon icon={faTimes} />
-      </button>
-    </td>
-  );
-
-  const renderDonationsApproved = () => (
-    <div className="search-bar-container">
-      <div className="title-and-search-container">
-        <h1 className="recent-users-title"><FaClipboardList style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Donations</h1>
-        <div className="search-bar-wrapper">
-          <input
-            type="text"
-            placeholder="Search by seller email, name, or category..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-bar"
-          />
-        </div>
+  const renderProductApproved = () => (
+    <div className="product-list-container">
+      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          placeholder="Search by donor email, name, or category..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Message</th>
-            <th>Donor</th>
-            <th>Date Offered</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        {filteredDonations.length > 0 ? (
-                filteredDonations.map(donation => (
-              <tr key={donation.id} onClick={() => openModal(donation)}>
-                <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-                <td>{donation.name}</td>
-                <td>{donation.location}</td>
-                <td>{donation.message}</td>
-                <td>{donation.donor_email}</td>
-                <td>{donation.createdAt.toLocaleDateString()}</td>
-                {renderActionButtonsDonations(donation.id)}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7">No approved products found.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {loading ? (
+        <p>Loading...</p>
+      ) : filteredProducts.length > 0 ? (
+        <ul  className="product-list">
+          {filteredProducts.map(product => (
+            <li onClick={() => openModal(product)} key={product.id} className="product-list-item">
+              <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+              <div className="product-info">
+                <div className="product-name">{product.name}</div>
+                <div className="product-detail">
+                  <span  className="product-price">{product.weight}KG</span>
+                  <span className="product-category">{product.category} Bundle</span>
+                  <span  className="product-qty">{product.purpose}</span>
+                  <span  className="product-seller">From: {product.donor_email}</span>
+                  <div className="product-actions">
+                    <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>
+                    <button onClick={() => handleDecline(product.id)} className="decline-button">Decline</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No pending products found.</p>
+      )}
     </div>
   );
 
   return (
     <div className="approved-products-container">
-      {renderDonationsApproved()}
+      {renderProductApproved()}
       <Modal
-        isOpen={modalIsOpen}
+         isOpen={modalIsOpen && currentItem !== null}
         onRequestClose={closeModal}
         contentLabel="Item Details"
         className="Modal"
@@ -153,13 +157,42 @@ function UserPendingDonation() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
           <h2>{currentItem?.name}</h2>
+          <div className="modal-photos">
+            {currentItem?.photo && (
+              <div className="main-photo">
+                <img src={currentItem.photo} alt={`${currentItem.name}`} className="modal-photo" />
+              </div>
+            )}
+            {currentItem?.subPhotos && currentItem?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {currentItem.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
+          </div>
           <div className="modal-details">
-            <p><strong>Category:</strong> {currentItem?.location}</p>
-            <p><strong>Quantity:</strong> {currentItem?.message}</p>
+            <p><strong>Weight:</strong> {currentItem?.weight}KG</p>
             <p><strong>Date Published:</strong> {currentItem?.createdAt.toLocaleDateString()}</p>
+            <p><strong>Purpose:</strong> {currentItem?.purpose}</p>
+            <p><strong>Message:</strong> {currentItem?.message}</p>
             <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
+            <p><strong>Category:</strong> {currentItem?.category} Bundle</p>
+            {currentItem?.itemNames && currentItem.itemNames.length > 0 && (
+              <div>
+                <p><strong>Items:</strong></p>
+                <ul>
+                  {currentItem.itemNames.map((itemName, index) => (
+                    <li key={index}>{itemName}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="modal-actions">
+            <button onClick={() => handleApprove(currentItem.id)} className="approve-button">Approve</button>
+            <button onClick={() => handleDecline(currentItem.id)} className="decline-button">Decline</button>
           </div>
         </div>
       </Modal>
