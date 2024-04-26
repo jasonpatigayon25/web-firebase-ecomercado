@@ -5,7 +5,7 @@ import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/fire
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FaClipboardCheck } from 'react-icons/fa';
+import { FaListAlt } from 'react-icons/fa';
 
 Modal.setAppElement('#root');
 
@@ -102,7 +102,7 @@ function UserPendingProducts() {
 
   const renderProductApproved = () => (
     <div className="product-list-container">
-      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
       <div className="search-bar-wrapper">
         <input
           type="text"

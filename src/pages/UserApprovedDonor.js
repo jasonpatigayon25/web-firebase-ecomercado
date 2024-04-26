@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import "../css/ActivityNavbar.css";
+import "../css/Products.css";
 import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
@@ -10,31 +11,31 @@ import { FaClipboardCheck } from 'react-icons/fa';
 Modal.setAppElement('#root');
 
 function UserApprovedDonor() {
-  const [donations, setDonations] = useState([]);
+  const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
-    const fetchApprovedDonations = async () => {
-      const donationsRef = collection(db, "donation");
-      const q = query(donationsRef, where("publicationStatus", "==", "approved"));
+    const fetchApprovedProducts = async () => {
+      const productsRef = collection(db, "donation");
+      const q = query(productsRef, where("publicationStatus", "==", "approved"));
       const querySnapshot = await getDocs(q);
-      const donationList = querySnapshot.docs
+      const productList = querySnapshot.docs
         .map(doc => ({
           id: doc.id,
           ...doc.data(),
           createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
         }))
         .sort((a, b) => b.createdAt - a.createdAt);
-      setDonations(donationList);
+      setProducts(productList);
     };
 
-    fetchApprovedDonations();
+    fetchApprovedProducts();
   }, []);
 
-  const openModal = (donation) => {
-    setCurrentItem(donation);
+  const openModal = (product) => {
+    setCurrentItem(product);
     setModalIsOpen(true);
   };
 
@@ -43,67 +44,55 @@ function UserApprovedDonor() {
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
+    setSearchQuery(e.target.value);
   };
 
+  const filteredProducts = products.filter(product => {
+    return (
+      product.donor_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
-  const filteredDonations = donations.filter(donation => 
-    donation.name.toLowerCase().includes(searchQuery) ||
-    donation.donor_email.toLowerCase().includes(searchQuery) ||
-    donation.location.toLowerCase().includes(searchQuery)
-  );
-
-  const renderDonationsApproved = () => (
-    <div className="search-bar-container">
-      <div className="title-and-search-container">
-        <h1 className="recent-users-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Donations</h1>
-        <div className="search-bar-wrapper">
-          <input
-            type="text"
-            placeholder="Search by seller email, name, or category..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-bar"
-          />
-        </div>
+  const renderProductApproved = () => (
+    <div className="product-list-container">
+      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Donations</h1>
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          placeholder="Search by seller email, name, or category..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
       </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Message</th>
-          <th>Donor</th>
-          <th>Date Offered</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredDonations.length > 0 ? (
-                filteredDonations.map(donation => (
-            <tr key={donation.id} onClick={() => openModal(donation)}>
-              <td><img src={donation.photo} alt={donation.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-              <td>{donation.name}</td>
-              <td>{donation.location}</td>
-              <td>{donation.message}</td>
-              <td>{donation.donor_email}</td>
-              <td>{donation.createdAt.toLocaleDateString()}</td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan="7">No approved products found.</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+      {filteredProducts.length > 0 ? (
+        <ul className="product-list">
+          {filteredProducts.map(product => (
+            <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
+              <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+              <div className="product-info">
+                <div className="product-name">{product.name}</div>
+                <div className="product-detail">
+                  <span  className="product-price">{product.weight}KG</span>
+                  <span className="product-category">{product.category} Bundle</span>
+                  <span  className="product-qty">{product.purpose}</span>
+                  <span  className="product-seller">From: {product.donor_email}</span>
+                  <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No approved products found.</p>
+      )}
     </div>
   );
-
   return (
     <div className="approved-products-container">
-      <h2>Approved Donations</h2>
-      {renderDonationsApproved()}
+      {renderProductApproved()}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -115,13 +104,38 @@ function UserApprovedDonor() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
           <h2>{currentItem?.name}</h2>
+          <div className="modal-photos">
+            {currentItem?.photo && (
+              <div className="main-photo">
+                <img src={currentItem.photo} alt={`${currentItem.name}`} className="modal-photo" />
+              </div>
+            )}
+            {currentItem?.subPhotos && currentItem?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {currentItem.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
+          </div>
           <div className="modal-details">
-            <p><strong>Category:</strong> {currentItem?.location}</p>
-            <p><strong>Quantity:</strong> {currentItem?.message}</p>
+            <p><strong>Quantity:</strong> {currentItem?.weight}KG</p>
             <p><strong>Date Published:</strong> {currentItem?.createdAt.toLocaleDateString()}</p>
+            <p><strong>Price:</strong> {currentItem?.purpose}</p>
+            <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
+            <p><strong>Category:</strong> {currentItem?.category} Bundle</p>
+            {currentItem?.itemNames && currentItem.itemNames.length > 0 && (
+              <div>
+                <p><strong>Items:</strong></p>
+                <ul>
+                  {currentItem.itemNames.map((itemName, index) => (
+                    <li key={index}>{itemName}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </Modal>

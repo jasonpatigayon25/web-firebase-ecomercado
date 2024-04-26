@@ -5,47 +5,47 @@ import { db } from '../config/firebase';
 import { collection, getDocs, query, where } from "firebase/firestore";
 import "../css/Admin.css";
 import Modal from 'react-modal';
-import UserApprovedDonor from "./UserApprovedDonor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import UserApprovedDonor from "./UserApprovedDonor";
 
 Modal.setAppElement('#root');
 
 function ApprovedPostDonor() {
-  const [approvedProducts, setApprovedProducts] = useState(0);
-  const [pendingProducts, setPendingProducts] = useState(0);
-  const [declinedProducts, setDeclinedProducts] = useState(0);
+  const [approvedDonations, setApprovedDonations] = useState(0);
+  const [pendingDonations, setPendingDonations] = useState(0);
+  const [declinedDonations, setDeclinedDonations] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
 
   useEffect(() => {
-    const fetchProductCounts = async () => {
-      const productCollection = collection(db, 'donation');
+    const fetchDonationCounts = async () => {
+      const donationCollection = collection(db, 'donation');
 
-      const approvedQuery = query(productCollection, where('publicationStatus', '==', 'approved'));
+      const approvedQuery = query(donationCollection, where('publicationStatus', '==', 'approved'));
       const approvedSnapshot = await getDocs(approvedQuery);
-      setApprovedProducts(approvedSnapshot.size);
+      setApprovedDonations(approvedSnapshot.size);
 
-      const pendingQuery = query(productCollection, where('publicationStatus', '==', 'pending'));
+      const pendingQuery = query(donationCollection, where('publicationStatus', '==', 'pending'));
       const pendingSnapshot = await getDocs(pendingQuery);
-      setPendingProducts(pendingSnapshot.size);
+      setPendingDonations(pendingSnapshot.size);
 
-      const declinedQuery = query(productCollection, where('publicationStatus', '==', 'declined'));
+      const declinedQuery = query(donationCollection, where('publicationStatus', '==', 'declined'));
       const declinedSnapshot = await getDocs(declinedQuery);
-      setDeclinedProducts(declinedSnapshot.size);
+      setDeclinedDonations(declinedSnapshot.size);
     };
 
-    fetchProductCounts();
+    fetchDonationCounts();
   }, []);
 
   const fetchAndShowModal = async (status) => {
-    const productCollection = collection(db, 'donation');
-    const statusQuery = query(productCollection, where('publicationStatus', '==', status));
+    const donationCollection = collection(db, 'donations');
+    const statusQuery = query(donationCollection, where('publicationStatus', '==', status));
     const snapshot = await getDocs(statusQuery);
     const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setModalContent(items);
-    setModalTitle(`${status.charAt(0).toUpperCase() + status.slice(1)} Products`);
+    setModalTitle(`${status.charAt(0).toUpperCase() + status.slice(1)} Donations`);
     setModalIsOpen(true);
   };
 
@@ -53,31 +53,29 @@ function ApprovedPostDonor() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('approved')}>
-            <div className="stats-number"><span>{approvedProducts}</span></div>
-            <div className="stats-icon"><FaThumbsUp /></div>
-            <div className="stats-label">Approved Products</div>
+        <div className="admin-nav-cards">
+          <div className="counter-card" onClick={() => fetchAndShowModal('approved')}>
+            <h2><span>{approvedDonations}</span></h2>
+            <FaThumbsUp className="icon" />
+            <p>Approved Donations</p>
           </div>
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('pending')}>
-            <div className="stats-number"><span>{pendingProducts}</span></div>
-            <div className="stats-icon"><FaHourglassHalf /></div>
-            <div className="stats-label">Pending Products</div>
+          <div className="counter-card" onClick={() => fetchAndShowModal('pending')}>
+            <h2><span>{pendingDonations}</span></h2>
+            <FaHourglassHalf className="icon" />
+            <p>Pending Donations</p>
           </div>
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('declined')}>
-            <div className="stats-number"><span>{declinedProducts}</span></div>
-            <div className="stats-icon"><FaThumbsDown /></div>
-            <div className="stats-label">Declined Products</div>
+          <div className="counter-card" onClick={() => fetchAndShowModal('declined')}>
+            <h2><span>{declinedDonations}</span></h2>
+            <FaThumbsDown className="icon" />
+            <p>Declined Donations</p>
           </div>
         </div>
-        <div>
-          <UserApprovedDonor />
-        </div>
+        <UserApprovedDonor />
       </div>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Product Details Modal"
+        contentLabel="Donation Details Modal"
         className="modal-content"
         overlayClassName="modal-overlay"
       >
@@ -99,4 +97,3 @@ function ApprovedPostDonor() {
 }
 
 export default ApprovedPostDonor;
-
