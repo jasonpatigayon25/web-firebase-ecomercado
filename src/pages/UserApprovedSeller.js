@@ -1,3 +1,4 @@
+// Existing imports...
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
@@ -70,7 +71,7 @@ function UserApprovedSeller() {
         <ul className="product-list">
           {filteredProducts.map(product => (
             <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
-              <img src={product.photo} alt={product.name} className="product-list-photo" />
+              <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
               <div className="product-info">
                 <div className="product-name">{product.name}</div>
                 <div className="product-detail">
@@ -103,8 +104,21 @@ function UserApprovedSeller() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
           <h2>{currentItem?.name}</h2>
+          <div className="modal-photos">
+            {currentItem?.photo && (
+              <div className="main-photo">
+                <img src={currentItem.photo} alt={`${currentItem.name}`} className="modal-photo" />
+              </div>
+            )}
+            {currentItem?.subPhotos && currentItem?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {currentItem.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
+          </div>
           <div className="modal-details">
             <p><strong>Category:</strong> {currentItem?.category}</p>
             <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
@@ -112,7 +126,7 @@ function UserApprovedSeller() {
             <p><strong>Price:</strong> ₱{currentItem?.price}</p>
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
-            <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping.width} cm X {currentItem?.shipping.height} cm X {currentItem?.shipping.length} cm </p>
+            <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
           </div>
         </div>
       </Modal>
