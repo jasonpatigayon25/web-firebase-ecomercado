@@ -53,21 +53,21 @@ function ApprovedPostSeller() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="admin-dashboard-cards">
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('approved')}>
-            <div className="stats-number"><span>{approvedProducts}</span></div>
-            <div className="stats-icon"><FaThumbsUp /></div>
-            <div className="stats-label">Approved Products</div>
+        <div className="admin-nav-cards">
+          <div className="counter-card" onClick={() => fetchAndShowModal('approved')}>
+            <h2><span>{approvedProducts}</span></h2>
+            <FaThumbsUp className="icon" />
+            <p>Approved Products</p>
           </div>
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('pending')}>
-            <div className="stats-number"><span>{pendingProducts}</span></div>
-            <div className="stats-icon"><FaHourglassHalf /></div>
-            <div className="stats-label">Pending Products</div>
+          <div className="counter-card" onClick={() => fetchAndShowModal('pending')}>
+            <h2><span>{pendingProducts}</span></h2>
+           <FaHourglassHalf className="icon" />
+            <p>Pending Products</p>
           </div>
-          <div className="admin-dashboard-card" onClick={() => fetchAndShowModal('declined')}>
-            <div className="stats-number"><span>{declinedProducts}</span></div>
-            <div className="stats-icon"><FaThumbsDown /></div>
-            <div className="stats-label">Declined Products</div>
+          <div className="counter-card" onClick={() => fetchAndShowModal('declined')}>
+            <h2><span>{declinedProducts}</span></h2>
+            <FaThumbsDown className="icon" />
+            <p>Declined Products</p>
           </div>
         </div>
         <div>
