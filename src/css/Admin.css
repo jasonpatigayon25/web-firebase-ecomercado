@@ -1,0 +1,100 @@
+:root {
+  --primary-color: #4CAF50;
+  --text-color: #333;
+  --background-color: #ffffff;
+  --secondary-text-color: #777;
+  --icon-color: #333;
+  --active-color: #D32F2F;
+}
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.admin-dashboard {
+  padding-top: 60px;
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-dashboard-sidebar {
+  width: 280px;
+  height: calc(100vh - 60px);
+  background-color: #E3FCE9;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 60px;
+  left: 0;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.admin-dashboard-content {
+  margin-left: 280px;
+  flex-grow: 1;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.admin-dashboard-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.admin-dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.stats-icon {
+  font-size: 24px;
+  color: var(--icon-color);
+}
+
+.stats-label {
+  font-size: 14px;
+  color: var(--secondary-text-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.pagination-controls button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button:hover {
+  background-color: #05652D;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

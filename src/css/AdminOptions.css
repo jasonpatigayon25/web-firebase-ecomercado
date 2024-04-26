@@ -59,6 +59,10 @@ body {
     color: #ffffff;
 }
 
+.sidebar-icon {
+    padding-right: 20px;
+}
+
 .admin-dashboard-nav li.active a {
     width: calc(100% + 20px);
     margin-right: -20px;
@@ -80,7 +84,6 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-
 }
 
 .admin-icon {
