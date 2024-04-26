@@ -97,9 +97,9 @@ th, td {
 }
 
 .admin-nav-card {
-  flex: 1 1 22%; /* Makes sure to fit 4 cards per row, with some flexibility */
-  max-width: calc(25% - 20px); /* Accounting for the gap */
-  background-color: #E3FCE9;  /* Light green background */
+  flex: 1 1 22%;
+  max-width: calc(25% - 20px);
+  background-color: #E3FCE9;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -113,7 +113,7 @@ th, td {
 }
 
 .admin-nav-card:hover {
-  background-color: #05652D; /* Dark green background on hover */
+  background-color: #05652D;
   transform: translateY(-5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -123,39 +123,39 @@ th, td {
 }
 
 .admin-nav-icon {
-  width: 60px; /* Adjust the size as necessary */
-  height: 60px; /* Adjust the size as necessary */
+  width: 60px;
+  height: 60px; 
   margin-bottom: 10px;
 }
 
 .admin-nav-label {
-  color: #05652D; /* Dark green text */
+  color: #05652D;
   font-size: 16px;
   font-weight: bold;
 }
 
 @media (max-width: 768px) {
   .admin-nav-card {
-    flex: 1 1 46%; /* Adjust to 2 cards per row on smaller screens */
-    max-width: calc(50% - 20px); /* Adjust accordingly */
+    flex: 1 1 46%;
+    max-width: calc(50% - 20px);
   }
 }
 
 @media (max-width: 480px) {
   .admin-nav-card {
-    flex: 1 1 96%; /* Full width on very small screens */
-    max-width: calc(100% - 20px); /* Adjust accordingly */
+    flex: 1 1 96%;
+    max-width: calc(100% - 20px);
   }
 }
 
 .admin-nav-card a {
-  color: var(--text-color); /* Initial text color */
-  text-decoration: none; /* Ensure links inside cards are not underlined */
+  color: var(--text-color);
+  text-decoration: none;
 }
 
 .admin-nav-card:hover .admin-nav-icon,
 .admin-nav-card:hover .admin-nav-label,
 .admin-nav-card:hover a {
-  color: #ffffff; /* White text and icons on hover */
-  fill: #ffffff; /* Ensure SVG icons also turn white */
+  color: #ffffff;
+  fill: #ffffff;
 }
