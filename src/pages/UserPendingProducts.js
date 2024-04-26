@@ -46,6 +46,10 @@ function UserPendingProducts() {
       setCurrentItem(product);
       setModalIsOpen(true);
     }
+    // if (!document.activeElement.classList.contains("product-actions")) {
+    //   setCurrentItem(product);
+    //   setModalIsOpen(true);
+    // }
   };
 
   const closeModal = () => {
