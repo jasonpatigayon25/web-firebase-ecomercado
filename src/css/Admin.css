@@ -136,7 +136,6 @@ body {
 
 
 /*User details*/
-
 .user-list-container {
   display: flex;
   flex-direction: column;
@@ -163,15 +162,28 @@ body {
   border-radius: 50%;
   object-fit: cover;
   margin-right: 15px;
+  border-width: 1px;
+  border-color: #05652D;
 }
 
 .user-info {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
-  width: 100%; 
+  width: 100%;
 }
 
+.user-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-date-registered {
+  font-size: 0.9em;
+  color: var(--secondary-text-color);
+  margin-left: auto;
+}
 .user-full-name {
   font-size: 1.1em;
   font-weight: bold;

@@ -76,23 +76,21 @@ function AdminDashboard() {
           <div className="user-list-container">
             {currentUsers.map((user, index) => (
               <div key={index} className="user-list-item">
-                <div className="user-info">
-                  <div className="user-detail">
-                    <img 
-                      src={user.photoUrl ? user.photoUrl : `${process.env.PUBLIC_URL}/icons/user.png`} 
-                      alt={user.fullName}
-                      className="user-list-photo"
-                    />
-                    <div>
-                      <p className="user-full-name"><strong>{user.fullName}</strong></p>
-                      <p className="user-email">{user.email}</p>
-                    </div>
-                  </div>
-                  <div className="user-registered-info"> 
-                    <p className="user-date-registered">Registered At: {user.dateRegistered}</p>
+              <div className="user-info">
+                <div className="user-detail">
+                  <img 
+                    src={user.photoUrl ? user.photoUrl : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                    alt={user.fullName}
+                    className="user-list-photo"
+                  />
+                  <div>
+                    <p className="user-full-name"><strong>{user.fullName}</strong></p>
+                    <p className="user-email">{user.email}</p>
                   </div>
                 </div>
+                <p className="user-date-registered">Registered At: {user.dateRegistered}</p>
               </div>
+            </div>
             ))}
           </div>
           <div className="pagination-controls">
