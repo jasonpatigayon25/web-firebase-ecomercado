@@ -412,3 +412,38 @@ body {
   margin: 5px; 
   object-fit: cover;
 }
+
+/*Product Appoval*/
+
+
+.approve-button {
+  padding: 15px 30px;
+  font-size: 16px;
+  background-color: #05652D;
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px; 
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.approve-button:hover {
+  background-color: #072815; 
+}
+
+.decline-button {
+  padding: 8px 20px;
+  font-size: 16px;
+  background-color: #D32F2F;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.decline-button:hover {
+  background-color: #C62828;
+}
