@@ -395,5 +395,20 @@ body {
 .modal-sub-photo {
   width: 100px; 
   height: 100px; 
+  margin: 5px;
+}
+
+
+.main-photo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-photo {
+  width: 200px; 
+  height: 200px; 
   margin: 5px; 
+  object-fit: cover;
 }

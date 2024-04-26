@@ -1,36 +1,37 @@
+// Existing imports...
 import React, { useState, useEffect } from 'react';
-import "../css/ActivityNavbar.css";
+import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FaClipboardList } from 'react-icons/fa';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardCheck } from 'react-icons/fa';
 
 Modal.setAppElement('#root');
 
-function UserPendingProduct() {
+function UserPendingProducts() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const fetchProducts = async () => {
-    const productsRef = collection(db, "products");
-    const q = query(productsRef, where("publicationStatus", "==", "pending"));
-    const querySnapshot = await getDocs(q);
-    const productList = querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
-      }))
-      .sort((a, b) => b.createdAt - a.createdAt);
-    setProducts(productList);
-  };
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
-    fetchProducts();
+    const fetchApprovedProducts = async () => {
+      const productsRef = collection(db, "products");
+      const q = query(productsRef, where("publicationStatus", "==", "pending"));
+      const querySnapshot = await getDocs(q);
+      const productList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setProducts(productList);
+    };
+
+    fetchApprovedProducts();
   }, []);
 
   const openModal = (product) => {
@@ -42,105 +43,53 @@ function UserPendingProduct() {
     setModalIsOpen(false);
   };
 
-  const handleApprove = async (productId) => {
-    const productRef = doc(db, 'products', productId);
-    try {
-      await updateDoc(productRef, {
-        publicationStatus: 'approved'
-      });
-      console.log('Product approved successfully');
-      fetchProducts();
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
-  const handleDecline = async (productId) => {
-    const productRef = doc(db, 'products', productId);
-    try {
-      await updateDoc(productRef, {
-        publicationStatus: 'declined'
-      });
-      console.log('Product declined successfully');
-      fetchProducts(); 
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
+    setSearchQuery(e.target.value);
   };
 
-  const filteredProducts = products.filter(product => 
-    product.name.toLowerCase().includes(searchQuery) ||
-    product.category.toLowerCase().includes(searchQuery) ||
-    product.seller_email.toLowerCase().includes(searchQuery)
-  );
-
-  const renderActionButtons = (productId) => (
-    <td className="action-buttons">
-      <button className="button-approve" onClick={(e) => { e.stopPropagation(); handleApprove(productId); }}>
-        <FontAwesomeIcon icon={faCheck} />
-      </button>
-      <button className="button-decline" onClick={(e) => { e.stopPropagation(); handleDecline(productId); }}>
-        <FontAwesomeIcon icon={faTimes} />
-      </button>
-    </td>
-  );
-
+  const filteredProducts = products.filter(product => {
+    return (
+      product.seller_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
   const renderProductApproved = () => (
-    <div className="search-bar-container">
-      <div className="title-and-search-container">
-        <h1 className="recent-users-title"><FaClipboardList style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
-        <div className="search-bar-wrapper">
-          <input
-            type="text"
-            placeholder="Search by seller email, name, or category..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-bar"
-          />
-        </div>
+    <div className="product-list-container">
+      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          placeholder="Search by seller email, name, or category..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Seller</th>
-            <th>Date Published</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        {filteredProducts.length > 0 ? (
-              filteredProducts.map(product => (
-              <tr key={product.id} onClick={() => openModal(product)}>
-                <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-                <td>{product.name}</td>
-                <td>{product.category}</td>
-                <td>₱{product.price}</td>
-                <td>{product.quantity}</td>
-                <td>{product.seller_email}</td>
-                <td>{product.createdAt.toLocaleDateString()}</td>
-                {renderActionButtons(product.id)}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7">No approved products found.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {filteredProducts.length > 0 ? (
+        <ul className="product-list">
+          {filteredProducts.map(product => (
+            <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
+              <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+              <div className="product-info">
+                <div className="product-name">{product.name}</div>
+                <div className="product-detail">
+                  <span  className="product-price">₱{product.price}</span>
+                  <span className="product-category">{product.category}</span>
+                  <span  className="product-qty">Qty: {product.quantity}</span>
+                  <span  className="product-seller">From: {product.seller_email}</span>
+                  <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No approved products found.</p>
+      )}
     </div>
   );
-
   return (
     <div className="approved-products-container">
       {renderProductApproved()}
@@ -155,8 +104,21 @@ function UserPendingProduct() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <img src={currentItem?.photo} alt={currentItem?.name} className="modal-image" />
           <h2>{currentItem?.name}</h2>
+          <div className="modal-photos">
+            {currentItem?.photo && (
+              <div className="main-photo">
+                <img src={currentItem.photo} alt={`${currentItem.name}`} className="modal-photo" />
+              </div>
+            )}
+            {currentItem?.subPhotos && currentItem?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {currentItem.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
+          </div>
           <div className="modal-details">
             <p><strong>Category:</strong> {currentItem?.category}</p>
             <p><strong>Quantity:</strong> {currentItem?.quantity}</p>
@@ -164,6 +126,7 @@ function UserPendingProduct() {
             <p><strong>Price:</strong> ₱{currentItem?.price}</p>
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
+            <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
           </div>
         </div>
       </Modal>
@@ -171,4 +134,4 @@ function UserPendingProduct() {
   );
 }
 
-export default UserPendingProduct;
+export default UserPendingProducts;
