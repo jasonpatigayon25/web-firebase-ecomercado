@@ -127,6 +127,7 @@ function UserApprovedSeller() {
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
+            <p><strong>Weight:</strong> {currentItem?.shipping ? `${currentItem.shipping.weight} kg`: 'N/A'}</p>
           </div>
         </div>
       </Modal>

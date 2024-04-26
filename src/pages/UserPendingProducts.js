@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
@@ -15,9 +14,15 @@ function UserPendingProducts() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); 
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchApprovedProducts = async () => {
+    fetchPendingProducts();
+  }, []);
+
+  const fetchPendingProducts = async () => {
+    setLoading(true);
+    try {
       const productsRef = collection(db, "products");
       const q = query(productsRef, where("publicationStatus", "==", "pending"));
       const querySnapshot = await getDocs(q);
@@ -29,10 +34,12 @@ function UserPendingProducts() {
         }))
         .sort((a, b) => b.createdAt - a.createdAt);
       setProducts(productList);
-    };
-
-    fetchApprovedProducts();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching pending products: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openModal = (product) => {
     setCurrentItem(product);
@@ -47,6 +54,38 @@ function UserPendingProducts() {
     setSearchQuery(e.target.value);
   };
 
+  const handleApprove = async (productId) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    if (confirmApprove) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+  const handleDecline = async (productId) => {
+    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    if (confirmDecline) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const filteredProducts = products.filter(product => {
     return (
       product.seller_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,32 +93,6 @@ function UserPendingProducts() {
       product.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
-
-  const handleApprove = async (productId) => {
-    try {
-      await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
-      const updatedProducts = products.map(product => {
-        if (product.id === productId) {
-          return { ...product, publicationStatus: "approved" };
-        }
-        return product;
-      });
-      setProducts(updatedProducts);
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
-  const handleDecline = async (productId) => {
-    try {
-      await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
-
-      const updatedProducts = products.filter(product => product.id !== productId);
-      setProducts(updatedProducts);
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
 
   const renderProductApproved = () => (
     <div className="product-list-container">
@@ -93,7 +106,9 @@ function UserPendingProducts() {
           className="search-bar"
         />
       </div>
-      {filteredProducts.length > 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : filteredProducts.length > 0 ? (
         <ul  className="product-list">
           {filteredProducts.map(product => (
             <li onClick={() => openModal(product)} key={product.id} className="product-list-item">
@@ -106,11 +121,10 @@ function UserPendingProducts() {
                   <span className="product-qty">Qty: {product.quantity}</span>
                   <span className="product-seller">From: {product.seller_email}</span>
                   <div className="product-actions">
-                  <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>
-                  <button onClick={() => handleDecline(product.id)} className="decline-button">Decline</button>
+                    <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>
+                    <button onClick={() => handleDecline(product.id)} className="decline-button">Decline</button>
+                  </div>
                 </div>
-                </div>
-                
               </div>
             </li>
           ))}
@@ -125,7 +139,7 @@ function UserPendingProducts() {
     <div className="approved-products-container">
       {renderProductApproved()}
       <Modal
-        isOpen={modalIsOpen}
+         isOpen={modalIsOpen && currentItem !== null}
         onRequestClose={closeModal}
         contentLabel="Item Details"
         className="Modal"
@@ -158,6 +172,7 @@ function UserPendingProducts() {
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
+            <p><strong>Weight:</strong> {currentItem?.shipping ? `${currentItem.shipping.weight} kg`: 'N/A'}</p>
           </div>
           <div className="modal-actions">
             <button onClick={() => handleApprove(currentItem.id)} className="approve-button">Approve</button>
