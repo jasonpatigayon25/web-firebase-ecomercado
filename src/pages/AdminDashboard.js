@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from '../config/firebase';
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import "../css/Admin.css";
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [recentFetchedSellers, setRecentFetchedSellers] = useState([]);
   const itemsPerPage = 5;
@@ -99,6 +100,10 @@ function AdminDashboard() {
     );
   }
 
+  const handleUserClick = (email) => {
+    navigate(`/user-activity/${email}`); 
+  };
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -108,7 +113,7 @@ function AdminDashboard() {
           <h1>Recent Registered Users</h1>
           <div className="user-list-container">
             {currentUserPageUsers.map((user, index) => (
-              <div key={index} className="user-list-item">
+              <div key={index} className="user-list-item" onClick={() => handleUserClick(user.email)}>
                 <div className="user-info">
                   <div className="user-detail">
                     <img 
@@ -140,7 +145,7 @@ function AdminDashboard() {
           <h1>Recent Registered Sellers</h1>
           <div className="user-list-container">
             {currentUserPageSellers.map((seller, index) => (
-              <div key={index} className="user-list-item">
+              <div key={index} className="user-list-item" onClick={() => handleUserClick(seller.email)}>
                 <div className="user-info">
                   <div className="user-detail">
                     <img 
