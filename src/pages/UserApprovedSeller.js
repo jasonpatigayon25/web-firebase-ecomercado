@@ -112,6 +112,7 @@ function UserApprovedSeller() {
             <p><strong>Price:</strong> ₱{currentItem?.price}</p>
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
+            <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping.width} cm X {currentItem?.shipping.height} cm X {currentItem?.shipping.length} cm </p>
           </div>
         </div>
       </Modal>
