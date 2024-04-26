@@ -307,7 +307,7 @@ body {
 
 .product-category {
   background-color: #E3FCE9;
-  border-radius: 4px; 
+  border-radius: 10px; 
   padding: 3px 6px; 
   margin-bottom: 5px;
 }
@@ -365,9 +365,22 @@ body {
 }
 
 .product-list-item:hover .product-name,
-.product-list-item:hover .product-category,
 .product-list-item:hover .product-price,
 .product-list-item:hover .product-quantity,
+.product-list-item:hover .product-seller,
 .product-list-item:hover .product-published-date {
   color: #ffffff;
+}
+
+.product-list-item:hover {
+  background-color: #4CAF50;
+}
+
+.product-list-item:hover .product-qty {
+  color: hwb(203 67% 8%); 
+}
+
+.product-list-item:hover .product-category {
+  background-color: #000; 
+  color: #fff;
 }
