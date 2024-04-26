@@ -7,6 +7,14 @@
   --active-color: #D32F2F;
 }
 
+h1 {
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  font-weight: 200;
+}
+
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
@@ -52,40 +60,6 @@ body {
   color: var(--secondary-text-color);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-}
-
-.pagination-controls button {
-  background-color: var(--primary-color);
-  border: none;
-  color: #fff;
-  padding: 5px 10px;
-  margin-right: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.pagination-controls button:hover {
-  background-color: #05652D;
-}
-
-.pagination-controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 
 /*Cards*/
 .admin-nav-cards {
@@ -158,4 +132,87 @@ th, td {
 .admin-nav-card:hover a {
   color: #ffffff;
   fill: #ffffff;
+}
+
+
+/*User details*/
+
+.user-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-list-item {
+  display: flex;
+  align-items: center;
+  background-color: #ccc;
+  padding: 10px;
+  border-bottom: #777;
+  border-width: 1px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.user-list-item:hover {
+  background-color: var(--primary-color);
+}
+
+.user-list-photo {
+  width: 50px;
+  height: 50px; 
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%; 
+}
+
+.user-full-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.user-date-registered {
+  font-size: 0.9em;
+  color: var(--secondary-text-color);
+  margin-left: 15px;
+}
+
+.user-list-item:hover .user-full-name,
+.user-list-item:hover .user-email,
+.user-list-item:hover .user-date-registered {
+  color: #ffffff;
+}
+
+/*Pagination*/
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.pagination-controls button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button:hover {
+  background-color: #05652D;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
