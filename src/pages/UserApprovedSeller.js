@@ -1,4 +1,4 @@
-// Existing imports...
+
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';

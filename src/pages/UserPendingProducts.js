@@ -1,4 +1,4 @@
-// Existing imports...
+
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
@@ -158,6 +158,10 @@ function UserPendingProducts() {
             <p><strong>Description:</strong> {currentItem?.description}</p>
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
+          </div>
+          <div className="modal-actions">
+            <button onClick={() => handleApprove(currentItem.id)} className="approve-button">Approve</button>
+            <button onClick={() => handleDecline(currentItem.id)} className="decline-button">Decline</button>
           </div>
         </div>
       </Modal>

@@ -414,8 +414,6 @@ body {
 }
 
 /*Product Appoval*/
-
-
 .approve-button {
   padding: 15px 30px;
   font-size: 16px;
@@ -447,3 +445,4 @@ body {
 .decline-button:hover {
   background-color: #C62828;
 }
+
