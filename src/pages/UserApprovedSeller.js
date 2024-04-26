@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "../css/ActivityNavbar.css";
+import "../css/Products.css";
 import { db } from '../config/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
@@ -55,54 +55,40 @@ function UserApprovedSeller() {
   });
 
   const renderProductApproved = () => (
-    <div className="search-bar-container">
-      <div className="title-and-search-container">
-        <h1 className="recent-users-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
-        <div className="search-bar-wrapper">
-          <input
-            type="text"
-            placeholder="Search by seller email, name, or category..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-bar"
-          />
-        </div>
+    <div className="product-list-container">
+      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          placeholder="Search by seller email, name, or category..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Seller</th>
-            <th>Date Published</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
-              <tr key={product.id} onClick={() => openModal(product)}>
-                <td><img src={product.photo} alt={product.name} className="rounded-image" style={{width: "50px", height: "50px"}} /></td>
-                <td>{product.name}</td>
-                <td>{product.category}</td>
-                <td>₱{product.price}</td>
-                <td>{product.quantity}</td>
-                <td>{product.seller_email}</td>
-                <td>{product.createdAt.toLocaleDateString()}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7">No approved products found.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {filteredProducts.length > 0 ? (
+        <ul className="product-list">
+          {filteredProducts.map(product => (
+            <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
+              <img src={product.photo} alt={product.name} className="product-list-photo" />
+              <div className="product-info">
+                <div className="product-name">{product.name}</div>
+                <div className="product-detail">
+                  <span  className="product-price">₱{product.price}</span>
+                  <span className="product-category">{product.category}</span>
+                  <span  className="product-qty">{product.quantity}</span>
+                  <span  className="product-seller">From: {product.seller_email}</span>
+                  <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No approved products found.</p>
+      )}
     </div>
   );
-
   return (
     <div className="approved-products-container">
       {renderProductApproved()}
