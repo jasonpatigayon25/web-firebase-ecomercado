@@ -145,7 +145,7 @@ function UsersInformation() {
           <SellerCard count={sellerCount} />
           <BannedCard count={bannedCount} />
         </div>
-          <h1>Recent Registered Users</h1>
+          <h1>Users</h1>
           <div className="user-list-container">
             {currentUserPageUsers.map((user, index) => (
               <div key={index} className="user-list-item" onClick={() => handleUserClick(user.email)}>
@@ -177,7 +177,7 @@ function UsersInformation() {
               ))}
             </div>
           </div>
-          <h1>Recent Registered Sellers</h1>
+          <h1>Registered Sellers</h1>
           <div className="user-list-container">
             {currentUserPageSellers.map((seller, index) => (
               <div key={index} className="user-list-item" onClick={() => handleUserClick(seller.email)}>
