@@ -1,0 +1,223 @@
+:root {
+    --primary-color: #4CAF50;
+    --text-color: #333;
+    --background-color: #ffffff;
+    --secondary-text-color: #777;
+    --icon-color: #333;
+    --active-color: #D32F2F;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Sidebar */
+.admin-dashboard-sidebar {
+    width: 280px;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: var(--background-color);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.admin-dashboard-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.admin-dashboard-nav li {
+    padding: 0px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-dashboard-nav li a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    align-items: center;
+    padding: 15px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, width 0.3s;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-dashboard-nav li:hover a,
+.admin-dashboard-nav li.active a {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.admin-dashboard-nav li.active a {
+    width: calc(100% + 20px);
+    margin-right: -20px;
+    background-color: #05652D;
+    position: relative;
+    z-index: 2;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: visible;
+}
+
+.admin-dashboard-nav li.active a .sidebar-icon,
+.admin-dashboard-nav li:hover a .sidebar-icon {
+    filter: brightness(0) invert(1);
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+}
+
+.admin-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #4CAF50;
+}
+
+.admin-username {
+    font-weight: bold;
+    color: #333;
+    padding: 5px 10px;
+}
+
+.admin-user-link {
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    color: #333;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e7e7e7;
+    border-color: #ccc;
+    background-color: #E3FCE9;
+}
+
+.admin-user-link:hover, .admin-user-link:focus {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.admin-user-link:active {
+    background-color: #dee2e6;
+    color: #212529;
+}
+
+/* Navbar */
+.admin-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2C3E50;
+    padding: 0 20px;
+    color: var(--background-color);
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.admin-logo {
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+.admin-logo:hover {
+    transform: scale(1.05);
+}
+
+.notification-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.notification-bell {
+    margin-right: 20px;
+    cursor: pointer;
+    position: relative;
+    font-size: 24px;
+}
+
+.notification-bell:hover {
+    color: #05652D;
+}
+
+.unread-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #E74C3C;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notifications-list {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    background: white;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    color: black;
+    padding: 10px;
+    display: none;
+}
+
+.notification-container .styled-bell.showNotifications .notifications-list {
+    display: block;
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.read {
+    background-color: #ecf0f1;
+}
+
+.notification-item.unread {
+    font-weight: bold;
+}
+
+.logout-link {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 15px 20px;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}

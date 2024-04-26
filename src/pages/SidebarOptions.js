@@ -11,21 +11,20 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
 import { notificationForAdminCollection } from '../config/firebase'; 
-import { FaHome , FaHistory, FaUserFriends, FaComments, FaBell, FaCog, 
-        FaUser, FaRegListAlt, FaClipboardCheck, FaClipboardList } from "react-icons/fa";
+import { FaBell, FaCog, 
+        FaUser } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
-import "../css/Admin.css";
+import "../css/AdminOptions.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getAuth } from "firebase/auth";
 import { signOut } from "firebase/auth";
 
 const auth = getAuth();
 
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-  <Link to="/admin-profile" onClick={onClick}>
-    <FaUser className="admin-icon" ref={ref}>
-      {children}
-    </FaUser>
+const CustomToggle = React.forwardRef(({ firstName }, ref) => (
+  <Link to="/admin-profile" ref={ref} className="admin-user-link">
+    <FaUser className="admin-icon" />
+    <span className="admin-username">Admin {firstName}</span>
   </Link>
 ));
 
@@ -37,22 +36,20 @@ function SidebarOptions() {
 
    const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    const fetchAdminMuteStatus = async () => {
+   useEffect(() => {
+    const fetchAdminData = async () => {
       const currentUser = auth.currentUser;
       if (currentUser) {
-        const adminEmail = currentUser.email; 
+        const adminEmail = currentUser.email;
         const querySnapshot = await getDocs(collection(db, "admin"));
-        
         const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
-        
         if (adminDoc) {
           setIsMuted(adminDoc.data().isMuted || false);
+          setFirstName(adminDoc.data().firstName || 'Admin');
         }
       }
     };
-  
-    fetchAdminMuteStatus();
+    fetchAdminData();
   }, []);
 
   useEffect(() => {
@@ -227,6 +224,8 @@ function SidebarOptions() {
     }
   };
 
+  const [firstName, setFirstName] = useState('');
+
   return (
     <div>
       <div className="admin-navbar">
@@ -276,67 +275,61 @@ function SidebarOptions() {
         </div>
       </div>
       <div className="admin-dashboard-sidebar">
-        <div className="admin-user">
-          <div className="admin-user">
-            <CustomToggle />
-            <span className="admin-dashboard-divider-alt"></span> 
-          </div>
-          <span className="admin-username">ADMIN</span>
-        </div>
+      <CustomToggle firstName={firstName} />
         <div className="divider"></div>
         <ul className="admin-dashboard-nav">
           <li className={location.pathname === "/admin-dashboard" ? "active" : ""}>
             <Link to="/admin-dashboard">
-              <FaHome />
+              <img src={`${process.env.PUBLIC_URL}/icons/dashboard.png`} alt="Dashboard" className="sidebar-icon" />
               Dashboard
             </Link>
           </li>
           <li className={location.pathname === "/users-information" || location.pathname.startsWith("/user-activity/") ? "active" : ""}>
             <Link to="/users-information">
-              <FaUserFriends />
+              <img src={`${process.env.PUBLIC_URL}/icons/user-information.png`} alt="Users Information" className="sidebar-icon" />
               Users Information
             </Link>
           </li>
           <li className={location.pathname === "/approved-seller" ? "active" : ""}>
             <Link to="/approved-seller">
-              <FaClipboardCheck />
-              Approved Posts - SELLER
+              <img src={`${process.env.PUBLIC_URL}/icons/approved-products.png`} alt="Approved Posts - Seller" className="sidebar-icon" />
+              Approved Products
             </Link>
           </li>
           <li className={location.pathname === "/pending-seller" ? "active" : ""}>
             <Link to="/pending-seller">
-              <FaClipboardList />
-              Pending for Approval - SELLER
+              <img src={`${process.env.PUBLIC_URL}/icons/pending-products.png`} alt="Pending for Approval - Seller" className="sidebar-icon" />
+              Pending Products
             </Link>
           </li>
           <li className={location.pathname === "/orders-history" ? "active" : ""}>
             <Link to="/orders-history">
-              <FaHistory />
+              <img src={`${process.env.PUBLIC_URL}/icons/orders-history.png`} alt="Orders History" className="sidebar-icon" />
               Orders History
             </Link>
           </li>
           <li className={location.pathname === "/approved-donor" ? "active" : ""}>
             <Link to="/approved-donor">
-              <FaRegListAlt />
-              Approved Posts - DONOR
+              <img src={`${process.env.PUBLIC_URL}/icons/approved-donations.png`} alt="Approved Posts - Donor" className="sidebar-icon" />
+              Approved Donations
             </Link>
           </li>
           <li className={location.pathname === "/pending-donor" ? "active" : ""}>
             <Link to="/pending-donor">
-              <FaClipboardList />
-              Pending for Approval - DONOR
+              <img src={`${process.env.PUBLIC_URL}/icons/pending-donations.png`} alt="Pending for Approval - Donor" className="sidebar-icon" />
+              Pending Donations
             </Link>
           </li>
           <li className={location.pathname === "/donation-history" ? "active" : ""}>
             <Link to="/donation-history">
-              <FaHistory />
-              Donation Requests History
+              <img src={`${process.env.PUBLIC_URL}/icons/donations-history.png`} alt="Donation Requests History" className="sidebar-icon" />
+              Requests History
             </Link>
           </li>
           <li className={location.pathname === "/user-feedback" ? "active" : ""}>
             <Link to="/user-feedback">
-              <FaComments />
-              User Feedback
+              <img src={`${process.env.PUBLIC_URL}/icons/feedback.png`} alt="User Feedback" className="sidebar-icon" />
+              Users Feedback
             </Link>
           </li>
         </ul>

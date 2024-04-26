@@ -1,0 +1,97 @@
+/* Navbar overall styling */
+.admin-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2C3E50; /* Dark blue background */
+    padding: 0 20px;
+    color: #ffffff;
+}
+
+.admin-logo {
+    height: 50px; /* Adjust the logo size */
+    transition: transform 0.3s ease;
+}
+
+.admin-logo:hover {
+    transform: scale(1.05); /* Slightly enlarge logo on hover */
+}
+
+.notification-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.notification-bell {
+    margin-right: 20px;
+    cursor: pointer;
+    position: relative;
+    font-size: 24px; /* Larger bell icon */
+}
+
+.notification-bell:hover {
+    color: #2980B9; /* Change color on hover */
+}
+
+.unread-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #E74C3C; /* Red background for notification count */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notifications-list {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    background: white;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    color: black;
+    padding: 10px;
+    display: none;
+}
+
+.notification-container .styled-bell.showNotifications .notifications-list {
+    display: block; /* Show notifications when toggled */
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ecf0f1;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.read {
+    background-color: #ecf0f1; /* Light grey background for read notifications */
+}
+
+.notification-item.unread {
+    font-weight: bold;
+}
+
+.logout-link {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
