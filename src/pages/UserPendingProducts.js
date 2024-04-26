@@ -42,8 +42,10 @@ function UserPendingProducts() {
   };
 
   const openModal = (product) => {
-    setCurrentItem(product);
-    setModalIsOpen(true);
+    if (currentItem) {
+      setCurrentItem(product);
+      setModalIsOpen(true);
+    }
   };
 
   const closeModal = () => {
