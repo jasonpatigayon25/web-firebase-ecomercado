@@ -20,18 +20,6 @@ body {
   min-height: 100vh;
 }
 
-.admin-dashboard-sidebar {
-  width: 280px;
-  height: calc(100vh - 60px);
-  background-color: #E3FCE9;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-  position: fixed;
-  top: 60px;
-  left: 0;
-  overflow-y: auto;
-  z-index: 999;
-}
-
 .admin-dashboard-content {
   margin-left: 280px;
   flex-grow: 1;
@@ -125,8 +113,13 @@ th, td {
 }
 
 .admin-nav-card:hover {
+  background-color: #05652D; /* Dark green background on hover */
   transform: translateY(-5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.admin-nav-card:hover .admin-nav-icon {
+  filter: brightness(0.2) invert(1);
 }
 
 .admin-nav-icon {
@@ -153,4 +146,16 @@ th, td {
     flex: 1 1 96%; /* Full width on very small screens */
     max-width: calc(100% - 20px); /* Adjust accordingly */
   }
+}
+
+.admin-nav-card a {
+  color: var(--text-color); /* Initial text color */
+  text-decoration: none; /* Ensure links inside cards are not underlined */
+}
+
+.admin-nav-card:hover .admin-nav-icon,
+.admin-nav-card:hover .admin-nav-label,
+.admin-nav-card:hover a {
+  color: #ffffff; /* White text and icons on hover */
+  fill: #ffffff; /* Ensure SVG icons also turn white */
 }

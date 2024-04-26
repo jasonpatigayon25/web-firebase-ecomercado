@@ -76,7 +76,7 @@ body {
 
 .admin-dashboard-nav li.active a .sidebar-icon,
 .admin-dashboard-nav li:hover a .sidebar-icon {
-    filter: brightness(0) invert(1);
+    filter: brightness(0.2) invert(1);
 }
 
 .admin-user {
