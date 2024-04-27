@@ -194,10 +194,18 @@ function UserFeedback() {
             <p><strong>Product ID:</strong> {currentRating.prodId}</p>
             {currentProduct && (
               <div>
-                <h3>Rated Product Details</h3>
-                <img src={currentProduct.photo} alt={currentProduct.name} style={{ width: '100px', height: '100px' }} />
-                <p><strong>Name:</strong> {currentProduct.name}</p>
-                <p><strong>Category:</strong> {currentProduct.category}</p>
+                <h3>Rated Product</h3>
+                <div className="order-cards-container">
+                <div className="order-card">
+                  <div className="order-card-content">
+                <img src={currentProduct.photo} alt={currentProduct.name} className="order-image" />
+                <div className="order-detail">
+                <h3 title={currentProduct.name}>{currentProduct.name.length > 20 ? `${currentProduct.name.substring(0, 20)}...` : currentProduct.name}</h3>
+                <p className="product-category-modal">{currentProduct.category}</p>
+                </div>
+              </div>
+              </div>
+              </div>
               </div>
             )}
           </div>
