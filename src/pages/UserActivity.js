@@ -293,29 +293,40 @@ function UserActivity() {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        contentLabel="Product Details"
-        className="modal"
-        overlayClassName="overlay"
+        contentLabel="Item Details"
+        className="Modal"
+        overlayClassName="Overlay"
       >
-        {selectedProduct && (
-          <div className="modal-content">
-            <button onClick={closeModal} className="modal-close-btn">
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-            <h2>{selectedProduct.name}</h2>
-            <div>
-              <img src={selectedProduct.photo} alt={`${selectedProduct.name} thumbnail`} />
-              <div>
-                <p>Name: {selectedProduct.name}</p>
-                <p>Price: ₱{selectedProduct.price}</p>
-                <p>Category: {selectedProduct.category}</p>
-                <p>Quantity: {selectedProduct.quantity}</p>
-                <p>Seller: {selectedProduct.seller_email}</p>
-                <p>Published At: {selectedProduct.createdAt.toLocaleDateString()}</p>
+        <div className="modal-content">
+          <button onClick={closeModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <h2>{selectedProduct?.name}</h2>
+          <div className="modal-photos">
+            {selectedProduct?.photo && (
+              <div className="main-photo">
+                <img src={selectedProduct.photo} alt={`${selectedProduct.name}`} className="modal-photo" />
               </div>
-            </div>
+            )}
+            {selectedProduct?.subPhotos && selectedProduct?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {selectedProduct.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
           </div>
-        )}
+          <div className="modal-details">
+            <p><strong>Category:</strong> {selectedProduct?.category}</p>
+            <p><strong>Quantity:</strong> {selectedProduct?.quantity}</p>
+            <p><strong>Date Published:</strong> {selectedProduct?.createdAt.toLocaleDateString()}</p>
+            <p><strong>Price:</strong> ₱{selectedProduct?.price}</p>
+            <p><strong>Description:</strong> {selectedProduct?.description}</p>
+            <p><strong>Seller Email:</strong> {selectedProduct?.seller_email}</p>
+            <p><strong>Logistic Packaging - WHL:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.width} cm X ${selectedProduct.shipping.height} cm X ${selectedProduct.shipping.length} cm` : 'N/A'}</p>
+            <p><strong>Weight:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.weight} kg`: 'N/A'}</p>
+          </div>
+        </div>
       </Modal>
     </div>
   );
