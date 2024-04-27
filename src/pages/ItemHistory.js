@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -16,19 +16,53 @@ function ItemHistory() {
   const [activeTab, setActiveTab] = useState('Pending');
 
   useEffect(() => {
+    const fetchProductDetails = async (productId) => {
+      try {
+        const docRef = doc(db, "products", productId);
+        const docSnapshot = await getDoc(docRef);
+    
+        if (!docSnapshot.exists()) {
+          console.error('No product with the given ID:', productId);
+          return {};
+        }
+    
+        const productData = { id: docSnapshot.id, ...docSnapshot.data() };
+        return productData;
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+        return {};
+      }
+    };
+
     const fetchOrdersByStatus = async () => {
       try {
         const ordersRef = collection(db, "orders");
         const q = query(ordersRef, where("status", "==", activeTab));
         const querySnapshot = await getDocs(q);
-        const orderList = querySnapshot.docs
-          .map(doc => ({
+        const ordersWithDetails = [];
+
+        for (let doc of querySnapshot.docs) {
+          const orderData = doc.data();
+          const productDetailsPromises = orderData.productDetails.map(
+            async (product) => {
+              const details = await fetchProductDetails(product.productId);
+              if (!details.category || !details.price) {
+                console.error('Missing category or price for product:', product.productId);
+              }
+              return { ...product, ...details };
+            }
+          );
+          const productDetails = await Promise.all(productDetailsPromises);
+
+          ordersWithDetails.push({
             id: doc.id,
-            ...doc.data(),
-            dateOrdered: doc.data().dateOrdered?.toDate() ? doc.data().dateOrdered.toDate() : new Date(),
-          }))
-          .sort((a, b) => b.dateOrdered - a.dateOrdered);
-        setOrders(orderList);
+            ...orderData,
+            productDetails,
+            dateOrdered: orderData.dateOrdered?.toDate() ? orderData.dateOrdered.toDate() : new Date(),
+          });
+        }
+
+        setOrders(ordersWithDetails.sort((a, b) => b.dateOrdered - a.dateOrdered));
       } catch (error) {
         console.error("Error fetching orders: ", error);
       }
@@ -85,11 +119,22 @@ function ItemHistory() {
             <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
               <div className="product-info">
                 <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
-                <div className="product-detail">
-                  <span className="product-price">₱{order.orderTotalPrice}</span>
-                  <span className="product-qty">Buyer: {order.buyerEmail}</span>
-                  <span className="product-qty">Seller: {order.sellerEmail}</span>
-                  <span className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</span>
+                <div className="order-detail">
+                  {order.productDetails.map((product, index) => (
+                    <div key={index} className="order-card">
+                      <img src={product.photo} alt={product.name} className="order-image" />
+                      <div className="order-detail">
+                        <h3>{product.name}</h3>
+                        <p>{product.category}</p>
+                        <p>₱{product.price}</p>
+                        <div className="product-qty">x{product.orderedQuantity}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="order-price">₱{order.orderTotalPrice}</div>
+                  <div className="order-qty">Buyer: {order.buyerEmail}</div>
+                  <div className="order-qty">Seller: {order.sellerEmail}</div>
+                  <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
                 </div>
               </div>
             </li>

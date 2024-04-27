@@ -615,3 +615,62 @@ body {
 .modal-details p {
   margin-bottom: 10px;
 }
+
+
+/*Order*/
+
+.order-card {
+  display: flex;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.order-card:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.order-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.order-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.order-detail h3 {
+  color: var(--text-color);
+  margin: 0;
+  font-weight: bold;
+}
+
+.order-detail p {
+  color: var(--secondary-text-color);
+  margin: 5px 0;
+}
+
+.order-qty {
+  color: var(--active-color);
+  font-weight: bold;
+  margin-top: 10px;
+  align-self: flex-start;
+  padding: 3px 6px;
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.order-card:hover .order-qty {
+  background-color: var(--active-color);
+  color: #fff;
+}
