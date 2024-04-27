@@ -511,3 +511,95 @@ body {
     width: 46%;
   }
 }
+
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  margin-right: 10px;
+  background-color: #fff;
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tab:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.active-tab {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+
+/*Order Lists*/
+.order-list-item {
+  display: flex;
+  align-items: center;
+  background-color: #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease;
+}
+
+.order-list-item:hover {
+  background-color: #4CAF50; 
+  color: #ffffff; 
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column; 
+  width: calc(100% - 95px); 
+}
+
+.order-id, 
+.order-total,
+.order-buyer,
+.order-seller,
+.order-date {
+  font-size: 1.1em; 
+  margin-bottom: 5px;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-detail > span {
+  margin-right: 15px; 
+}
+
+/* Modal order details */
+.modal-content {
+  padding: 20px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.modal-details {
+  margin-top: 20px;
+}
+
+.modal-details p {
+  margin-bottom: 10px;
+}

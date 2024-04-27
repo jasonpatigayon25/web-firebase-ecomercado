@@ -1,98 +1,128 @@
-import React, { useState, useEffect } from "react";
-import { FaThumbsUp, FaThumbsDown, FaHourglassHalf } from "react-icons/fa";
-import SidebarOptions from "./SidebarOptions";
+import React, { useState, useEffect } from 'react';
+import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, where } from "firebase/firestore";
-import "../css/Admin.css";
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import UserApprovedSeller from "./UserApprovedSeller";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
 function ItemHistory() {
-  const [approvedProducts, setApprovedProducts] = useState(0);
-  const [pendingProducts, setPendingProducts] = useState(0);
-  const [declinedProducts, setDeclinedProducts] = useState(0);
+  const [orders, setOrders] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState([]);
-  const [modalTitle, setModalTitle] = useState("");
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [activeTab, setActiveTab] = useState('Pending');
 
   useEffect(() => {
-    const fetchProductCounts = async () => {
-      const productCollection = collection(db, 'products');
-
-      const approvedQuery = query(productCollection, where('publicationStatus', '==', 'approved'));
-      const approvedSnapshot = await getDocs(approvedQuery);
-      setApprovedProducts(approvedSnapshot.size);
-
-      const pendingQuery = query(productCollection, where('publicationStatus', '==', 'pending'));
-      const pendingSnapshot = await getDocs(pendingQuery);
-      setPendingProducts(pendingSnapshot.size);
-
-      const declinedQuery = query(productCollection, where('publicationStatus', '==', 'declined'));
-      const declinedSnapshot = await getDocs(declinedQuery);
-      setDeclinedProducts(declinedSnapshot.size);
+    const fetchOrdersByStatus = async () => {
+      try {
+        const ordersRef = collection(db, "orders");
+        const q = query(ordersRef, where("status", "==", activeTab));
+        const querySnapshot = await getDocs(q);
+        const orderList = querySnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+            dateOrdered: doc.data().dateOrdered?.toDate() ? doc.data().dateOrdered.toDate() : new Date(),
+          }))
+          .sort((a, b) => b.dateOrdered - a.dateOrdered);
+        setOrders(orderList);
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
     };
+  
+    fetchOrdersByStatus();
+  }, [activeTab]);
 
-    fetchProductCounts();
-  }, []);
-
-  const fetchAndShowModal = async (status) => {
-    const productCollection = collection(db, 'products');
-    const statusQuery = query(productCollection, where('publicationStatus', '==', status));
-    const snapshot = await getDocs(statusQuery);
-    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setModalContent(items);
-    setModalTitle(`${status.charAt(0).toUpperCase() + status.slice(1)} Products`);
+  const openModal = (order) => {
+    setCurrentOrder(order);
     setModalIsOpen(true);
   };
 
-  return (
-    <div className="admin-dashboard">
-      <SidebarOptions />
-      <div className="admin-dashboard-content">
-        <div className="admin-nav-cards">
-          <div className="counter-card" onClick={() => fetchAndShowModal('approved')}>
-            <h2><span>{approvedProducts}</span></h2>
-            <FaThumbsUp className="icon" />
-            <p>Approved Products</p>
-          </div>
-          <div className="counter-card" onClick={() => fetchAndShowModal('pending')}>
-            <h2><span>{pendingProducts}</span></h2>
-           <FaHourglassHalf className="icon" />
-            <p>Pending Products</p>
-          </div>
-          <div className="counter-card" onClick={() => fetchAndShowModal('declined')}>
-            <h2><span>{declinedProducts}</span></h2>
-            <FaThumbsDown className="icon" />
-            <p>Declined Products</p>
-          </div>
-        </div>
-        <div>
-          <UserApprovedSeller />
-        </div>
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleTabClick = (status) => {
+    setActiveTab(status);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredOrders = orders.filter(order => {
+    return (
+      order.buyerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.sellerEmail.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  const renderOrderDetails = () => (
+    <div className="order-list-container">
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          placeholder="Search by buyer email or seller email..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
       </div>
+      <div className="tabs">
+        <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Orders</div>
+        <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Orders</div>
+        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivered Orders</div>
+        <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Orders</div>
+        <div className={`tab ${activeTab === 'Cancelled' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Cancelled')}>Cancelled Orders</div>
+      </div>
+      {filteredOrders.length > 0 ? (
+        <ul className="product-list">
+          {filteredOrders.map(order => (
+            <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
+              <div className="product-info">
+                <div className="product-name">#{order.id}</div>
+                <div className="product-detail">
+                  <span className="product-price">Total Payment: ₱{order.orderTotalPrice}</span>
+                  <span className="product-qty">Buyer Email: {order.buyerEmail}</span>
+                  <span className="product-qty">Seller Email: {order.sellerEmail}</span>
+                  <span className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No orders found.</p>
+      )}
+    </div>
+  );
+  
+  return (
+    <div className="order-history-container">
+      {renderOrderDetails()}
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Product Details Modal"
-        className="modal-content"
-        overlayClassName="modal-overlay"
+        onRequestClose={closeModal}
+        contentLabel="Order Details"
+        className="Modal"
+        overlayClassName="Overlay"
       >
-        <div className="modal-header">
-          <button onClick={() => setModalIsOpen(false)} className="modal-close-btn"><FontAwesomeIcon icon={faTimes} /></button>
-        </div>
-        <h2>{modalTitle}</h2>
-        {modalContent.map((item) => (
-          <div key={item.id} className="modal-item-details">
-            <h3>{item.name}</h3>
-            <p><strong>Category:</strong> {item.category}</p>
-            <p><strong>Description:</strong> {item.description || 'N/A'}</p>
-            <p><strong>Publication Status:</strong> {item.publicationStatus}</p>
+        <div className="modal-content">
+          <button onClick={closeModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <h2>{currentOrder?.id}</h2>
+          <div className="modal-details">
+            <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
+            <p><strong>Buyer Email:</strong> {currentOrder?.buyerEmail}</p>
+            <p><strong>Seller Email:</strong> {currentOrder?.sellerEmail}</p>
+            <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
           </div>
-        ))}
+        </div>
       </Modal>
     </div>
   );
