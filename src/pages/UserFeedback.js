@@ -1,142 +1,112 @@
 import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import '../css/ButtonAnimation.css';
-import { Modal } from "react-bootstrap";
-import { FaUser, FaArchive } from "react-icons/fa";
-import { db } from '../config/firebase'; 
-import { collection, getDocs, doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { db } from '../config/firebase';
+import { collection, getDocs, query, orderBy, limit, where } from "firebase/firestore";
 
 function UserFeedback() {
-    const [feedbacks, setFeedbacks] = useState([]);
-    const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
-    const [selectedFeedback, setSelectedFeedback] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const itemsPerPage = 5;
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [itemsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const userId = user ? user.uid : null;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const feedbackCollection = collection(db, 'feedback');
-            const querySnapshot = await getDocs(feedbackCollection);
-            const feedbacksData = querySnapshot.docs
-                .map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    date: doc.data().timestamp.toDate().toLocaleDateString()
-                }))
-                .filter(feedback => !feedback.archivedBy || !feedback.archivedBy.includes(userId))
-                .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds); 
-            setFeedbacks(feedbacksData);
-        };
-        fetchData();
-    }, [userId]);
-
-    useEffect(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        setFilteredFeedbacks(feedbacks.slice(start, end));
-        setTotalPages(Math.ceil(feedbacks.length / itemsPerPage));
-    }, [feedbacks, currentPage]);
-
-    const handleFeedbackClick = (feedback) => {
-        setSelectedFeedback(feedback);
-    };
-
-    const handleClose = () => {
-        setSelectedFeedback(null);
-    };
-
-    const handleArchiveFeedback = async (id) => {
-        const feedbackRef = doc(db, 'feedback', id);
-        await updateDoc(feedbackRef, {
-            archivedBy: arrayUnion(userId) 
-        });
-        setFeedbacks(currentFeedbacks => currentFeedbacks.filter(feedback => feedback.id !== id));
-        setSelectedFeedback(null);
-    };
-
-    const handlePageChange = (newPage) => {
-        if (newPage < 1 || newPage > totalPages) return;
-        setCurrentPage(newPage);
-    };
-
+  const filteredFeedbacks = feedbacks.filter(feedback => {
     return (
-        <div className="admin-dashboard">
-            <SidebarOptions />
-            <div className="admin-dashboard-content">
-
-                <div className="admin-dashboard-recent-users">
-                    <h2>Recent Feedbacks</h2>
-                    <div className="divider"></div>
-                    <div className="user-feedback-list">
-                        {filteredFeedbacks.map((feedback) => (
-                            <div
-                                key={feedback.id}
-                                className={`user-feedback-item ${selectedFeedback === feedback ? "active" : ""}`}
-                                onClick={() => handleFeedbackClick(feedback)}
-                            >
-                                <div className="user-icon">
-                                    <FaUser size={30} />
-                                </div>
-                                <div className="feedback-content">
-                                    <strong>{feedback.email}</strong>
-                                    <p>{feedback.description ? (feedback.description.slice(0, 50)) : "No description provided"}</p>
-                                </div>
-                                <div className="feedback-date">
-                                    <i>{feedback.date}</i>
-                                </div>
-                                <div className="archive-icon" onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleArchiveFeedback(feedback.id);
-                                    }}>
-                                    <FaArchive size={20} color="#f0ad4e"/> 
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="pagination">
-                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                            Previous
-                        </button>
-                        <span>Page {currentPage} of {totalPages}</span>
-                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                            Next
-                        </button>
-                    </div>
-                </div>
-
-                <Modal show={selectedFeedback !== null} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>User Feedback</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {selectedFeedback && (
-                            <>
-                                <p>
-                                    <strong>{selectedFeedback.email}</strong> -{" "}
-                                    <i>{selectedFeedback.date}</i>
-                                </p>
-                                <p>{selectedFeedback.description}</p>
-                                <button 
-                                    onClick={() => handleArchiveFeedback(selectedFeedback.id)}
-                                    className="btn btn-warning"
-                                >
-                                    Archive Feedback
-                                </button>
-                            </>
-                        )}
-                    </Modal.Body>
-                </Modal>
-
-            </div>
-        </div>
+      feedback.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      feedback.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
+  });
+
+  useEffect(() => {
+    async function fetchFeedbacks() {
+      const feedbackQuery = query(collection(db, 'feedback'), orderBy('timestamp', 'desc'), limit(20));
+      const feedbackSnapshot = await getDocs(feedbackQuery);
+      const feedbacksWithUser = await Promise.all(feedbackSnapshot.docs.map(async (docSnapshot) => {
+        const feedbackData = docSnapshot.data();
+        const userDocSnapshot = await getDocs(query(collection(db, 'users'), where('email', '==', feedbackData.email)));
+        if (!userDocSnapshot.empty) {
+          const userData = userDocSnapshot.docs[0].data();
+          return {
+            email: feedbackData.email,
+            fullName: `${userData.firstName} ${userData.lastName}`,
+            description: feedbackData.description,
+            timestamp: feedbackData.timestamp.toDate().toLocaleString(),
+            photoUrl: userData.photoUrl,
+          };
+        }
+        return null; 
+      }));
+      setFeedbacks(feedbacksWithUser.filter(f => f !== null)); // Filter out any nulls from missing user documents.
+    }
+
+    fetchFeedbacks().catch(console.error);
+  }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const totalPages = Math.ceil(filteredFeedbacks.length / itemsPerPage);
+  const currentPageFeedbacks = filteredFeedbacks.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <div className="admin-dashboard">
+      <SidebarOptions />
+      <div className="admin-dashboard-content">
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by email or description..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+        <h1>Recent Feedbacks</h1>
+        <div className="user-list-container">
+            {currentPageFeedbacks.map((feedback, index) => (
+                <div key={index} className="user-list-item">
+                <div className="user-info">
+                    <div className="user-photo">
+                    <img
+                        src={feedback.photoUrl || `${process.env.PUBLIC_URL}/icons/user.png`} 
+                        alt={`${feedback.fullName}'s profile`}
+                        className="user-feedback-photo"
+                        />
+                    </div>
+                    <div className="user-detail">
+                    <div>
+                        <p className="user-full-name"><strong>{feedback.fullName}</strong></p>
+                        <p className="user-email">{feedback.email}</p>
+                        <p className="user-description">{feedback.description}</p>
+                    </div>
+                    </div>
+                    <p className="user-date-registered">Received At: {feedback.timestamp}</p>
+                </div>
+                </div>
+            ))}
+          <div className="pagination-controls">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handlePageChange(i + 1)}
+                disabled={currentPage === i + 1}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default UserFeedback;
