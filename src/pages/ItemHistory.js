@@ -119,21 +119,24 @@ function ItemHistory() {
             <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
               <div className="product-info">
                 <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
-                <div className="order-detail">
-                  {order.productDetails.map((product, index) => (
-                    <div key={index} className="order-card">
-                      <img src={product.photo} alt={product.name} className="order-image" />
-                      <div className="order-detail">
-                        <h3>{product.name}</h3>
-                        <p>{product.category}</p>
-                        <p>₱{product.price}</p>
-                        <div className="product-qty">x{product.orderedQuantity}</div>
-                      </div>
+                <div className="order-cards-container">
+                {order.productDetails.map((product, index) => (
+                  <div key={index} className="order-card">
+                    <img src={product.photo} alt={product.name} className="order-image" />
+                    <div className="order-detail">
+                    <h3 title={product.name}>{product.name.length > 10 ? `${product.name.substring(0, 10)}...` : product.name}</h3>
+                      <p>{product.category}</p>
+                      <p>₱{product.price}</p>
+                      <div className="product-qty">x{product.orderedQuantity}</div>
                     </div>
+                  </div>
                   ))}
-                  <div className="order-price">₱{order.orderTotalPrice}</div>
-                  <div className="order-qty">Buyer: {order.buyerEmail}</div>
-                  <div className="order-qty">Seller: {order.sellerEmail}</div>
+
+                </div>
+                <div className="product-info">
+                <div className="product-price">₱{order.orderTotalPrice}</div>
+                  <div className="product-seller">Buyer: {order.buyerEmail}</div>
+                  <div className="product-seller">Seller: {order.sellerEmail}</div>
                   <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
                 </div>
               </div>
