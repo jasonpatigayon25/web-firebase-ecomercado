@@ -128,7 +128,7 @@ function UserPendingProducts() {
                 <div className="product-detail">
                   <span className="product-price">₱{product.price}</span>
                   <span className="product-category">{product.category}</span>
-                  <span className="product-qty">Qty: {product.quantity}</span>
+                  <span className="product-quantity">Qty: {product.quantity}</span>
                   <span className="product-seller">From: {product.seller_email}</span>
                   <div className="product-actions">
                     <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>

@@ -77,7 +77,7 @@ function UserApprovedSeller() {
                 <div className="product-detail">
                   <span  className="product-price">₱{product.price}</span>
                   <span className="product-category">{product.category}</span>
-                  <span  className="product-qty">Qty: {product.quantity}</span>
+                  <span  className="product-quantity">Qty: {product.quantity}</span>
                   <span  className="product-seller">From: {product.seller_email}</span>
                   <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
                 </div>

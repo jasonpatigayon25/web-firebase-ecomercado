@@ -319,6 +319,15 @@ body {
   margin-bottom: 5px;
 }
 
+.product-quantity {
+  background-color: #f2f2f2;
+  border-radius: 10px; 
+  padding: 3px 6px; 
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+
 .product-category-modal {
   background-color: #05652D;
   border-radius: 10px; 
@@ -410,6 +419,7 @@ body {
 
 .product-list-item:hover .product-category,
 .product-list-item:hover .product-purpose,
+.product-list-item:hover .product-quantity,
 .product-list-item:hover .product-qty {
   background-color: #000; 
   color: #fff;
