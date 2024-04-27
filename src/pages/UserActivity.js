@@ -11,8 +11,8 @@ function UserActivity() {
   const [userDetails, setUserDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-
-  const [activeTab, setActiveTab] = useState('pendingProducts');
+  const [activeTab, setActiveTab] = useState('pending');
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -40,6 +40,57 @@ function UserActivity() {
     fetchUserDetails();
   }, [email]);
 
+  useEffect(() => {
+    const fetchProducts = async (status, userEmail) => {
+      if (!userEmail) return; 
+      const productsRef = collection(db, "products");
+      const q = query(
+        productsRef,
+        where("publicationStatus", "==", status),
+        where("seller_email", "==", userEmail)  
+      );
+      const querySnapshot = await getDocs(q);
+      const productList = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+      })).sort((a, b) => b.createdAt - a.createdAt);
+      setProducts(productList);
+    };
+
+    if (userDetails && userDetails.email) {
+      fetchProducts(activeTab, userDetails.email);
+    }
+  }, [activeTab, userDetails]);  
+
+  const renderTabContent = () => {
+    return (
+      <div className="product-list-container">
+        {products.length > 0 ? (
+          <ul className="product-list">
+            {products.map(product => (
+              <li key={product.id} className="product-list-item">
+                <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+                <div className="product-info">
+                  <div className="product-name">{product.name}</div>
+                  <div className="product-detail">
+                    <span className="product-price">₱{product.price}</span>
+                    <span className="product-category">{product.category}</span>
+                    <span className="product-qty">Qty: {product.quantity}</span>
+                    <span className="product-seller">From: {product.seller_email}</span>
+                    <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No {activeTab.replace(/([A-Z])/g, ' $1').toLowerCase()} found.</p>
+        )}
+      </div>
+    );
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -56,33 +107,6 @@ function UserActivity() {
     const confirmBan = window.confirm(`Are you sure you want to ban ${userDetails.firstName} ${userDetails.lastName}?`);
     if (confirmBan) {
       console.log('User banned:', userDetails.email);
-    }
-  };
-  
-  
-  const fetchPendingProducts = () => { /* ... */ };
-  const fetchPendingDonations = () => { /* ... */ };
-  const fetchApprovedProducts = () => { /* ... */ };
-  const fetchApprovedDonations = () => { /* ... */ };
-  const fetchDeclinedProducts = () => { /* ... */ };
-  const fetchDeclinedDonations = () => { /* ... */ };
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'pendingProducts':
-        return fetchPendingProducts();
-      case 'pendingDonations':
-        return fetchPendingDonations();
-      case 'approvedProducts':
-        return fetchApprovedProducts();
-      case 'approvedDonations':
-        return fetchApprovedDonations();
-      case 'declinedProducts':
-        return fetchDeclinedProducts();
-      case 'declinedDonations':
-        return fetchDeclinedDonations();
-      default:
-        return <div>Select a category to view its contents.</div>;
     }
   };
 
@@ -107,12 +131,9 @@ function UserActivity() {
           </div>
         </div>
         <div className="tabs">
-          <div onClick={() => setActiveTab('pendingProducts')} className={`tab ${activeTab === 'pendingProducts' ? 'active-tab' : ''}`}>Pending Products</div>
-          <div onClick={() => setActiveTab('pendingDonations')} className={`tab ${activeTab === 'pendingDonations' ? 'active-tab' : ''}`}>Pending Donations</div>
-          <div onClick={() => setActiveTab('approvedProducts')} className={`tab ${activeTab === 'approvedProducts' ? 'active-tab' : ''}`}>Approved Products</div>
-          <div onClick={() => setActiveTab('approvedDonations')} className={`tab ${activeTab === 'approvedDonations' ? 'active-tab' : ''}`}>Approved Donations</div>
-          <div onClick={() => setActiveTab('declinedProducts')} className={`tab ${activeTab === 'declinedProducts' ? 'active-tab' : ''}`}>Declined Products</div>
-          <div onClick={() => setActiveTab('declinedDonations')} className={`tab ${activeTab === 'declinedDonations' ? 'active-tab' : ''}`}>Declined Donations</div>
+          <div onClick={() => setActiveTab('pending')} className={`tab ${activeTab === 'pending' ? 'active-tab' : ''}`}>Pending Products</div>
+          <div onClick={() => setActiveTab('approved')} className={`tab ${activeTab === 'approved' ? 'active-tab' : ''}`}>Approved Products</div>
+          <div onClick={() => setActiveTab('declined')} className={`tab ${activeTab === 'declined' ? 'active-tab' : ''}`}>Declined Products</div>
         </div>
         <div className="tab-content">
           {renderTabContent()}
