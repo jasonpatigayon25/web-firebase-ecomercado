@@ -279,7 +279,7 @@ function UserFeedback() {
                   <div className="user-rating">
                     <StarRating rating={rating.rating} />
                 </div>
-                <p className="user-rated-at">Product ID: {rating.prodId}</p>
+                <p className="user-rater">Product ID: {rating.prodId}</p>
                 </div>
                 <p className="user-rated-at">Rated At: {rating.ratedAt}</p>
               </div>

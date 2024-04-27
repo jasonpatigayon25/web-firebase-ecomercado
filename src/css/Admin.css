@@ -813,7 +813,7 @@ body {
 .user-rating {
   display: flex;
   align-items: right;
-  margin-left: 20px;
+  margin-left: 50px;
 }
 
 .user-photo,
@@ -852,6 +852,11 @@ body {
   align-self: end;
 }
 
+.user-rater {
+  margin-left: 50px;
+  font-size: 0.85em;
+  color: var(--secondary-text-color);
+}
 
 
 /*User profile desif*/
