@@ -313,7 +313,7 @@ body {
 }
 
 .product-category-modal {
-  background-color: #E3FCE9;
+  background-color: #05652D;
   border-radius: 10px; 
   padding: 3px 6px; 
   margin-bottom: 5px;
@@ -943,7 +943,7 @@ body {
 
 .modal-content {
   position: relative;
-  background-color: #333; 
+  background: linear-gradient(to bottom, #1c1a1a 0%, #333 100%);
   color: #fff; 
   border-radius: 10px;
   padding: 30px; 
@@ -952,15 +952,16 @@ body {
   width: 90%;
   max-height: 90%;
   overflow-y: auto;
+  align-items: center; 
 }
 
 .modal-close-btn {
-  position: absolute;
-  top: 15px; 
-  right: 15px;
+  position: fixed; 
+  top: 15px;
+  right: 15px; 
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px; 
-  color: #fff; 
+  font-size: 24px; /* Increased font size */
+  color: #fff; /* Font color white */
 }
