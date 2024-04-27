@@ -813,6 +813,7 @@ body {
 .user-rating {
   display: flex;
   align-items: right;
+  margin-left: 20px;
 }
 
 .user-photo,
@@ -832,6 +833,7 @@ body {
 .product-full-name {
   font-weight: 600;
   margin-bottom: 5px;
+  color: #05652D;
 }
 
 .user-description,
@@ -849,3 +851,7 @@ body {
   margin-top: auto;
   align-self: end;
 }
+
+
+
+/*MODAL*/

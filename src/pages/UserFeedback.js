@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
 import { collection, getDocs, query, orderBy, limit, where } from "firebase/firestore";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function UserFeedback() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [itemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [currentFeedback, setCurrentFeedback] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [productRatings, setProductRatings] = useState([]);
@@ -72,6 +78,7 @@ function UserFeedback() {
               comment: ratingData.comment,
               rating: ratingData.rating,
               ratedAt: ratingData.ratedAt.toDate().toLocaleString(),
+              prodId: ratingData.prodId,
             };
           }
           return null; 
@@ -98,7 +105,6 @@ function UserFeedback() {
     setRatingSearchQuery(e.target.value);
   };
 
-
   const totalPages = Math.ceil(filteredFeedbacks.length / itemsPerPage);
   const totalRatingPages = Math.ceil(filteredProductRatings.length / itemsPerPage); 
   const currentPageFeedbacks = filteredFeedbacks.slice(
@@ -108,6 +114,40 @@ function UserFeedback() {
   const currentPageRatings = filteredProductRatings.slice( 
     (currentRatingPage - 1) * itemsPerPage,
     currentRatingPage * itemsPerPage
+  );
+
+  const handleOpenModal = (feedback) => {
+    setCurrentFeedback(feedback);
+    setModalIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const renderModalContent = () => (
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={handleCloseModal}
+      contentLabel="Feedback Details"
+      ariaHideApp={false}
+      className="Modal"
+      overlayClassName="Overlay"
+    >
+      {currentFeedback && (
+        <div className="modal-content">
+        <button onClick={handleCloseModal} className="modal-close-btn">
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+        <div className="modal-item-details">
+          <p><strong>Name:</strong> {currentFeedback.fullName}</p>
+          <p><strong>Email:</strong> {currentFeedback.email}</p>
+          <p><strong>Description:</strong> {currentFeedback.description}</p>
+          <p><strong>Feedback At:</strong> {currentFeedback.timestamp}</p>
+        </div>
+        </div>
+      )}
+    </Modal>
   );
 
   return (
@@ -126,13 +166,13 @@ function UserFeedback() {
         <h1>Recent Feedbacks</h1>
         <div className="user-list-container">
             {currentPageFeedbacks.map((feedback, index) => (
-                <div key={index} className="user-list-item">
+                <div key={index} className="user-list-item" onClick={() => handleOpenModal(feedback)}>
                 <div className="user-info">
                     <div className="user-detail">
                     <div>
                         <p className="user-full-name"><strong>{feedback.fullName}</strong></p>
                         <p className="user-email">{feedback.email}</p>
-                        <p className="user-description">{feedback.description}</p>
+                        <p className="user-rating-comment">{feedback.description}</p>
                     </div>
                     </div>
                     <p className="user-date-registered">Received At: {feedback.timestamp}</p>
@@ -174,6 +214,7 @@ function UserFeedback() {
                   <div className="user-rating">
                     <StarRating rating={rating.rating} />
                 </div>
+                <p className="user-rated-at">Product ID: {rating.prodId}</p>
                 </div>
                 <p className="user-rated-at">Rated At: {rating.ratedAt}</p>
               </div>
@@ -191,6 +232,7 @@ function UserFeedback() {
             ))}
           </div>
         </div>
+        {renderModalContent()}
       </div>
     </div>
   );
