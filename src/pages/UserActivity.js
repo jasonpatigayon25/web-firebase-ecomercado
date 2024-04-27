@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
@@ -22,11 +22,10 @@ function UserActivity() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
   const [pendingDonations, setPendingDonations] = useState([]);
-
-
+  const [approvedDonations, setApprovedDonations] = useState([]);
+  const [declinedDonations, setDeclinedDonations] = useState([]);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -91,7 +90,7 @@ function UserActivity() {
   }, []);
 
   const fetchPendingProducts = async () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const productsRef = collection(db, "products");
       const q = query(productsRef, where("publicationStatus", "==", "pending"));
@@ -107,7 +106,7 @@ function UserActivity() {
     } catch (error) {
       console.error("Error fetching pending products: ", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -142,7 +141,7 @@ function UserActivity() {
   const handleApprove = async (productId) => {
     const confirmApprove = window.confirm("Are you sure you want to approve this product?");
     if (confirmApprove) {
-      setLoading(true);
+      setIsLoading(true);
       try {
         await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
         await fetchPendingProducts();
@@ -150,7 +149,7 @@ function UserActivity() {
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -158,7 +157,7 @@ function UserActivity() {
   const handleDecline = async (productId) => {
     const confirmDecline = window.confirm("Are you sure you want to decline this product?");
     if (confirmDecline) {
-      setLoading(true);
+      setIsLoading(true);
       try {
         await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
         await fetchPendingProducts();
@@ -166,7 +165,7 @@ function UserActivity() {
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -174,6 +173,7 @@ function UserActivity() {
   const renderPendingProductsContent = () => {
     return (
       <div className="product-list-container">
+        
         {products.length > 0 ? (
           <ul className="product-list">
             {products.map(product => (
@@ -202,14 +202,12 @@ function UserActivity() {
     );
   };
 
-  useEffect(() => {
-    fetchPendingDonations();
-  }, []);
+
 
   const handleApproveDonation = async (donationId) => {
     const confirmApprove = window.confirm("Are you sure you want to approve this product?");
     if (confirmApprove) {
-      setLoading(true);
+      setIsLoading(true);
       try {
         await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
         await fetchPendingDonations();
@@ -217,7 +215,7 @@ function UserActivity() {
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -225,7 +223,7 @@ function UserActivity() {
   const handleDeclineDonation = async (donationId) => {
     const confirmDecline = window.confirm("Are you sure you want to decline this product?");
     if (confirmDecline) {
-      setLoading(true);
+      setIsLoading(true);
       try {
         await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
         await fetchPendingDonations();
@@ -233,16 +231,16 @@ function UserActivity() {
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   };
   
-  const fetchPendingDonations = async () => {
-    setLoading(true);
+  const fetchPendingDonations = useCallback(async () => {
+    setIsLoading(true);
     try {
       const donationsRef = collection(db, "donation");
-      const q = query(donationsRef, where("publicationStatus", "==", "pending"));
+      const q = query(donationsRef, where("publicationStatus", "==", "pending"), where("donor_email", "==", email));
       const querySnapshot = await getDocs(q);
       const donationList = querySnapshot.docs
         .map(doc => ({
@@ -255,8 +253,86 @@ function UserActivity() {
     } catch (error) {
       console.error("Error fetching pending donations: ", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
+  }, [email]);
+
+  const fetchApprovedDonations = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const donationsRef = collection(db, "donation");
+      const q = query(donationsRef, where("publicationStatus", "==", "approved"), where("donor_email", "==", email));
+      const querySnapshot = await getDocs(q);
+      const donationList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setApprovedDonations(donationList);
+    } catch (error) {
+      console.error("Error fetching approved donations: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email]);
+
+  const fetchDeclinedDonations = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const donationsRef = collection(db, "donation");
+      const q = query(donationsRef, where("publicationStatus", "==", "declined"), where("donor_email", "==", email));
+      const querySnapshot = await getDocs(q);
+      const donationList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setDeclinedDonations(donationList);
+    } catch (error) {
+      console.error("Error fetching declined donations: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    fetchPendingDonations();
+    fetchApprovedDonations();
+    fetchDeclinedDonations();
+  }, [fetchPendingDonations, fetchApprovedDonations, fetchDeclinedDonations]);
+
+  const renderDonationsContent = (donations) => {
+    return (
+      <div className="product-list-container">
+        {donations.length > 0 ? (
+          <ul className="product-list">
+            {donations.map(donation => (
+              <li key={donation.id} className="product-list-item" onClick={() => openModal(donation)}>
+                <img src={donation.photo} alt={`${donation.name} thumbnail`} className="product-list-photo" />
+                <div className="product-info">
+                  <div className="product-name">{donation.name}</div>
+                  <div className="product-detail">
+                    <span className="product-price">{donation.weight}KG</span>
+                    <span className="product-category">{donation.category} Bundle</span>
+                    <span className="product-qty">
+                      {donation.purpose.length > 10 ? `${donation.purpose.substring(0, 10)}...` : donation.purpose}
+                    </span>
+                    <span className="product-seller">From: {donation.donor_email}</span>
+                    <span className="product-published-date">Published At: {donation.createdAt.toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No donations found.</p>
+        )}
+      </div>
+    );
   };
 
   const renderPendingDonationsContent = () => {
@@ -302,6 +378,10 @@ function UserActivity() {
         return renderProductsContent();
       case 'pending-donation':
         return renderPendingDonationsContent();
+      case 'approved-donation':
+        return renderDonationsContent(approvedDonations);
+      case 'declined-donation':
+        return renderDonationsContent(declinedDonations);
       default:
         return 'Invalid';
     }
