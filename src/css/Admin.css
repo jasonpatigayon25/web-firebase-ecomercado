@@ -312,8 +312,30 @@ body {
   margin-bottom: 5px;
 }
 
+.product-category-modal {
+  background-color: #000;
+  border-radius: 10px; 
+  padding: 3px 6px; 
+  margin-bottom: 5px;
+  display: inline-block; 
+  max-width: fit-content;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
 .product-qty {
   font-weight: bold;
+}
+
+.product-qty-modal {
+  font-weight: bold;
+  background-color: #000;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-weight: bold;
+  margin-left: 10px;
+  align-self: flex-end;
 }
 
 .product-price {

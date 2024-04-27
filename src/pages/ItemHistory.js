@@ -94,6 +94,7 @@ function ItemHistory() {
       order.sellerEmail.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+  
 
   const renderOrderDetails = () => (
     <div className="order-list-container">
@@ -188,11 +189,11 @@ function ItemHistory() {
                     <img src={product.photo} alt={product.name} className="order-image" />
                     <div className="order-detail">
                       <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
-                      <p className="category">{product.category}</p>
+                      <p className="product-category-modal">{product.category}</p>
                       <p className="price" >₱{product.price}</p>
                     </div>
                   </div>
-                  <div className="product-qty">x{product.orderedQuantity}</div>
+                  <div className="product-qty-modal">x{product.orderedQuantity}</div>
                 </div>
               ))}
             </div>
