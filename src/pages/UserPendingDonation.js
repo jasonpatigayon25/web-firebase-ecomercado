@@ -127,7 +127,7 @@ function UserPendingDonation() {
                 <div className="product-detail">
                   <span  className="product-price">{product.weight}KG</span>
                   <span className="product-category">{product.category} Bundle</span>
-                  <span className="product-qty">
+                  <span className="product-purpose">
                     {product.purpose.length > 10 ? `${product.purpose.substring(0, 10)}...` : product.purpose}
                   </span>
                   <span  className="product-seller">From: {product.donor_email}</span>
