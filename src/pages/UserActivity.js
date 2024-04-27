@@ -205,13 +205,14 @@ function UserActivity() {
 
 
   const handleApproveDonation = async (donationId) => {
-    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    const confirmApprove = window.confirm("Are you sure you want to approve this donation?");
     if (confirmApprove) {
       setIsLoading(true);
       try {
         await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
-        await fetchPendingDonations();
-        closeModal(); 
+        setPendingDonations(prevDonations => prevDonations.filter(donation => donation.id !== donationId));
+        await fetchApprovedDonations();
+        closeModal();
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
@@ -221,13 +222,14 @@ function UserActivity() {
   };
   
   const handleDeclineDonation = async (donationId) => {
-    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    const confirmDecline = window.confirm("Are you sure you want to decline this donation?");
     if (confirmDecline) {
       setIsLoading(true);
       try {
         await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
-        await fetchPendingDonations();
-        closeModal(); 
+        setPendingDonations(prevDonations => prevDonations.filter(donation => donation.id !== donationId));
+        await fetchDeclinedDonations();
+        closeModal();
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
