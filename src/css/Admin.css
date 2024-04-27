@@ -675,7 +675,7 @@ body {
 }
 
 .order-card:hover {
-  background-color: var(--primary-color);
+  background-color: #ddd;
   color: #fff;
 }
 
@@ -759,7 +759,7 @@ body {
 }
 
 .order-detail p.category {
-  background-color: #E3FCE9;    
+  background-color: #ddd;    
   border-radius: 6px;  
   padding: 2px 4px;   
   margin: 2px 0;
