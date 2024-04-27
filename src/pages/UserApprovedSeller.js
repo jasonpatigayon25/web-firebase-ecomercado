@@ -57,7 +57,6 @@ function UserApprovedSeller() {
 
   const renderProductApproved = () => (
     <div className="product-list-container">
-      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
       <div className="search-bar-wrapper">
         <input
           type="text"
@@ -67,6 +66,7 @@ function UserApprovedSeller() {
           className="search-bar"
         />
       </div>
+      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Products</h1>
       {filteredProducts.length > 0 ? (
         <ul className="product-list">
           {filteredProducts.map(product => (

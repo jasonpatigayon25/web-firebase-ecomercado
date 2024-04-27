@@ -16,6 +16,22 @@ function UsersInformation() {
   const [userCount, setUserCount] = useState(0);
   const [sellerCount, setSellerCount] = useState(0);
   const [bannedCount, setBannedCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredUsers = recentFetchedUsers.filter(user => {
+    return (
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  })
+
+  const filteredSellers = recentFetchedSellers.filter(user => {
+    return (
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.registeredName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  })
 
   useEffect(() => {
     // Fetch recent registered users
@@ -61,11 +77,11 @@ function UsersInformation() {
 
   const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
   const totalSellersPages = Math.ceil(recentFetchedSellers.length / itemsPerPage);
-  const currentUserPageUsers = recentFetchedUsers.slice(
+  const currentUserPageUsers = filteredUsers.slice(
     (userCurrentPage - 1) * itemsPerPage,
     userCurrentPage * itemsPerPage
   );
-  const currentUserPageSellers = recentFetchedSellers.slice(
+  const currentUserPageSellers = filteredSellers.slice(
     (sellerCurrentPage - 1) * itemsPerPage,
     sellerCurrentPage * itemsPerPage
   );
@@ -136,6 +152,11 @@ function UsersInformation() {
     </div>
   );
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -145,7 +166,16 @@ function UsersInformation() {
           <SellerCard count={sellerCount} />
           <BannedCard count={bannedCount} />
         </div>
-          <h1>Users</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search by email, first name, last name, or seller name..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-bar"
+          />
+        </div>
+          <h1>Recent Registered Users</h1>
           <div className="user-list-container">
             {currentUserPageUsers.map((user, index) => (
               <div key={index} className="user-list-item" onClick={() => handleUserClick(user.email)}>
@@ -177,7 +207,7 @@ function UsersInformation() {
               ))}
             </div>
           </div>
-          <h1>Registered Sellers</h1>
+          <h1>Recent Registered Sellers</h1>
           <div className="user-list-container">
             {currentUserPageSellers.map((seller, index) => (
               <div key={index} className="user-list-item" onClick={() => handleUserClick(seller.email)}>
