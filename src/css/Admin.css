@@ -854,4 +854,75 @@ body {
 
 
 
-/*MODAL*/
+/*User profile desif*/
+.user-details-card {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+  transition: box-shadow 0.3s ease;
+}
+
+.user-details-card:hover {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+  margin-right: 20px;
+}
+
+.card-info {
+  flex-grow: 1;
+}
+
+.card-info h1 {
+  color: var(--primary-color);
+  margin: 0 0 10px 0;
+  font-size: 1.75em;
+}
+
+.card-info p {
+  color: var(--text-color);
+  margin: 5px 0;
+  font-size: 1em;
+}
+
+.info-icon {
+  margin-right: 10px;
+  color: var(--icon-color);
+}
+
+.card-ban-icon {
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
+  color: var(--active-color);
+  cursor: pointer;
+  font-size: 2em;
+}
+
+/*icons */
+.fa-envelope, .fa-map-marker-alt, .fa-calendar-alt {
+  color: var(--secondary-text-color);
+}
+
+.fa-user-alt {
+  color: var(--primary-color);
+}
+
+.button-ban {
+  background-color: var(--active-color);
+}
+
+.button-ban:hover {
+  background-color: darken(var(--active-color), 10%);
+}

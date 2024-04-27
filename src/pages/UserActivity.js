@@ -5,8 +5,6 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
-import ActivityNavbar from './ActivityNavbar';
-
 
 function UserActivity() {
   const { email } = useParams();  
@@ -58,6 +56,7 @@ function UserActivity() {
       console.log('User banned:', userDetails.email);
     }
   };
+  
 
   return (
     <div className="admin-dashboard">
@@ -69,7 +68,7 @@ function UserActivity() {
           {userDetails.photoUrl ? (
             <img src={userDetails.photoUrl} alt="Profile" />
           ) : (
-            <FaUser size={50} />
+            <FaUser size={120} />
           )}
         </div>
         <div className="card-info">
@@ -79,7 +78,6 @@ function UserActivity() {
           <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
         </div>
       </div>
-      <ActivityNavbar email={email} />
       </div>
     </div>
   );

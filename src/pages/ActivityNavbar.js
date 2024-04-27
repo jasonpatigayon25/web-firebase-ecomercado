@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaClipboardCheck } from 'react-icons/fa';
 
 Modal.setAppElement('#root');
 
@@ -113,43 +114,43 @@ function ActivityNavbar({ email }) {
   function openDonationModal(donation) {
     setCurrentDonation(donation);
     setIsOpenDonation(true);
-  }
+  } 
 
   function closeDonationModal() {
     setIsOpenDonation(false);
   }
+  
 
   const renderProductApproved = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Date Published</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.length ? (
-          products.map(product => (
-            <tr key={product.id} onClick={() => openModal(product)}>
-              <td><img src={product.photo} alt={product.name} className="rounded-image" /></td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>₱ {product.price}</td>
-              <td>{product.quantity}</td>
-              <td>{product.createdAt.toDate().toLocaleDateString()}</td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan="5">No approved posts yet.</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+    <div className="product-list-container">
+      <h1 className="recent-products-title">
+        <FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+        All Approved Donations
+      </h1>
+      {products.length > 0 ? (
+        <ul className="product-list">
+          {products.map(product => (
+            <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
+              <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+              <div className="product-info">
+                <div className="product-name">{product.name}</div>
+                <div className="product-detail">
+                  <span className="product-price">{product.weight}KG</span>
+                  <span className="product-category">{product.category} Bundle</span>
+                  <span className="product-qty">
+                    {product.purpose && product.purpose.length > 10 ? `${product.purpose.substring(0, 10)}...` : product.purpose}
+                  </span>
+                  <span className="product-seller">From: {product.donor_email}</span>
+                  <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No approved donations found.</p>
+      )}
+    </div>
   );
 
   const renderProductDeclined= () => (
