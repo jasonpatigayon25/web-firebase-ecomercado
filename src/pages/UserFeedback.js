@@ -255,7 +255,6 @@ function UserFeedback() {
             ))}
           </div>
         </div>
-        <h1>Product Ratings</h1>
         <div className="search-bar-wrapper">
           <input
             type="text"
@@ -265,6 +264,8 @@ function UserFeedback() {
             className="search-bar"
           />
         </div>
+        <h1>Product Ratings</h1>
+        
         <div className="user-list-container">
           {currentPageRatings.map((rating, index) => ( 
             <div key={index} className="user-list-item" onClick={() => handleOpenModalRating(rating)}>

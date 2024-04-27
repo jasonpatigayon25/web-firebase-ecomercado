@@ -34,7 +34,7 @@ function UsersInformation() {
   })
 
   useEffect(() => {
-    // Fetch recent registered users
+    //registered users
     getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
       .then(snapshot => {
         const fetchedUsers = snapshot.docs.map(doc => {
@@ -53,7 +53,7 @@ function UsersInformation() {
         console.error("Error fetching recent users: ", err);
       });
 
-    // Fetch recent registered sellers
+    // registered sellers
     getDocs(query(collection(db, 'registeredSeller'), orderBy('registeredAt', 'desc'), limit(20)))
       .then(snapshot => {
         const fetchedSellers = snapshot.docs.map(doc => {

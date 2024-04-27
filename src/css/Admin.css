@@ -962,6 +962,41 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px; /* Increased font size */
-  color: #fff; /* Font color white */
+  font-size: 24px; 
+  color: #fff; 
+}
+
+.search-bar-wrapper {
+  position: relative;
+  width: 500px; 
+  margin-left: auto; 
+  margin-right: 20px; 
+  margin-bottom: 10px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+
+.search-bar::placeholder {
+  color: #999;
+}
+
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #999; 
+}
+
+.search-bar:hover,
+.search-bar:focus {
+  border-color: #999;
 }
