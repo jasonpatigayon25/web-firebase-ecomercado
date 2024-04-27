@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 function UserActivity() {
@@ -177,8 +177,12 @@ function UserActivity() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-        <div className="user-details-card">
-          <FaBan className="card-ban-icon" onClick={handleBanUser} />
+      <div className="user-details-card">
+          {userDetails.banned ? (
+            <div className="card-ban-icon">BANNED <FaCog /></div>
+          ) : (
+            <FaBan className="card-ban-icon" onClick={handleBanUser} />
+          )}
           <div className="card-avatar">
             {userDetails.photoUrl ? (
               <img src={userDetails.photoUrl} alt="Profile" />
