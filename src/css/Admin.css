@@ -803,3 +803,49 @@ body {
 .product-list-item:hover .order-id {
   color: #ffffff;
 }
+
+/* Star Rating */
+.star-rating img {
+  width: 20px; 
+  margin-right: 4px;
+}
+
+.user-rating {
+  display: flex;
+  align-items: right;
+}
+
+.user-photo,
+.product-photo {
+  margin-right: 15px;
+  align-self: start;
+}
+
+.user-feedback-photo,
+.user-rating-photo {
+  width: 60px;
+  height: 60px; 
+  border-radius: 50%;
+}
+
+.user-full-name,
+.product-full-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.user-description,
+.product-comment {
+  font-size: 0.95em;
+  color: var(--secondary-text-color);
+  padding: 10px 0;
+}
+
+.user-date-registered,
+.user-rated-at,
+.product-rated-at {
+  font-size: 0.85em;
+  color: var(--secondary-text-color);
+  margin-top: auto;
+  align-self: end;
+}

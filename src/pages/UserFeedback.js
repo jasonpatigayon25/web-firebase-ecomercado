@@ -8,7 +8,9 @@ function UserFeedback() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [itemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentRatingPage, setCurrentRatingPage] = useState(1); 
   const [searchQuery, setSearchQuery] = useState("");
+  const [productRatings, setProductRatings] = useState([]);
 
   const filteredFeedbacks = feedbacks.filter(feedback => {
     return (
@@ -16,6 +18,15 @@ function UserFeedback() {
       feedback.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+  
+
+  function StarRating({ rating }) {
+    const stars = Array.from({ length: rating }, (_, index) => (
+      <img key={index} src={`${process.env.PUBLIC_URL}/icons/star.png`} alt={`${index + 1} star`} />
+    ));
+  
+    return <div className="star-rating">{stars}</div>;
+  }
 
   useEffect(() => {
     async function fetchFeedbacks() {
@@ -36,9 +47,31 @@ function UserFeedback() {
         }
         return null; 
       }));
-      setFeedbacks(feedbacksWithUser.filter(f => f !== null)); // Filter out any nulls from missing user documents.
+      setFeedbacks(feedbacksWithUser.filter(f => f !== null)); 
     }
 
+    async function fetchProductRatings() {
+        const ratingsQuery = query(collection(db, 'productRatings'), orderBy('ratedAt', 'desc'), limit(20));
+        const ratingsSnapshot = await getDocs(ratingsQuery);
+        const ratingsWithUser = await Promise.all(ratingsSnapshot.docs.map(async (doc) => {
+          const ratingData = doc.data();
+          const userQuery = query(collection(db, 'users'), where('email', '==', ratingData.ratedBy));
+          const userDocSnapshot = await getDocs(userQuery);
+          if (!userDocSnapshot.empty) {
+            const userData = userDocSnapshot.docs[0].data();
+            return {
+              fullName: `${userData.firstName} ${userData.lastName}`,
+              email: ratingData.ratedBy,
+              comment: ratingData.comment,
+              rating: ratingData.rating,
+              ratedAt: ratingData.ratedAt.toDate().toLocaleString(),
+            };
+          }
+          return null; 
+        }));
+        setProductRatings(ratingsWithUser.filter(f => f !== null));
+      }
+      fetchProductRatings().catch(console.error);
     fetchFeedbacks().catch(console.error);
   }, []);
 
@@ -50,10 +83,20 @@ function UserFeedback() {
     setSearchQuery(e.target.value);
   };
 
+  const handleRatingPageChange = (newPage) => { 
+    setCurrentRatingPage(newPage);
+  };
+
+
   const totalPages = Math.ceil(filteredFeedbacks.length / itemsPerPage);
+  const totalRatingPages = Math.ceil(productRatings.length / itemsPerPage); 
   const currentPageFeedbacks = filteredFeedbacks.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
+  );
+  const currentPageRatings = productRatings.slice( 
+    (currentRatingPage - 1) * itemsPerPage,
+    currentRatingPage * itemsPerPage
   );
 
   return (
@@ -74,13 +117,6 @@ function UserFeedback() {
             {currentPageFeedbacks.map((feedback, index) => (
                 <div key={index} className="user-list-item">
                 <div className="user-info">
-                    <div className="user-photo">
-                    <img
-                        src={feedback.photoUrl || `${process.env.PUBLIC_URL}/icons/user.png`} 
-                        alt={`${feedback.fullName}'s profile`}
-                        className="user-feedback-photo"
-                        />
-                    </div>
                     <div className="user-detail">
                     <div>
                         <p className="user-full-name"><strong>{feedback.fullName}</strong></p>
@@ -104,9 +140,41 @@ function UserFeedback() {
             ))}
           </div>
         </div>
+        <h1>Product Ratings</h1>
+        <div className="user-list-container">
+          {currentPageRatings.map((rating, index) => ( 
+            <div key={index} className="user-list-item">
+              <div className="user-info">
+                <div className="user-detail">
+                  <div>
+                    <p className="user-full-name"><strong>{rating.fullName}</strong></p>
+                    <p className="user-email">{rating.email}</p>
+                    <p className="user-rating-comment">"{rating.comment}"</p>
+                  </div>
+                  <div className="user-rating">
+                    <StarRating rating={rating.rating} />
+                </div>
+                </div>
+                <p className="user-rated-at">Rated At: {rating.ratedAt}</p>
+              </div>
+            </div>
+          ))}
+          <div className="pagination-controls">
+            {Array.from({ length: totalRatingPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handleRatingPageChange(i + 1)}
+                disabled={currentRatingPage === i + 1}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
+  
 }
 
 export default UserFeedback;
