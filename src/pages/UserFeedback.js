@@ -12,6 +12,8 @@ function UserFeedback() {
   const [itemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [currentRating, setCurrentRating] = useState(null);
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
 
@@ -150,6 +152,39 @@ function UserFeedback() {
     </Modal>
   );
 
+  const handleOpenModalRating = (rating) => {
+    setCurrentRating(rating);
+    setModalIsOpen(true);
+  };
+
+  const renderRatingModalContent = () => (
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={handleCloseModal}
+      contentLabel="Product Rating Details"
+      ariaHideApp={false}
+      className="Modal"
+      overlayClassName="Overlay"
+    >
+      {currentRating && (
+        <div className="modal-content">
+          <button onClick={handleCloseModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <h2>Rating Detail</h2>
+          <div className="modal-item-details">
+            <p><strong>Full Name:</strong> {currentRating.fullName}</p>
+            <p><strong>Email:</strong> {currentRating.email}</p>
+            <p><strong>Rating:</strong> {currentRating.rating} Stars</p>
+            <p><strong>Comment:</strong> {currentRating.comment}</p>
+            <p><strong>Rated At:</strong> {currentRating.ratedAt}</p>
+            <p><strong>Product ID:</strong> {currentRating.prodId}</p>
+          </div>
+        </div>
+      )}
+    </Modal>
+  );
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
@@ -203,7 +238,7 @@ function UserFeedback() {
         </div>
         <div className="user-list-container">
           {currentPageRatings.map((rating, index) => ( 
-            <div key={index} className="user-list-item">
+            <div key={index} className="user-list-item" onClick={() => handleOpenModalRating(rating)}>
               <div className="user-info">
                 <div className="user-detail">
                   <div>
@@ -233,6 +268,7 @@ function UserFeedback() {
           </div>
         </div>
         {renderModalContent()}
+        {renderRatingModalContent()}
       </div>
     </div>
   );
