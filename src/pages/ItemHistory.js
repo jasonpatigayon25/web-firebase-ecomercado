@@ -118,26 +118,33 @@ function ItemHistory() {
           {filteredOrders.map(order => (
             <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
               <div className="product-info">
+              <div className="order-header">
                 <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
+                <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
+              </div>
                 <div className="order-cards-container">
                 {order.productDetails.map((product, index) => (
-                  <div key={index} className="order-card">
+                  <div className="order-card">
+                  <div className="order-card-content">
                     <img src={product.photo} alt={product.name} className="order-image" />
                     <div className="order-detail">
-                    <h3 title={product.name}>{product.name.length > 10 ? `${product.name.substring(0, 10)}...` : product.name}</h3>
-                      <p>{product.category}</p>
-                      <p>₱{product.price}</p>
-                      <div className="product-qty">x{product.orderedQuantity}</div>
+                      <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
+                      <p className="category">{product.category}</p>
+                      <p className="price" >₱{product.price}</p>
                     </div>
                   </div>
+                  <div className="product-qty">x{product.orderedQuantity}</div>
+                </div>
                   ))}
 
                 </div>
-                <div className="product-info">
-                <div className="product-price">₱{order.orderTotalPrice}</div>
+                <div className="order-footer">
+
                   <div className="product-seller">Buyer: {order.buyerEmail}</div>
                   <div className="product-seller">Seller: {order.sellerEmail}</div>
-                  <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
+                  <div className="payment-label">
+                  Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
+                </div>
                 </div>
               </div>
             </li>

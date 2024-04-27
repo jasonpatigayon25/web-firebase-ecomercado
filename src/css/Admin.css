@@ -583,8 +583,9 @@ body {
 
 .order-detail {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
 }
 
 .order-detail > span {
@@ -617,6 +618,7 @@ body {
 
 /*Order*/
 
+
 .order-cards-container {
   display: flex;
   overflow-x: auto;
@@ -632,9 +634,8 @@ body {
   font-size: 0.9em;
 }
 
-
 .order-card {
-  flex: 0 0 160px; /* Flex-basis set to 160px to give all cards the same width */
+  flex: 0 0 300px;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -643,6 +644,12 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.order-card-content {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
 }
 
 .order-card h3 {
@@ -678,7 +685,6 @@ body {
   border-radius: 4px;
   object-fit: cover;
   margin-right: 15px;
-  text-align: center;
 }
 
 .order-detail {
@@ -688,22 +694,31 @@ body {
 }
 
 .order-detail h3 {
+  font-size: 1rem;
   color: var(--text-color);
-  margin: 0;
   font-weight: bold;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-qty {
   background-color: #f2f2f2;
   border-radius: 12px;
-  padding: 5px;
-  margin-top: 5px;
-  align-self: flex-start;
+  padding: 5px 10px;
+  font-weight: bold;
+  margin-left: 10px;
+  align-self: flex-end;
 }
 
+/*Additional Order design*/
+
 .order-detail p {
-  color: var(--secondary-text-color);
   margin: 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .order-qty {
@@ -720,4 +735,42 @@ body {
 .order-card:hover .order-qty {
   background-color: var(--active-color);
   color: #fff;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.payment-label {
+  color: black;
+}
+
+.payment-value {
+  font-weight: bold;
+  color: green;
+}
+
+.order-detail p.category {
+  background-color: #E3FCE9;    
+  border-radius: 6px;  
+  padding: 2px 4px;   
+  margin: 2px 0;
+  font-size: 0.85em;
+  display: inline-block; 
+  max-width: fit-content;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.order-detail p.price {
+  color: #05652D; 
 }
