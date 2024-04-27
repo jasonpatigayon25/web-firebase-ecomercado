@@ -59,6 +59,7 @@ function UserActivity() {
     }
   };
   
+  
   const fetchPendingProducts = () => { /* ... */ };
   const fetchPendingDonations = () => { /* ... */ };
   const fetchApprovedProducts = () => { /* ... */ };
