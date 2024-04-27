@@ -84,11 +84,11 @@ function ItemHistory() {
           {filteredOrders.map(order => (
             <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
               <div className="product-info">
-                <div className="product-name">#{order.id}</div>
+                <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
                 <div className="product-detail">
-                  <span className="product-price">Total Payment: ₱{order.orderTotalPrice}</span>
-                  <span className="product-qty">Buyer Email: {order.buyerEmail}</span>
-                  <span className="product-qty">Seller Email: {order.sellerEmail}</span>
+                  <span className="product-price">₱{order.orderTotalPrice}</span>
+                  <span className="product-qty">Buyer: {order.buyerEmail}</span>
+                  <span className="product-qty">Seller: {order.sellerEmail}</span>
                   <span className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</span>
                 </div>
               </div>

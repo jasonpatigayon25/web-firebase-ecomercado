@@ -516,29 +516,35 @@ body {
 /* Tabs */
 .tabs {
   display: flex;
-  margin-bottom: 20px;
+
+  justify-content: space-around; 
+  margin-left: 30px;
 }
 
 .tab {
-  padding: 10px 20px;
+  flex-grow: 1; 
+  text-align: center; 
+  padding: 20px 0; 
   cursor: pointer;
-  border-radius: 5px 5px 0 0;
-  margin-right: 10px;
-  background-color: #fff;
-  color: var(--text-color);
+  background-color: #05652D;
+  color: #ffffff;
+  border-right: #fff;
+  border-width: 1px;
+  font-weight: bold;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.tab:hover {
-  background-color: var(--primary-color);
+.tab:hover, .active-tab {
+  background-color: #4CAF50; 
   color: #fff;
 }
 
 .active-tab {
-  background-color: var(--primary-color);
-  color: #fff;
+  background-color: #ccc;
+  color: #05652D;
+  font-weight: bold; 
+  font-size: 18px;
 }
-
 
 /*Order Lists*/
 .order-list-item {
@@ -555,6 +561,12 @@ body {
   background-color: #4CAF50; 
   color: #ffffff; 
 }
+
+.order-id {
+  color: #808080;
+  font-size: 12px; 
+}
+
 
 .order-info {
   display: flex;
