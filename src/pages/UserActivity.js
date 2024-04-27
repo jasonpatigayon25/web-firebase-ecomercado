@@ -89,41 +89,29 @@ function UserActivity() {
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-      <div className="user-details-card">
-        <FaBan className="card-ban-icon" onClick={handleBanUser} />
-        <div className="card-avatar">
-          {userDetails.photoUrl ? (
-            <img src={userDetails.photoUrl} alt="Profile" />
-          ) : (
-            <FaUser size={120} />
-          )}
+        <div className="user-details-card">
+          <FaBan className="card-ban-icon" onClick={handleBanUser} />
+          <div className="card-avatar">
+            {userDetails.photoUrl ? (
+              <img src={userDetails.photoUrl} alt="Profile" />
+            ) : (
+              <FaUser size={120} />
+            )}
+          </div>
+          <div className="card-info">
+            <h1><FaUserAlt className="info-icon" /> {userDetails.firstName} {userDetails.lastName}</h1>
+            <p><FaEnvelope className="info-icon" /> {userDetails.email}</p>
+            <p><FaMapMarkerAlt className="info-icon" /> {userDetails.address}</p>
+            <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
+          </div>
         </div>
-        <div className="card-info">
-          <h1><FaUserAlt className="info-icon" /> {userDetails.firstName} {userDetails.lastName}</h1>
-          <p><FaEnvelope className="info-icon" /> {userDetails.email}</p>
-          <p><FaMapMarkerAlt className="info-icon" /> {userDetails.address}</p>
-          <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
-        </div>
-      </div>
-      <div className="tabs">
-          <div onClick={() => setActiveTab('pendingProducts')} className={`tab ${activeTab === 'pendingProducts' ? 'active-tab' : ''}`}>
-            Pending Products
-          </div>
-          <div onClick={() => setActiveTab('pendingDonations')} className={`tab ${activeTab === 'pendingDonations' ? 'active-tab' : ''}`}>
-            Pending Donations
-          </div>
-          <div onClick={() => setActiveTab('approvedProducts')} className={`tab ${activeTab === 'approvedProducts' ? 'active-tab' : ''}`}>
-            Approved Products
-          </div>
-          <div onClick={() => setActiveTab('approvedDonations')} className={`tab ${activeTab === 'approvedDonations' ? 'active-tab' : ''}`}>
-            Approved Donations
-          </div>
-          <div onClick={() => setActiveTab('declinedProducts')} className={`tab ${activeTab === 'declinedProducts' ? 'active-tab' : ''}`}>
-            Declined Products
-          </div>
-          <div onClick={() => setActiveTab('declinedDonations')} className={`tab ${activeTab === 'declinedDonations' ? 'active-tab' : ''}`}>
-            Declined Donations
-          </div>
+        <div className="tabs">
+          <div onClick={() => setActiveTab('pendingProducts')} className={`tab ${activeTab === 'pendingProducts' ? 'active-tab' : ''}`}>Pending Products</div>
+          <div onClick={() => setActiveTab('pendingDonations')} className={`tab ${activeTab === 'pendingDonations' ? 'active-tab' : ''}`}>Pending Donations</div>
+          <div onClick={() => setActiveTab('approvedProducts')} className={`tab ${activeTab === 'approvedProducts' ? 'active-tab' : ''}`}>Approved Products</div>
+          <div onClick={() => setActiveTab('approvedDonations')} className={`tab ${activeTab === 'approvedDonations' ? 'active-tab' : ''}`}>Approved Donations</div>
+          <div onClick={() => setActiveTab('declinedProducts')} className={`tab ${activeTab === 'declinedProducts' ? 'active-tab' : ''}`}>Declined Products</div>
+          <div onClick={() => setActiveTab('declinedDonations')} className={`tab ${activeTab === 'declinedDonations' ? 'active-tab' : ''}`}>Declined Donations</div>
         </div>
         <div className="tab-content">
           {renderTabContent()}
