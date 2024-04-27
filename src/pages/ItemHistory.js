@@ -174,17 +174,34 @@ function ItemHistory() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <h2>{currentOrder?.id}</h2>
+          <h2>#{currentOrder?.id.toUpperCase()}</h2>
           <div className="modal-details">
-            <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Buyer Email:</strong> {currentOrder?.buyerEmail}</p>
             <p><strong>Seller Email:</strong> {currentOrder?.sellerEmail}</p>
+            <p><strong>Delivery Fee:</strong> ₱{currentOrder?.shippingFee}</p>
+            <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
+            <div className="order-cards-container">
+              {currentOrder?.productDetails.map((product, index) => (
+                <div className="order-card" key={index}>
+                  <div className="order-card-content">
+                    <img src={product.photo} alt={product.name} className="order-image" />
+                    <div className="order-detail">
+                      <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
+                      <p className="category">{product.category}</p>
+                      <p className="price" >₱{product.price}</p>
+                    </div>
+                  </div>
+                  <div className="product-qty">x{product.orderedQuantity}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </Modal>
     </div>
   );
 }
+
 
 export default ItemHistory;
