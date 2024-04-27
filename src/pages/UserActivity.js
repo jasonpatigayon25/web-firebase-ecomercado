@@ -24,6 +24,9 @@ function UserActivity() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const [pendingDonations, setPendingDonations] = useState([]);
+
+
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -107,7 +110,6 @@ function UserActivity() {
       setLoading(false);
     }
   };
-
 
   const renderProductsContent = () => {
     return (
@@ -200,6 +202,96 @@ function UserActivity() {
     );
   };
 
+  useEffect(() => {
+    fetchPendingDonations();
+  }, []);
+
+  const handleApproveDonation = async (donationId) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    if (confirmApprove) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
+        await fetchPendingDonations();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+  const handleDeclineDonation = async (donationId) => {
+    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    if (confirmDecline) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
+        await fetchPendingDonations();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+  const fetchPendingDonations = async () => {
+    setLoading(true);
+    try {
+      const donationsRef = collection(db, "donation");
+      const q = query(donationsRef, where("publicationStatus", "==", "pending"));
+      const querySnapshot = await getDocs(q);
+      const donationList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setPendingDonations(donationList);
+    } catch (error) {
+      console.error("Error fetching pending donations: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderPendingDonationsContent = () => {
+    return (
+      <div className="product-list-container">
+        {pendingDonations.length > 0 ? (
+          <ul className="product-list">
+            {pendingDonations.map(donation => (
+              <li key={donation.id} className="product-list-item" onClick={() => openModal(donation)}>
+                <img src={donation.photo} alt={`${donation.name} thumbnail`} className="product-list-photo" />
+                <div className="product-info">
+                  <div className="product-name">{donation.name}</div>
+                  <div className="product-detail">
+                    <span className="product-price">{donation.weight}KG</span>
+                    <span className="product-category">{donation.category} Bundle</span>
+                    <span className="product-qty">
+                      {donation.purpose.length > 10 ? `${donation.purpose.substring(0, 10)}...` : donation.purpose}
+                    </span>
+                    <span className="product-seller">From: {donation.donor_email}</span>
+                    <div className="product-actions">
+                      <button onClick={() => handleApproveDonation(donation.id)} className="approve-button">Approve</button>
+                      <button onClick={() => handleDeclineDonation(donation.id)} className="decline-button">Decline</button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No pending donations found.</p>
+        )}
+      </div>
+    );
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'pending':
@@ -208,6 +300,8 @@ function UserActivity() {
         return renderProductsContent();
       case 'declined':
         return renderProductsContent();
+      case 'pending-donation':
+        return renderPendingDonationsContent();
       default:
         return 'Invalid';
     }
@@ -389,6 +483,9 @@ function UserActivity() {
           <div onClick={() => setActiveTab('pending')} className={`tab ${activeTab === 'pending' ? 'active-tab' : ''}`}>Pending Products</div>
           <div onClick={() => setActiveTab('approved')} className={`tab ${activeTab === 'approved' ? 'active-tab' : ''}`}>Approved Products</div>
           <div onClick={() => setActiveTab('declined')} className={`tab ${activeTab === 'declined' ? 'active-tab' : ''}`}>Declined Products</div>
+          <div onClick={() => setActiveTab('pending-donation')} className={`tab ${activeTab === 'pending-donation' ? 'active-tab' : ''}`}>Pending Donations</div>
+          <div onClick={() => setActiveTab('approved-donation')} className={`tab ${activeTab === 'approved-donation' ? 'active-tab' : ''}`}>Approved Donations</div>
+          <div onClick={() => setActiveTab('declined-donation')} className={`tab ${activeTab === 'declined-donation' ? 'active-tab' : ''}`}>Declined Donations</div>
         </div>
         <div className="tab-content">
           {renderTabContent()}
