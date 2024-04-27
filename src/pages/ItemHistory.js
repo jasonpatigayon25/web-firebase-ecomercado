@@ -110,7 +110,7 @@ function ItemHistory() {
       <div className="tabs">
         <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Orders</div>
         <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Orders</div>
-        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivered Orders</div>
+        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivery Process Orders</div>
         <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Orders</div>
         <div className={`tab ${activeTab === 'Cancelled' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Cancelled')}>Cancelled Orders</div>
       </div>
