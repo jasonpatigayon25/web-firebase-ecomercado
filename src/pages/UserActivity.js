@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog } from 'react-icons/fa';
@@ -17,10 +17,13 @@ function UserActivity() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('pending');
+  const isPendingTab = activeTab === 'pending';
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -80,8 +83,33 @@ function UserActivity() {
     setModalIsOpen(false);
   };
 
+  useEffect(() => {
+    fetchPendingProducts();
+  }, []);
 
-  const renderTabContent = () => {
+  const fetchPendingProducts = async () => {
+    setLoading(true);
+    try {
+      const productsRef = collection(db, "products");
+      const q = query(productsRef, where("publicationStatus", "==", "pending"));
+      const querySnapshot = await getDocs(q);
+      const productList = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() ? doc.data().createdAt.toDate() : new Date(),
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      setProducts(productList);
+    } catch (error) {
+      console.error("Error fetching pending products: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const renderProductsContent = () => {
     return (
       <div className="product-list-container">
         {products.length > 0 ? (
@@ -107,6 +135,82 @@ function UserActivity() {
         )}
       </div>
     );
+  };
+
+  const handleApprove = async (productId) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    if (confirmApprove) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  
+  const handleDecline = async (productId) => {
+    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    if (confirmDecline) {
+      setLoading(true);
+      try {
+        await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
+        await fetchPendingProducts();
+        closeModal(); 
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const renderPendingProductsContent = () => {
+    return (
+      <div className="product-list-container">
+        {products.length > 0 ? (
+          <ul className="product-list">
+            {products.map(product => (
+              <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
+                <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
+                <div className="product-info">
+                  <div className="product-name">{product.name}</div>
+                  <div className="product-detail">
+                    <span className="product-price">₱{product.price}</span>
+                    <span className="product-category">{product.category}</span>
+                    <span className="product-qty">Qty: {product.quantity}</span>
+                    <span className="product-seller">From: {product.seller_email}</span>
+                    <div className="product-actions">
+                    <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>
+                    <button onClick={() => handleDecline(product.id)} className="decline-button">Decline</button>
+                  </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No {activeTab.replace(/([A-Z])/g, ' $1').toLowerCase()} found.</p>
+        )}
+      </div>
+    );
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'pending':
+        return renderPendingProductsContent();
+      case 'approved':
+        return renderProductsContent();
+      case 'declined':
+        return renderProductsContent();
+      default:
+        return 'Invalid';
+    }
   };
 
   if (isLoading) {
@@ -325,6 +429,50 @@ function UserActivity() {
             <p><strong>Seller Email:</strong> {selectedProduct?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.width} cm X ${selectedProduct.shipping.height} cm X ${selectedProduct.shipping.length} cm` : 'N/A'}</p>
             <p><strong>Weight:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.weight} kg`: 'N/A'}</p>
+          </div>
+        </div>
+      </Modal>
+            <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Item Details"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <div className="modal-content">
+          <button onClick={closeModal} className="modal-close-btn">
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <h2>{selectedProduct?.name}</h2>
+          <div className="modal-photos">
+            {selectedProduct?.photo && (
+              <div className="main-photo">
+                <img src={selectedProduct.photo} alt={`${selectedProduct.name}`} className="modal-photo" />
+              </div>
+            )}
+            {selectedProduct?.subPhotos && selectedProduct?.subPhotos.length >   0 && (
+              <div className="sub-photos">
+                {selectedProduct.subPhotos.map((subPhoto, index) => (
+                  <img key={index} src={subPhoto} alt={`Sub Photo}`} className="modal-sub-photo" />
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="modal-details">
+            <p><strong>Category:</strong> {selectedProduct?.category}</p>
+            <p><strong>Quantity:</strong> {selectedProduct?.quantity}</p>
+            <p><strong>Date Published:</strong> {selectedProduct?.createdAt.toLocaleDateString()}</p>
+            <p><strong>Price:</strong> ₱{selectedProduct?.price}</p>
+            <p><strong>Description:</strong> {selectedProduct?.description}</p>
+            <p><strong>Seller Email:</strong> {selectedProduct?.seller_email}</p>
+            <p><strong>Logistic Packaging - WHL:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.width} cm X ${selectedProduct.shipping.height} cm X ${selectedProduct.shipping.length} cm` : 'N/A'}</p>
+            <p><strong>Weight:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.weight} kg`: 'N/A'}</p>
+            {isPendingTab && (
+            <div className="modal-actions">
+              <button onClick={() => handleApprove(selectedProduct.id)} className="approve-button">Approve</button>
+              <button onClick={() => handleDecline(selectedProduct.id)} className="decline-button">Decline</button>
+            </div>
+          )}
           </div>
         </div>
       </Modal>
