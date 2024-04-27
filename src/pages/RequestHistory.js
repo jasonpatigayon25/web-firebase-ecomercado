@@ -9,70 +9,74 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 Modal.setAppElement('#root');
 
 function RequestHistory() {
-  const [orders, setOrders] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [currentOrder, setCurrentOrder] = useState(null);
+  const [currentRequest, setCurrentRequest] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); 
   const [activeTab, setActiveTab] = useState('Pending');
 
   useEffect(() => {
-    const fetchProductDetails = async (productId) => {
+    const fetchDonationDetails = async (donationId) => {
       try {
-        const docRef = doc(db, "products", productId);
+        const docRef = doc(db, "donation", donationId);
         const docSnapshot = await getDoc(docRef);
-    
+  
         if (!docSnapshot.exists()) {
-          console.error('No product with the given ID:', productId);
-          return {};
+          console.error('No donation with the given ID:', donationId);
+          return null;
         }
-    
-        const productData = { id: docSnapshot.id, ...docSnapshot.data() };
-        return productData;
+  
+        return { id: docSnapshot.id, ...docSnapshot.data() };
       } catch (error) {
-        console.error("Error fetching product details:", error);
-        return {};
-      }
-    };
-
-    const fetchOrdersByStatus = async () => {
-      try {
-        const ordersRef = collection(db, "orders");
-        const q = query(ordersRef, where("status", "==", activeTab));
-        const querySnapshot = await getDocs(q);
-        const ordersWithDetails = [];
-
-        for (let doc of querySnapshot.docs) {
-          const orderData = doc.data();
-          const productDetailsPromises = orderData.productDetails.map(
-            async (product) => {
-              const details = await fetchProductDetails(product.productId);
-              if (!details.category || !details.price) {
-                console.error('Missing category or price for product:', product.productId);
-              }
-              return { ...product, ...details };
-            }
-          );
-          const productDetails = await Promise.all(productDetailsPromises);
-
-          ordersWithDetails.push({
-            id: doc.id,
-            ...orderData,
-            productDetails,
-            dateOrdered: orderData.dateOrdered?.toDate() ? orderData.dateOrdered.toDate() : new Date(),
-          });
-        }
-
-        setOrders(ordersWithDetails.sort((a, b) => b.dateOrdered - a.dateOrdered));
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
+        console.error("Error fetching donation details:", error);
+        return null;
       }
     };
   
-    fetchOrdersByStatus();
+    const fetchRequestsByStatus = async () => {
+      try {
+        const requestsRef = collection(db, "requests");
+        const q = query(requestsRef, where("status", "==", activeTab));
+        const querySnapshot = await getDocs(q);
+        const requestsWithDetails = [];
+  
+        for (let docSnapshot of querySnapshot.docs) {
+
+          const requestData = docSnapshot.data();
+
+          const totalFee = (requestData.deliveryFee || 0) + (requestData.disposalFee || 0);
+
+          const donationDetailsPromises = requestData.donorDetails.map(
+            (donation) => fetchDonationDetails(donation.donationId)
+          );
+  
+          const donationDetails = (await Promise.all(donationDetailsPromises)).filter(Boolean);
+  
+          if (!donationDetails.length) {
+            console.error('Donation details not found for request:', docSnapshot.id);
+            continue;
+          }
+  
+          requestsWithDetails.push({
+            id: docSnapshot.id,
+            ...requestData,
+            donationDetails,
+            totalFee,
+            dateRequested: requestData.dateRequested?.toDate() || new Date(),
+          });
+        }
+  
+        setRequests(requestsWithDetails.sort((a, b) => b.dateRequested - a.dateRequested));
+      } catch (error) {
+        console.error("Error fetching requests: ", error);
+      }
+    };
+  
+    fetchRequestsByStatus();
   }, [activeTab]);
 
-  const openModal = (order) => {
-    setCurrentOrder(order);
+  const openModal = (request) => {
+    setCurrentRequest(request);
     setModalIsOpen(true);
   };
 
@@ -88,53 +92,53 @@ function RequestHistory() {
     setSearchQuery(e.target.value);
   };
 
-  const filteredOrders = orders.filter(order => {
+  const filteredRequests = requests.filter(request => {
     return (
-      order.buyerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.sellerEmail.toLowerCase().includes(searchQuery.toLowerCase())
+      request.requesterEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      request.donorEmail.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
   
 
-  const renderOrderDetails = () => (
+  const renderRequestDetails = () => (
     <div className="order-list-container">
       <div className="search-bar-wrapper">
         <input
           type="text"
-          placeholder="Search by buyer email or seller email..."
+          placeholder="Search by requester email or donor email..."
           value={searchQuery}
           onChange={handleSearchChange}
           className="search-bar"
         />
       </div>
       <div className="tabs">
-        <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Orders</div>
-        <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Orders</div>
-        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivery Process Orders</div>
-        <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Orders</div>
-        <div className={`tab ${activeTab === 'Cancelled' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Cancelled')}>Cancelled Orders</div>
+        <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Requests</div>
+        <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Requests</div>
+        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivery Process Requests</div>
+        <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Requests</div>
+        <div className={`tab ${activeTab === 'Declined' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Declined')}>Declined Requests</div>
       </div>
-      {filteredOrders.length > 0 ? (
+      {filteredRequests.length > 0 ? (
         <ul className="product-list">
-          {filteredOrders.map(order => (
-            <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
+          {filteredRequests.map(request => (
+            <li key={request.id} className="product-list-item" onClick={() => openModal(request)}>
               <div className="product-info">
               <div className="order-header">
-                <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
-                <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
+                <div className="order-id">{`#${request.id}`.toUpperCase()}</div>
+                <div className="product-published-date">Date Requested: {request.dateRequested.toLocaleDateString()}</div>
               </div>
                 <div className="order-cards-container">
-                {order.productDetails.map((product, index) => (
+                {request.donationDetails.map((donation, index) => (
                   <div className="order-card">
                   <div className="order-card-content">
-                    <img src={product.photo} alt={product.name} className="order-image" />
+                    <img src={donation.photo} alt={donation.name} className="order-image" />
                     <div className="order-detail">
-                      <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
-                      <p className="category">{product.category}</p>
-                      <p className="price" >₱{product.price}</p>
+                      <h3 title={donation.name}>{donation.name.length > 20 ? `${donation.name.substring(0, 20)}...` : donation.name}</h3>
+                      <p className="category">{donation.category}</p>
+                      <p className="weight">Weight: {donation.weight} kg</p>
                     </div>
                   </div>
-                  <div className="product-qty">x{product.orderedQuantity}</div>
+                  {/* <div className="product-qty">x{donation.requestedQuantity}</div> */}
                 </div>
                   ))}
 
@@ -142,13 +146,13 @@ function RequestHistory() {
                 <div className="order-footer">
 
                   <div className="payment-label">
-                  Buyer: <span className="payment-value">{order.buyerEmail}</span>
+                  Requester: <span className="payment-value">{request.requesterEmail}</span>
                 </div>
                 <div className="payment-label">
-                Seller: <span className="payment-value">{order.sellerEmail}</span>
+                Donor: <span className="payment-value">{request.donorEmail}</span>
                 </div>
                   <div className="payment-label">
-                  Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
+                  Total Fee: <span className="payment-value">₱{request.totalFee}</span>
                 </div>
                 </div>
               </div>
@@ -156,18 +160,18 @@ function RequestHistory() {
           ))}
         </ul>
       ) : (
-        <p>No orders found.</p>
+        <p>No requests found.</p>
       )}
     </div>
   );
   
   return (
     <div className="order-history-container">
-      {renderOrderDetails()}
+      {renderRequestDetails()}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        contentLabel="Order Details"
+        contentLabel="Request Details"
         className="Modal"
         overlayClassName="Overlay"
       >
@@ -175,25 +179,26 @@ function RequestHistory() {
           <button onClick={closeModal} className="modal-close-btn">
             <FontAwesomeIcon icon={faTimes} />
           </button>
-          <h2>#{currentOrder?.id.toUpperCase()}</h2>
+          <h2>#{currentRequest?.id.toUpperCase()}</h2>
           <div className="modal-details">
-            <p><strong>Buyer Email:</strong> {currentOrder?.buyerEmail}</p>
-            <p><strong>Seller Email:</strong> {currentOrder?.sellerEmail}</p>
-            <p><strong>Delivery Fee:</strong> ₱{currentOrder?.shippingFee}</p>
-            <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
-            <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
+            <p><strong>Requester Email:</strong> {currentRequest?.requesterEmail}</p>
+            <p><strong>Donor Email:</strong> {currentRequest?.donorEmail}</p>
+            <p><strong>Delivery Fee:</strong> ₱{currentRequest?.deliveryFee}</p>
+            <p><strong>Delivery Fee:</strong> ₱{currentRequest?.disposalFee}</p>
+            <p><strong>Total Fee:</strong> ₱{currentRequest?.totalFee}</p>
+            <p><strong>Date Requested:</strong> {currentRequest?.dateRequested?.toLocaleDateString()}</p>
             <div className="order-cards-container">
-              {currentOrder?.productDetails.map((product, index) => (
+              {currentRequest?.donationDetails.map((donation, index) => (
                 <div className="order-card" key={index}>
                   <div className="order-card-content">
-                    <img src={product.photo} alt={product.name} className="order-image" />
+                    <img src={donation.photo} alt={donation.name} className="order-image" />
                     <div className="order-detail">
-                      <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
-                      <p className="product-category-modal">{product.category}</p>
-                      <p className="price" >₱{product.price}</p>
+                      <h3 title={donation.name}>{donation.name.length > 20 ? `${donation.name.substring(0, 20)}...` : donation.name}</h3>
+                      <p className="product-category-modal">{donation.category}</p>
+                      <p className="price">Weight: {donation.weight} kg</p>
                     </div>
                   </div>
-                  <div className="product-qty-modal">x{product.orderedQuantity}</div>
+                  {/* <div className="product-qty-modal">x{donation.requestedQuantity}</div> */}
                 </div>
               ))}
             </div>

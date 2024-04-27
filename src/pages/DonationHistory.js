@@ -7,7 +7,7 @@ import "../css/Admin.css";
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import ItemHistory from "./ItemHistory";
+import RequestsHistory from "./RequestHistory";
 
 Modal.setAppElement('#root');
 
@@ -90,7 +90,7 @@ function DonationHistory() {
             <p>Cancelled</p>
           </div>
         </div>
-        <ItemHistory />
+        <RequestsHistory />
       </div>
       <Modal
         isOpen={modalIsOpen}
