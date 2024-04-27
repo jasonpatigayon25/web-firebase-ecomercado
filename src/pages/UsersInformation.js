@@ -118,7 +118,7 @@ function UsersInformation() {
       });
 
     // Count banned users
-    const bannedQuery = query(collection(db, 'users'), where('isBanned', '==', true));
+    const bannedQuery = query(collection(db, 'users'), where('banned', '==', true));
     getDocs(bannedQuery)
       .then(snapshot => {
         setBannedCount(snapshot.size);

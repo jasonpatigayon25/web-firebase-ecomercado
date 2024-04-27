@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function UserActivity() {
   const { email } = useParams();  
@@ -13,6 +14,7 @@ function UserActivity() {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('pending');
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -103,10 +105,71 @@ function UserActivity() {
     return <div>No user found.</div>;
   }
 
-  const handleBanUser = () => {
+  const handleBanUser = async (e) => {
+    e.preventDefault();
+  
     const confirmBan = window.confirm(`Are you sure you want to ban ${userDetails.firstName} ${userDetails.lastName}?`);
-    if (confirmBan) {
-      console.log('User banned:', userDetails.email);
+    
+    if (!confirmBan) {
+      return; 
+    }
+  
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+  
+    try {
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        alert(`No user found with email: ${email}`);
+        return;
+      }
+  
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(document.ref, {
+          banned: true
+        });
+      });
+  
+      alert(`${email} has been banned permanently.`);
+      navigate(`/users-information`);
+    } catch (error) {
+      console.error("Error banning the user: ", error);
+      alert("Failed to ban the user.");
+    }
+  
+    const productsRef = collection(db, "products");
+    const productsQuery = query(productsRef, where("seller_email", "==", email));
+  
+    try {
+      const productsSnapshot = await getDocs(productsQuery);
+  
+      productsSnapshot.forEach(async (productDoc) => {
+        await updateDoc(productDoc.ref, {
+          publicationStatus: 'declined'
+        });
+      });
+  
+      console.log(`Products from ${email} have been disabled.`);
+    } catch (error) {
+      console.error("Error disabling the user's products: ", error);
+    }
+  
+    const donationsRef = collection(db, "donation");
+    const donationsQuery = query(donationsRef, where("donor_email", "==", email));
+  
+    try {
+      const donationsSnapshot = await getDocs(donationsQuery);
+  
+      donationsSnapshot.forEach(async (donationDoc) => {
+        await updateDoc(donationDoc.ref, {
+          publicationStatus: 'declined'
+        });
+      });
+  
+      console.log(`Donations from ${email} have been disabled.`);
+    } catch (error) {
+      console.error("Error disabling the user's donations: ", error);
     }
   };
 
