@@ -6,6 +6,10 @@ import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 
 function UserActivity() {
   const { email } = useParams();  
@@ -14,6 +18,8 @@ function UserActivity() {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('pending');
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,13 +71,23 @@ function UserActivity() {
     }
   }, [activeTab, userDetails]);  
 
+  const openModal = (product) => {
+    setSelectedProduct(product);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+
   const renderTabContent = () => {
     return (
       <div className="product-list-container">
         {products.length > 0 ? (
           <ul className="product-list">
             {products.map(product => (
-              <li key={product.id} className="product-list-item">
+              <li key={product.id} className="product-list-item" onClick={() => openModal(product)}>
                 <img src={product.photo} alt={`${product.name} thumbnail`} className="product-list-photo" />
                 <div className="product-info">
                   <div className="product-name">{product.name}</div>
@@ -274,6 +290,33 @@ function UserActivity() {
           {renderTabContent()}
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Product Details"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        {selectedProduct && (
+          <div className="modal-content">
+            <button onClick={closeModal} className="modal-close-btn">
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <h2>{selectedProduct.name}</h2>
+            <div>
+              <img src={selectedProduct.photo} alt={`${selectedProduct.name} thumbnail`} />
+              <div>
+                <p>Name: {selectedProduct.name}</p>
+                <p>Price: ₱{selectedProduct.price}</p>
+                <p>Category: {selectedProduct.category}</p>
+                <p>Quantity: {selectedProduct.quantity}</p>
+                <p>Seller: {selectedProduct.seller_email}</p>
+                <p>Published At: {selectedProduct.createdAt.toLocaleDateString()}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
