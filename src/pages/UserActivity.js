@@ -108,7 +108,7 @@ function UserActivity() {
   const handleBanUser = async (e) => {
     e.preventDefault();
   
-    const confirmBan = window.confirm(`Are you sure you want to ban ${userDetails.firstName} ${userDetails.lastName}?`);
+    const confirmBan = window.confirm(`Confirmation to ban ${userDetails.firstName} ${userDetails.lastName}?`);
     
     if (!confirmBan) {
       return; 
@@ -131,7 +131,7 @@ function UserActivity() {
         });
       });
   
-      alert(`${email} has been banned permanently.`);
+      alert(`${email} has been banned.`);
       navigate(`/users-information`);
     } catch (error) {
       console.error("Error banning the user: ", error);
@@ -173,13 +173,81 @@ function UserActivity() {
     }
   };
 
+  const handleUnBanUser = async (e) => {
+    e.preventDefault();
+  
+    const confirmBan = window.confirm(`Confirmation of enabling ${userDetails.firstName} ${userDetails.lastName}?`);
+    
+    if (!confirmBan) {
+      return; 
+    }
+  
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+  
+    try {
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        alert(`No user found with email: ${email}`);
+        return;
+      }
+  
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(document.ref, {
+          banned: false
+        });
+      });
+  
+      alert(`${email} account has been enabled.`);
+      navigate(`/users-information`);
+    } catch (error) {
+      console.error("Error banning the user: ", error);
+      alert("Failed to ban the user.");
+    }
+  
+    const productsRef = collection(db, "products");
+    const productsQuery = query(productsRef, where("seller_email", "==", email));
+  
+    try {
+      const productsSnapshot = await getDocs(productsQuery);
+  
+      productsSnapshot.forEach(async (productDoc) => {
+        await updateDoc(productDoc.ref, {
+          publicationStatus: 'pending'
+        });
+      });
+  
+      console.log(`Products from ${email} have been pending.`);
+    } catch (error) {
+      console.error("Error pending the user's products: ", error);
+    }
+  
+    const donationsRef = collection(db, "donation");
+    const donationsQuery = query(donationsRef, where("donor_email", "==", email));
+  
+    try {
+      const donationsSnapshot = await getDocs(donationsQuery);
+  
+      donationsSnapshot.forEach(async (donationDoc) => {
+        await updateDoc(donationDoc.ref, {
+          publicationStatus: 'pending'
+        });
+      });
+  
+      console.log(`Donations from ${email} have been pending.`);
+    } catch (error) {
+      console.error("Error disabling the user's donations: ", error);
+    }
+  };
+
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
       <div className="user-details-card">
           {userDetails.banned ? (
-            <div className="card-ban-icon">BANNED <FaCog /></div>
+            <div className="card-ban-icon">BANNED <FaCog onClick={handleUnBanUser} /></div>
           ) : (
             <FaBan className="card-ban-icon" onClick={handleBanUser} />
           )}
