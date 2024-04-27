@@ -140,8 +140,12 @@ function ItemHistory() {
                 </div>
                 <div className="order-footer">
 
-                  <div className="product-seller">Buyer: {order.buyerEmail}</div>
-                  <div className="product-seller">Seller: {order.sellerEmail}</div>
+                  <div className="payment-label">
+                  Buyer: <span className="payment-value">{order.buyerEmail}</span>
+                </div>
+                <div className="payment-label">
+                Seller: <span className="payment-value">{order.sellerEmail}</span>
+                </div>
                   <div className="payment-label">
                   Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
                 </div>

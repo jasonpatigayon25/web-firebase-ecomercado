@@ -774,3 +774,10 @@ body {
 .order-detail p.price {
   color: #05652D; 
 }
+
+
+.product-list-item:hover .payment-label,
+.product-list-item:hover .payment-value,
+.product-list-item:hover .order-id {
+  color: #ffffff;
+}
