@@ -8,16 +8,23 @@ function UserFeedback() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [itemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentRatingPage, setCurrentRatingPage] = useState(1); 
+
   const [searchQuery, setSearchQuery] = useState("");
   const [productRatings, setProductRatings] = useState([]);
 
-  const filteredFeedbacks = feedbacks.filter(feedback => {
-    return (
-      feedback.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feedback.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  });
+  const [currentRatingPage, setCurrentRatingPage] = useState(1);
+  const [ratingSearchQuery, setRatingSearchQuery] = useState("");
+
+  const filteredFeedbacks = feedbacks.filter(feedback =>
+    feedback.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    feedback.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredProductRatings = productRatings.filter(rating =>
+    rating.email.toLowerCase().includes(ratingSearchQuery.toLowerCase()) ||
+    rating.fullName.toLowerCase().includes(ratingSearchQuery.toLowerCase()) ||
+    rating.rating.toString() === ratingSearchQuery.trim()
+  );
   
 
   function StarRating({ rating }) {
@@ -87,14 +94,18 @@ function UserFeedback() {
     setCurrentRatingPage(newPage);
   };
 
+  const handleRatingSearchChange = (e) => {
+    setRatingSearchQuery(e.target.value);
+  };
+
 
   const totalPages = Math.ceil(filteredFeedbacks.length / itemsPerPage);
-  const totalRatingPages = Math.ceil(productRatings.length / itemsPerPage); 
+  const totalRatingPages = Math.ceil(filteredProductRatings.length / itemsPerPage); 
   const currentPageFeedbacks = filteredFeedbacks.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  const currentPageRatings = productRatings.slice( 
+  const currentPageRatings = filteredProductRatings.slice( 
     (currentRatingPage - 1) * itemsPerPage,
     currentRatingPage * itemsPerPage
   );
@@ -141,6 +152,15 @@ function UserFeedback() {
           </div>
         </div>
         <h1>Product Ratings</h1>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            placeholder="Search ratings by email, name, or stars..."
+            value={ratingSearchQuery}
+            onChange={handleRatingSearchChange}
+            className="search-bar"
+          />
+        </div>
         <div className="user-list-container">
           {currentPageRatings.map((rating, index) => ( 
             <div key={index} className="user-list-item">
@@ -174,7 +194,6 @@ function UserFeedback() {
       </div>
     </div>
   );
-  
 }
 
 export default UserFeedback;
