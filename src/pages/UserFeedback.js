@@ -3,11 +3,12 @@ import Modal from "react-modal";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, orderBy, limit, where } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, where, doc, getDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function UserFeedback() {
+
   const [feedbacks, setFeedbacks] = useState([]);
   const [itemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +58,7 @@ function UserFeedback() {
             fullName: `${userData.firstName} ${userData.lastName}`,
             description: feedbackData.description,
             timestamp: feedbackData.timestamp.toDate().toLocaleString(),
-            photoUrl: userData.photoUrl,
+            photo: userData.photo,
           };
         }
         return null; 
@@ -152,8 +153,20 @@ function UserFeedback() {
     </Modal>
   );
 
-  const handleOpenModalRating = (rating) => {
+  const [currentProduct, setCurrentProduct] = useState(null);
+
+  const handleOpenModalRating = async (rating) => {
     setCurrentRating(rating);
+    if (rating.prodId) {
+      const productRef = doc(db, 'products', rating.prodId);
+      const productSnap = await getDoc(productRef);
+      if (productSnap.exists()) {
+        setCurrentProduct({ id: productSnap.id, ...productSnap.data() });
+      } else {
+        console.log("No such product!");
+        setCurrentProduct(null);
+      }
+    }
     setModalIsOpen(true);
   };
 
@@ -179,6 +192,14 @@ function UserFeedback() {
             <p><strong>Comment:</strong> {currentRating.comment}</p>
             <p><strong>Rated At:</strong> {currentRating.ratedAt}</p>
             <p><strong>Product ID:</strong> {currentRating.prodId}</p>
+            {currentProduct && (
+              <div>
+                <h3>Rated Product Details</h3>
+                <img src={currentProduct.photo} alt={currentProduct.name} style={{ width: '100px', height: '100px' }} />
+                <p><strong>Name:</strong> {currentProduct.name}</p>
+                <p><strong>Category:</strong> {currentProduct.category}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
