@@ -1,161 +1,114 @@
 import React, { useState, useEffect } from "react";
+import { FaThumbsUp, FaTruck, FaBoxOpen, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import SidebarOptions from "./SidebarOptions";
-import "../css/Admin.css";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { collection, getDocs, query, where } from "firebase/firestore";
+import "../css/Admin.css";
+import Modal from 'react-modal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import ItemHistory from "./ItemHistory";
+
+Modal.setAppElement('#root');
 
 function DonationHistory() {
-  const [donations, setDonations] = useState([]);
-  const [totalDonation, setTotalDonation] = useState(0);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDonation, setSelectedDonation] = useState(null);
-
-  const [approvedDonations, setApprovedDonations] = useState(0);
-
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handleOpenModal = (donation) => {
-    setSelectedDonation(donation);
-    setModalVisible(true);
-  }
-
-  const handleCloseModal = () => {
-    setSelectedDonation(null);
-    setModalVisible(false);
-  }
+  const [toApprove, setToApprove] = useState(0);
+  const [toDeliver, setToDeliver] = useState(0);
+  const [deliveryProcess, setDeliveryProcess] = useState(0);
+  const [completed, setCompleted] = useState(0);
+  const [cancelled, setCancelled] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState([]);
+  const [modalTitle, setModalTitle] = useState("");
 
   useEffect(() => {
-    const fetchDonations = async () => {
-      const donationCollection = collection(db, 'donation');
-      const donationQuery = query(donationCollection, orderBy('createdAt', 'desc'));
-      const donationData = await getDocs(donationQuery);
-      const donations = donationData.docs.map(doc => ({
-        id: doc.id,
-        name: doc.data().name,
-        photo: doc.data().photo,
-        location: doc.data().location,
-        message: doc.data().message,
-        donor_email: doc.data().donor_email,
-        createdAt: doc.data().createdAt
-      }));
-      setDonations(donations);
-      setTotalDonation(donationData.size);
-    };
-  
-    const fetchApprovedDonations = async () => {
-      const donationCollection = collection(db, 'donation');
-      const approvedDonationsQuery = query(donationCollection, where('isDonated', '==', true));
-      try {
-        const querySnapshot = await getDocs(approvedDonationsQuery);
-        setApprovedDonations(querySnapshot.size); 
-      } catch (error) {
-        console.error("Error fetching approved donations: ", error);
-      }
+    const fetchOrderCounts = async () => {
+      const orderCollection = collection(db, 'requests');
+
+      const toApproveQuery = query(orderCollection, where('status', '==', 'Pending'));
+      const toApproveSnapshot = await getDocs(toApproveQuery);
+      setToApprove(toApproveSnapshot.size);
+
+      const toDeliverQuery = query(orderCollection, where('status', '==', 'Approved'));
+      const toDeliverSnapshot = await getDocs(toDeliverQuery);
+      setToDeliver(toDeliverSnapshot.size);
+
+      const deliveryProcessQuery = query(orderCollection, where('status', '==', 'Receiving'));
+      const deliveryProcessSnapshot = await getDocs(deliveryProcessQuery);
+      setDeliveryProcess(deliveryProcessSnapshot.size);
+
+      const completedQuery = query(orderCollection, where('status', '==', 'Completed'));
+      const completedSnapshot = await getDocs(completedQuery);
+      setCompleted(completedSnapshot.size);
+
+      const cancelledQuery = query(orderCollection, where('status', '==', 'Declined'));
+      const cancelledSnapshot = await getDocs(cancelledQuery);
+      setCancelled(cancelledSnapshot.size);
     };
 
-    fetchDonations();
-    fetchApprovedDonations();
+    fetchOrderCounts();
   }, []);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const fetchAndShowModal = async (status) => {
+    const orderCollection = collection(db, 'requests');
+    const statusQuery = query(orderCollection, where('status', '==', status));
+    const snapshot = await getDocs(statusQuery);
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setModalContent(items);
+    setModalTitle(`${status.charAt(0).toUpperCase() + status.slice(1)} Orders`);
+    setModalIsOpen(true);
   };
-
-  const totalPages = Math.ceil(donations.length / itemsPerPage);
-  const currentDonations = donations.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const donationChartData = [
-    { name: 'Total Donations', value: totalDonation },
-    { name: 'Approved Donations', value: approvedDonations },
-  ];
-
-  const [isStatsCardHovered, setIsStatsCardHovered] = useState(false);
 
   return (
     <div className="admin-dashboard">
       <SidebarOptions />
       <div className="admin-dashboard-content">
-      <div className="admin-dashboard-cards">
-      <div 
-          className="admin-dashboard-card"
-          onMouseEnter={() => setIsStatsCardHovered(true)}
-          onMouseLeave={() => setIsStatsCardHovered(false)}
-        >
-        <h1 className="statistics-title" style={{ color: isStatsCardHovered ? '#008000' : '#ffffff' }}>Donation Overview</h1>
-          <BarChart width={600} height={300} data={donationChartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#4CAF50" />
-          </BarChart>
-        </div>
-        </div>
-        <div className="admin-dashboard-recent-users">
-          <h2>Total Donations: {totalDonation}</h2>
-          <table className="admin-dashboard-recent-users">
-            <thead>
-              <tr>
-                <th style={{ width: '80px' }}>Image</th>
-                <th style={{ width: '100px' }}>Product</th>
-                <th style={{ width: '100px' }}>Donor</th>
-                <th style={{ width: '300px' }}>Location</th>
-                <th style={{ width: '80px' }}>View</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentDonations.map((donation, index) => (
-                <tr key={index}>
-                  <td className="user-image" style={{ width: '80px' }}> 
-                    <img src={donation.photo} alt="Donation" width="50" height="50"/>
-                  </td>
-                  <td style={{ width: '100px' }}>{donation.name}</td>
-                  <td style={{ width: '100px' }}>{donation.donor_email}</td>
-                  <td style={{ width: '300px' }}>{donation.location}</td>
-                  <button  className="view-link" onClick={() => handleOpenModal(donation)} style={{ cursor: 'pointer' }}>
-                    View
-                  </button>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-            <div className="pagination-controls">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => handlePageChange(i + 1)}
-                disabled={currentPage === i + 1}
-              >
-                {i + 1}
-              </button>
-            ))}
+        <div className="admin-nav-cards-order">
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Pending')}>
+            <h2><span>{toApprove}</span></h2>
+            <FaThumbsUp className="icon" />
+            <p>To Approve</p>
           </div>
-          {isModalVisible && (
-            <DonationDetailsModal donation={selectedDonation} onClose={handleCloseModal} />
-          )}
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Approved')}>
+            <h2><span>{toDeliver}</span></h2>
+            <FaTruck className="icon" />
+            <p>To Deliver</p>
+          </div>
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Receiving')}>
+            <h2><span>{deliveryProcess}</span></h2>
+            <FaBoxOpen className="icon" />
+            <p>Delivery Process</p>
+          </div>
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Completed')}>
+            <h2><span>{completed}</span></h2>
+            <FaCheckCircle className="icon" />
+            <p>Completed</p>
+          </div>
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Declined')}>
+            <h2><span>{cancelled}</span></h2>
+            <FaTimesCircle className="icon" />
+            <p>Cancelled</p>
+          </div>
         </div>
+        <ItemHistory />
       </div>
-    </div>
-  );
-}
-
-function DonationDetailsModal({ donation, onClose }) {
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <img src={donation.photo} alt={donation.name} width="100%" />
-        <h2 style={{ color: 'black' }}>{donation.name}</h2>
-        <p>Donor Email: {donation.donor_email}</p>
-        <p>Location: {donation.location}</p>
-        <p>Message: {donation.message}</p>
-        <button className="modal-close-button" onClick={onClose}>✕</button>
-      </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Order Details Modal"
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <div className="modal-header">
+          <button onClick={() => setModalIsOpen(false)} className="modal-close-btn"><FontAwesomeIcon icon={faTimes} /></button>
+        </div>
+        <h2>{modalTitle}</h2>
+        {modalContent.map((item) => (
+          <div key={item.id} className="modal-item-details">
+            {/* WALA */}
+          </div>
+        ))}
+      </Modal>
     </div>
   );
 }

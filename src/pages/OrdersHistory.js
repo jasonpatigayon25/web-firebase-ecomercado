@@ -84,7 +84,7 @@ function OrdersHistory() {
             <FaCheckCircle className="icon" />
             <p>Completed</p>
           </div>
-          <div className="counter-card-order" onClick={() => fetchAndShowModal('cancelled')}>
+          <div className="counter-card-order" onClick={() => fetchAndShowModal('Cancelled')}>
             <h2><span>{cancelled}</span></h2>
             <FaTimesCircle className="icon" />
             <p>Cancelled</p>
