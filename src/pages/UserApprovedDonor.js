@@ -57,7 +57,6 @@ function UserApprovedDonor() {
 
   const renderProductApproved = () => (
     <div className="product-list-container">
-      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Donations</h1>
       <div className="search-bar-wrapper">
         <input
           type="text"
@@ -67,6 +66,7 @@ function UserApprovedDonor() {
           className="search-bar"
         />
       </div>
+      <h1 className="recent-products-title"><FaClipboardCheck style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Approved Donations</h1>
       {filteredProducts.length > 0 ? (
         <ul className="product-list">
           {filteredProducts.map(product => (
@@ -77,7 +77,9 @@ function UserApprovedDonor() {
                 <div className="product-detail">
                   <span  className="product-price">{product.weight}KG</span>
                   <span className="product-category">{product.category} Bundle</span>
-                  <span  className="product-qty">{product.purpose}</span>
+                  <span className="product-qty">
+                    {product.purpose.length > 10 ? `${product.purpose.substring(0, 10)}...` : product.purpose}
+                  </span>
                   <span  className="product-seller">From: {product.donor_email}</span>
                   <span className="product-published-date">Published At: {product.createdAt.toLocaleDateString()}</span>
                 </div>
@@ -90,6 +92,7 @@ function UserApprovedDonor() {
       )}
     </div>
   );
+
   return (
     <div className="approved-products-container">
       {renderProductApproved()}

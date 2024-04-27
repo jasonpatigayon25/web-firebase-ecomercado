@@ -105,8 +105,7 @@ function UserPendingProducts() {
 
   const renderProductApproved = () => (
     <div className="product-list-container">
-      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
-      <div className="search-bar-wrapper">
+       <div className="search-bar-wrapper">
         <input
           type="text"
           placeholder="Search by seller email, name, or category..."
@@ -115,6 +114,8 @@ function UserPendingProducts() {
           className="search-bar"
         />
       </div>
+      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+
       {loading ? (
         <p>Loading...</p>
       ) : filteredProducts.length > 0 ? (

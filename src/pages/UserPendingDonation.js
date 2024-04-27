@@ -104,7 +104,6 @@ function UserPendingDonation() {
 
   const renderProductApproved = () => (
     <div className="product-list-container">
-      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
       <div className="search-bar-wrapper">
         <input
           type="text"
@@ -114,6 +113,8 @@ function UserPendingDonation() {
           className="search-bar"
         />
       </div>
+      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+      
       {loading ? (
         <p>Loading...</p>
       ) : filteredProducts.length > 0 ? (
@@ -126,7 +127,9 @@ function UserPendingDonation() {
                 <div className="product-detail">
                   <span  className="product-price">{product.weight}KG</span>
                   <span className="product-category">{product.category} Bundle</span>
-                  <span  className="product-qty">{product.purpose}</span>
+                  <span className="product-qty">
+                    {product.purpose.length > 10 ? `${product.purpose.substring(0, 10)}...` : product.purpose}
+                  </span>
                   <span  className="product-seller">From: {product.donor_email}</span>
                   <div className="product-actions">
                     <button onClick={() => handleApprove(product.id)} className="approve-button">Approve</button>
