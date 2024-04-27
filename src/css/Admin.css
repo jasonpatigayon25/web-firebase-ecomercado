@@ -926,3 +926,4 @@ body {
 .button-ban:hover {
   background-color: darken(var(--active-color), 10%);
 }
+

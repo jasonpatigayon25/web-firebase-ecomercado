@@ -12,6 +12,8 @@ function UserActivity() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [activeTab, setActiveTab] = useState('pendingProducts');
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       setIsLoading(true);
@@ -57,6 +59,31 @@ function UserActivity() {
     }
   };
   
+  const fetchPendingProducts = () => { /* ... */ };
+  const fetchPendingDonations = () => { /* ... */ };
+  const fetchApprovedProducts = () => { /* ... */ };
+  const fetchApprovedDonations = () => { /* ... */ };
+  const fetchDeclinedProducts = () => { /* ... */ };
+  const fetchDeclinedDonations = () => { /* ... */ };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'pendingProducts':
+        return fetchPendingProducts();
+      case 'pendingDonations':
+        return fetchPendingDonations();
+      case 'approvedProducts':
+        return fetchApprovedProducts();
+      case 'approvedDonations':
+        return fetchApprovedDonations();
+      case 'declinedProducts':
+        return fetchDeclinedProducts();
+      case 'declinedDonations':
+        return fetchDeclinedDonations();
+      default:
+        return <div>Select a category to view its contents.</div>;
+    }
+  };
 
   return (
     <div className="admin-dashboard">
@@ -78,6 +105,29 @@ function UserActivity() {
           <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
         </div>
       </div>
+      <div className="tabs">
+          <div onClick={() => setActiveTab('pendingProducts')} className={`tab ${activeTab === 'pendingProducts' ? 'active-tab' : ''}`}>
+            Pending Products
+          </div>
+          <div onClick={() => setActiveTab('pendingDonations')} className={`tab ${activeTab === 'pendingDonations' ? 'active-tab' : ''}`}>
+            Pending Donations
+          </div>
+          <div onClick={() => setActiveTab('approvedProducts')} className={`tab ${activeTab === 'approvedProducts' ? 'active-tab' : ''}`}>
+            Approved Products
+          </div>
+          <div onClick={() => setActiveTab('approvedDonations')} className={`tab ${activeTab === 'approvedDonations' ? 'active-tab' : ''}`}>
+            Approved Donations
+          </div>
+          <div onClick={() => setActiveTab('declinedProducts')} className={`tab ${activeTab === 'declinedProducts' ? 'active-tab' : ''}`}>
+            Declined Products
+          </div>
+          <div onClick={() => setActiveTab('declinedDonations')} className={`tab ${activeTab === 'declinedDonations' ? 'active-tab' : ''}`}>
+            Declined Donations
+          </div>
+        </div>
+        <div className="tab-content">
+          {renderTabContent()}
+        </div>
       </div>
     </div>
   );
