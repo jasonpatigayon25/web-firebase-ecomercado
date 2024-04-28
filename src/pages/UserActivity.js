@@ -132,7 +132,9 @@ function UserActivity() {
             ))}
           </ul>
         ) : (
-          <p>No {activeTab.replace(/([A-Z])/g, ' $1').toLowerCase()} found.</p>
+        <div className="product-info">
+          <p className="no-pending">No products yet.</p>
+          </div>
         )}
       </div>
     );
@@ -196,7 +198,9 @@ function UserActivity() {
             ))}
           </ul>
         ) : (
-          <p>No {activeTab.replace(/([A-Z])/g, ' $1').toLowerCase()} found.</p>
+          <div className="product-info">
+          <p className="no-pending">No products yet.</p>
+          </div>
         )}
       </div>
     );
@@ -331,7 +335,9 @@ function UserActivity() {
             ))}
           </ul>
         ) : (
-          <p>No donations found.</p>
+        <div className="product-info">
+          <p className="no-pending">No donations yet.</p>
+          </div>
         )}
       </div>
     );
@@ -364,7 +370,9 @@ function UserActivity() {
             ))}
           </ul>
         ) : (
-          <p>No pending donations found.</p>
+        <div className="product-info">
+          <p className="no-pending">No donations yet.</p>
+          </div>
         )}
       </div>
     );
