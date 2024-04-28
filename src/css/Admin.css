@@ -1057,3 +1057,26 @@ body {
 .admin-nav-card:hover .counter-badge {
   background-color: #000;
 }
+
+
+.order-status-counter {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #05652D;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  animation: fade 0.5s ease-in-out;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.admin-nav-card:hover .order-status-counter {
+  background-color: #000;
+}

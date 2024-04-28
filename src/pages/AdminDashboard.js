@@ -14,6 +14,23 @@ function AdminDashboard() {
   const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
   const [pendingProductsCount, setPendingProductsCount] = useState(0);
   const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
+  const [orderStatusCounts, setOrderStatusCounts] = useState({
+    pending: 0,
+    approved: 0,
+    receiving: 0,
+    completed: 0,
+    cancelled: 0
+  });
+  const [currentOrderStatusIndex, setCurrentOrderStatusIndex] = useState(0);
+
+  const [requestStatusCounts, setRequestStatusCounts] = useState({
+    pending: 0,
+    approved: 0,
+    receiving: 0,
+    completed: 0,
+    declined: 0
+  });
+  const [currentRequestStatusIndex, setCurrentRequestStatusIndex] = useState(0);
 
   useEffect(() => {
 
@@ -74,7 +91,66 @@ function AdminDashboard() {
        .catch(err => {
          console.error("Error fetching pending donation count: ", err);
        });
+
+       
   }, []);
+
+//Order counters
+  useEffect(() => {
+    const orderStatuses = ['Pending', 'Approved', 'Receiving', 'Completed', 'Cancelled'];
+    const counts = {};
+  
+    orderStatuses.forEach(status => {
+      getDocs(query(collection(db, 'orders'), where('status', '==', status)))
+        .then(snapshot => {
+          counts[status.toLowerCase()] = snapshot.size;
+          if (Object.keys(counts).length === orderStatuses.length) { 
+            setOrderStatusCounts(counts);
+          }
+        })
+        .catch(err => {
+          console.error(`Error fetching ${status} orders count: `, err);
+        });
+    });
+  }, []);
+
+
+  //Request Counters
+  useEffect(() => {
+    const requestStatus = ['Pending', 'Approved', 'Receiving', 'Completed', 'Declined'];
+    const counts = {};
+  
+    requestStatus.forEach(status => {
+      getDocs(query(collection(db, 'requests'), where('status', '==', status)))
+        .then(snapshot => {
+          counts[status.toLowerCase()] = snapshot.size;
+          if (Object.keys(counts).length === requestStatus.length) { 
+            setRequestStatusCounts(counts);
+          }
+        })
+        .catch(err => {
+          console.error(`Error fetching ${status} requests count: `, err);
+        });
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+        setCurrentOrderStatusIndex(prevIndex => (prevIndex + 1) % 5);
+    }, 3000);
+
+    return () => clearInterval(timer);  
+}, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentRequestStatusIndex(prevIndex => (prevIndex + 1) % 5); 
+    }, 3000);
+  
+    return () => clearInterval(timer);
+  }, []);
+
+
 
   const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
   const totalSellersPages = Math.ceil(recentFetchedSellers.length / itemsPerPage);
@@ -96,6 +172,12 @@ function AdminDashboard() {
   };
 
   function AdminNavigation() {
+    const orderStatuses = ['pending', 'approved', 'receiving', 'completed', 'cancelled'];
+    const orderStatusLabels = ['TO PAY', 'TO DELIVER', 'TO RECEIVE', 'COMPLETED', 'CANCELLED'];
+  
+    const requestStatuses = ['pending', 'approved', 'receiving', 'completed', 'declined'];
+    const requestStatusLabels = ['TO PAY', 'TO DELIVER', 'TO RECEIVE', 'COMPLETED', 'DECLINED'];
+  
     const navOptions = [
       { label: 'Users Information', path: '/users-information', iconPath: 'user-information.png' },
       { label: 'Approved Products', path: '/approved-seller', iconPath: 'approved-products.png' },
@@ -106,7 +188,7 @@ function AdminDashboard() {
       { label: 'Requests History', path: '/donation-history', iconPath: 'donations-history.png' },
       { label: 'Users Feedback', path: '/user-feedback', iconPath: 'feedback.png' }
     ];
-
+  
     return (
       <div className="admin-nav-cards">
         {navOptions.map((option, index) => (
@@ -114,7 +196,17 @@ function AdminDashboard() {
             <Link to={option.path}>
               <img src={`${process.env.PUBLIC_URL}/icons/${option.iconPath}`} alt={option.label} className="admin-nav-icon" />
               <p className="admin-nav-label">{option.label}</p>
-              {option.count > 0 && (
+              {option.path === '/orders-history' && (
+                <div className="order-status-counter">
+                  {orderStatusCounts[orderStatuses[currentOrderStatusIndex]]} {orderStatusLabels[currentOrderStatusIndex]}
+                </div>
+              )}
+              {option.path === '/donation-history' && (
+                <div className="order-status-counter">
+                  {requestStatusCounts[requestStatuses[currentRequestStatusIndex]]} {requestStatusLabels[currentRequestStatusIndex]}
+                </div>
+              )}
+              {option.count > 0 && option.path !== '/orders-history' && option.path !== '/donation-history' && (
                 <div className="counter-badge">{option.count}</div>
               )}
             </Link>
