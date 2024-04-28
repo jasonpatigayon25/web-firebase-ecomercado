@@ -8,7 +8,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
-function RequestHistory() {
+function RequestsHistory() {
   const [requests, setRequests] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentRequest, setCurrentRequest] = useState(null);

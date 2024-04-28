@@ -77,7 +77,7 @@ function OrdersHistory() {
           <div className="counter-card-order" onClick={() => fetchAndShowModal('Receiving')}>
             <h2><span>{deliveryProcess}</span></h2>
             <FaBoxOpen className="icon" />
-            <p>Delivery Process</p>
+            <p>To Receive</p>
           </div>
           <div className="counter-card-order" onClick={() => fetchAndShowModal('Completed')}>
             <h2><span>{completed}</span></h2>
