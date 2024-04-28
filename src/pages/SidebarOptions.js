@@ -7,7 +7,9 @@ import {
   doc,
   writeBatch,
   updateDoc,
-  collection
+  collection,
+  where,
+  query
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
 import { notificationForAdminCollection } from '../config/firebase'; 
@@ -36,6 +38,9 @@ function SidebarOptions() {
 
    const [unreadCount, setUnreadCount] = useState(0);
 
+   const [pendingProductsCount, setPendingProductsCount] = useState(0);
+   const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
+
    useEffect(() => {
     const fetchAdminData = async () => {
       const currentUser = auth.currentUser;
@@ -50,6 +55,28 @@ function SidebarOptions() {
       }
     };
     fetchAdminData();
+  }, []);
+
+  useEffect(() => {
+
+      //Pending products count
+      getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')))
+      .then(snapshot => {
+        setPendingProductsCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching pending products count: ", err);
+      });
+
+       //Pending donations  count
+       getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')))
+       .then(snapshot => {
+        setPendingDonationsCount(snapshot.size);
+       })
+       .catch(err => {
+         console.error("Error fetching pending donation count: ", err);
+       });
+
   }, []);
 
   useEffect(() => {
@@ -297,9 +324,12 @@ function SidebarOptions() {
             </Link>
           </li>
           <li className={location.pathname === "/pending-seller" ? "active" : ""}>
-            <Link to="/pending-seller">
-              <img src={`${process.env.PUBLIC_URL}/icons/pending-products.png`} alt="Pending for Approval - Seller" className="sidebar-icon" />
-              Pending Products
+           <Link to="/pending-seller" className="sidebar-link">
+              <span className="link-content">
+                <img src={`${process.env.PUBLIC_URL}/icons/pending-products.png`} alt="Pending for Approval - Seller" className="sidebar-icon" />
+                Pending Products
+              </span>
+              {pendingProductsCount > 0 && <span className="sidebar-counter">{pendingProductsCount}</span>}
             </Link>
           </li>
           <li className={location.pathname === "/orders-history" ? "active" : ""}>
@@ -315,9 +345,12 @@ function SidebarOptions() {
             </Link>
           </li>
           <li className={location.pathname === "/pending-donor" ? "active" : ""}>
-            <Link to="/pending-donor">
-              <img src={`${process.env.PUBLIC_URL}/icons/pending-donations.png`} alt="Pending for Approval - Donor" className="sidebar-icon" />
-              Pending Donations
+             <Link to="/pending-donor" className="sidebar-link">
+              <span className="link-content">
+                <img src={`${process.env.PUBLIC_URL}/icons/pending-donations.png`} alt="Pending for Approval - Donor" className="sidebar-icon" />
+                Pending Donations
+              </span>
+              {pendingDonationsCount > 0 && <span className="sidebar-counter">{pendingDonationsCount}</span>}
             </Link>
           </li>
           <li className={location.pathname === "/donation-history" ? "active" : ""}>
