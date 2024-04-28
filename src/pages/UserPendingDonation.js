@@ -113,7 +113,7 @@ function UserPendingDonation() {
           className="search-bar"
         />
       </div>
-      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Products</h1>
+      <h1 className="recent-products-title"><FaListAlt style={{ marginRight: '8px', verticalAlign: 'middle' }} /> All Pending Donations</h1>
       
       {loading ? (
         <p>Loading...</p>
