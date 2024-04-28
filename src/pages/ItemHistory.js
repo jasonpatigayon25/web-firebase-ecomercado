@@ -188,6 +188,7 @@ function ItemHistory() {
             <p><strong>Delivery Fee:</strong> ₱{currentOrder?.shippingFee}</p>
             <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
+            <p><strong>Delivery Address:</strong> {currentOrder?.deliveryAddress}</p>
             <div className="order-cards-container">
               {currentOrder?.productDetails.map((product, index) => (
                 <div className="order-card" key={index}>

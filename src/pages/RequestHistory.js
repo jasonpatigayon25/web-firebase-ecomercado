@@ -191,9 +191,10 @@ function RequestHistory() {
             <p><strong>Requester Email:</strong> {currentRequest?.requesterEmail}</p>
             <p><strong>Donor Email:</strong> {currentRequest?.donorEmail}</p>
             <p><strong>Delivery Fee:</strong> ₱{currentRequest?.deliveryFee}</p>
-            <p><strong>Delivery Fee:</strong> ₱{currentRequest?.disposalFee}</p>
+            <p><strong>Disposal Fee:</strong> ₱{currentRequest?.disposalFee}</p>
             <p><strong>Total Fee:</strong> ₱{currentRequest?.totalFee}</p>
             <p><strong>Date Requested:</strong> {currentRequest?.dateRequested?.toLocaleDateString()}</p>
+            <p><strong>Delivery Address:</strong> {currentRequest?.address}</p>
             <div className="order-cards-container">
               {currentRequest?.donationDetails.map((donation, index) => (
                 <div className="order-card" key={index}>
