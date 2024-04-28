@@ -140,7 +140,9 @@ function UserPendingProducts() {
           ))}
         </ul>
       ) : (
-        <p>No pending products found.</p>
+        <div className="product-info">
+        <p className="no-pending">No Pending Products Yet.</p>
+        </div>
       )}
     </div>
   );

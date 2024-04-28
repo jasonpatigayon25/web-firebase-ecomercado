@@ -1023,3 +1023,13 @@ body {
 .search-bar:focus {
   border-color: #999;
 }
+
+.no-pending {
+  font-size: 24px;
+  color: #ccc;
+}
+
+.no-pending-message {
+  font-size: 24px;
+  text-align: center;
+}

@@ -141,7 +141,9 @@ function UserPendingDonation() {
           ))}
         </ul>
       ) : (
-        <p>No pending products found.</p>
+        <div className="product-info">
+        <p className="no-pending">No Pending Donations Yet.</p>
+        </div>
       )}
     </div>
   );
