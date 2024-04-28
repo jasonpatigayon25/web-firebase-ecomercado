@@ -14,6 +14,7 @@ function RequestHistory() {
   const [currentRequest, setCurrentRequest] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); 
   const [activeTab, setActiveTab] = useState('Pending');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchDonationDetails = async (donationId) => {
@@ -34,6 +35,7 @@ function RequestHistory() {
     };
   
     const fetchRequestsByStatus = async () => {
+      setIsLoading(true);
       try {
         const requestsRef = collection(db, "requests");
         const q = query(requestsRef, where("status", "==", activeTab));
@@ -67,6 +69,7 @@ function RequestHistory() {
         }
   
         setRequests(requestsWithDetails.sort((a, b) => b.dateRequested - a.dateRequested));
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching requests: ", error);
       }
@@ -118,7 +121,9 @@ function RequestHistory() {
         <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Requests</div>
         <div className={`tab ${activeTab === 'Declined' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Declined')}>Declined Requests</div>
       </div>
-      {filteredRequests.length > 0 ? (
+      {isLoading ? (
+        <div className="no-pending"><p>Loading...</p></div>
+      ) : filteredRequests.length > 0 ? (
         <ul className="product-list">
           {filteredRequests.map(request => (
             <li key={request.id} className="product-list-item" onClick={() => openModal(request)}>
@@ -160,7 +165,9 @@ function RequestHistory() {
           ))}
         </ul>
       ) : (
-        <p>No requests found.</p>
+        <div className="product-info">
+        <p className="no-pending">No Requests Yet.</p>
+        </div>
       )}
     </div>
   );

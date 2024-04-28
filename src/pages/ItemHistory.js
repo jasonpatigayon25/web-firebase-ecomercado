@@ -14,6 +14,7 @@ function ItemHistory() {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); 
   const [activeTab, setActiveTab] = useState('Pending');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductDetails = async (productId) => {
@@ -35,6 +36,7 @@ function ItemHistory() {
     };
 
     const fetchOrdersByStatus = async () => {
+      setIsLoading(true);
       try {
         const ordersRef = collection(db, "orders");
         const q = query(ordersRef, where("status", "==", activeTab));
@@ -63,6 +65,7 @@ function ItemHistory() {
         }
 
         setOrders(ordersWithDetails.sort((a, b) => b.dateOrdered - a.dateOrdered));
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching orders: ", error);
       }
@@ -114,52 +117,55 @@ function ItemHistory() {
         <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Orders</div>
         <div className={`tab ${activeTab === 'Cancelled' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Cancelled')}>Cancelled Orders</div>
       </div>
-      {filteredOrders.length > 0 ? (
+      {isLoading ? (
+        <div className="no-pending"><p>Loading...</p></div>
+      ) : filteredOrders.length > 0 ? (
         <ul className="product-list">
           {filteredOrders.map(order => (
             <li key={order.id} className="product-list-item" onClick={() => openModal(order)}>
               <div className="product-info">
-              <div className="order-header">
-                <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
-                <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
-              </div>
-                <div className="order-cards-container">
-                {order.productDetails.map((product, index) => (
-                  <div className="order-card">
-                  <div className="order-card-content">
-                    <img src={product.photo} alt={product.name} className="order-image" />
-                    <div className="order-detail">
-                      <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
-                      <p className="category">{product.category}</p>
-                      <p className="price" >₱{product.price}</p>
-                    </div>
-                  </div>
-                  <div className="product-qty">x{product.orderedQuantity}</div>
+                <div className="order-header">
+                  <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
+                  <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
                 </div>
+                <div className="order-cards-container">
+                  {order.productDetails.map((product, index) => (
+                    <div className="order-card" key={index}>
+                      <div className="order-card-content">
+                        <img src={product.photo} alt={product.name} className="order-image" />
+                        <div className="order-detail">
+                          <h3 title={product.name}>{product.name.length > 20 ? `${product.name.substring(0, 20)}...` : product.name}</h3>
+                          <p className="category">{product.category}</p>
+                          <p className="price">₱{product.price}</p>
+                        </div>
+                      </div>
+                      <div className="product-qty">x{product.orderedQuantity}</div>
+                    </div>
                   ))}
-
                 </div>
                 <div className="order-footer">
-
                   <div className="payment-label">
-                  Buyer: <span className="payment-value">{order.buyerEmail}</span>
-                </div>
-                <div className="payment-label">
-                Seller: <span className="payment-value">{order.sellerEmail}</span>
-                </div>
+                    Buyer: <span className="payment-value">{order.buyerEmail}</span>
+                  </div>
                   <div className="payment-label">
-                  Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
-                </div>
+                    Seller: <span className="payment-value">{order.sellerEmail}</span>
+                  </div>
+                  <div className="payment-label">
+                    Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
+                  </div>
                 </div>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No orders found.</p>
+        <div className="product-info">
+        <p className="no-pending">No Orders Yet.</p>
+        </div>
       )}
     </div>
   );
+  
   
   return (
     <div className="order-history-container">
