@@ -184,6 +184,7 @@ function UserPendingDonation() {
             <p><strong>Message:</strong> {currentItem?.message}</p>
             <p><strong>Donor Email:</strong> {currentItem?.donor_email}</p>
             <p><strong>Category:</strong> {currentItem?.category} Bundle</p>
+            <p><strong>Location:</strong> {currentItem?.location}</p>
             {currentItem?.itemNames && currentItem.itemNames.length > 0 && (
               <div>
                 <p><strong>Items:</strong></p>

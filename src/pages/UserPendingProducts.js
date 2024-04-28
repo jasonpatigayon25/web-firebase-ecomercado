@@ -185,6 +185,7 @@ function UserPendingProducts() {
             <p><strong>Seller Email:</strong> {currentItem?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {currentItem?.shipping ? `${currentItem.shipping.width} cm X ${currentItem.shipping.height} cm X ${currentItem.shipping.length} cm` : 'N/A'}</p>
             <p><strong>Weight:</strong> {currentItem?.shipping ? `${currentItem.shipping.weight} kg`: 'N/A'}</p>
+            <p><strong>Location:</strong> {currentItem?.location}</p>
           </div>
           <div className="modal-actions">
             <button onClick={() => handleApprove(currentItem.id)} className="approve-button">Approve</button>
