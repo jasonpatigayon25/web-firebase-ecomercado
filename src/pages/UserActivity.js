@@ -616,6 +616,7 @@ function UserActivity() {
             <p><strong>Seller Email:</strong> {selectedProduct?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.width} cm X ${selectedProduct.shipping.height} cm X ${selectedProduct.shipping.length} cm` : 'N/A'}</p>
             <p><strong>Weight:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.weight} kg`: 'N/A'}</p>
+            <p><strong>Location:</strong> {selectedProduct?.location}</p>
           </div>
         </div>
       </Modal>
@@ -654,6 +655,7 @@ function UserActivity() {
             <p><strong>Seller Email:</strong> {selectedProduct?.seller_email}</p>
             <p><strong>Logistic Packaging - WHL:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.width} cm X ${selectedProduct.shipping.height} cm X ${selectedProduct.shipping.length} cm` : 'N/A'}</p>
             <p><strong>Weight:</strong> {selectedProduct?.shipping ? `${selectedProduct.shipping.weight} kg`: 'N/A'}</p>
+            <p><strong>Location:</strong> {selectedProduct?.location}</p>
             {isPendingTab && (
             <div className="modal-actions">
               <button onClick={() => handleApprove(selectedProduct.id)} className="approve-button">Approve</button>
