@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SidebarOptions from "./SidebarOptions";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from '../config/firebase';
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import "../css/Admin.css";
 
 function AdminDashboard() {
@@ -12,8 +12,11 @@ function AdminDashboard() {
   const itemsPerPage = 5;
   const [userCurrentPage, setUserCurrentPage] = useState(1);
   const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
+  const [pendingProductsCount, setPendingProductsCount] = useState(0);
+  const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
 
   useEffect(() => {
+
     // Fetch recent registered users
     getDocs(query(collection(db, 'users'), orderBy('dateRegistered', 'desc'), limit(20)))
       .then(snapshot => {
@@ -53,6 +56,24 @@ function AdminDashboard() {
       .catch(err => {
         console.error("Error fetching recent sellers: ", err);
       });
+
+      //Pending products count
+      getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')))
+      .then(snapshot => {
+        setPendingProductsCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching pending products count: ", err);
+      });
+
+       //Pending donations  count
+       getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')))
+       .then(snapshot => {
+        setPendingDonationsCount(snapshot.size);
+       })
+       .catch(err => {
+         console.error("Error fetching pending donation count: ", err);
+       });
   }, []);
 
   const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
@@ -78,10 +99,10 @@ function AdminDashboard() {
     const navOptions = [
       { label: 'Users Information', path: '/users-information', iconPath: 'user-information.png' },
       { label: 'Approved Products', path: '/approved-seller', iconPath: 'approved-products.png' },
-      { label: 'Pending Products', path: '/pending-seller', iconPath: 'pending-products.png' },
+      { label: 'Pending Products', path: '/pending-seller', iconPath: 'pending-products.png', count: pendingProductsCount },
       { label: 'Orders History', path: '/orders-history', iconPath: 'orders-history.png' },
       { label: 'Approved Donations', path: '/approved-donor', iconPath: 'approved-donations.png' },
-      { label: 'Pending Donations', path: '/pending-donor', iconPath: 'pending-donations.png' },
+      { label: 'Pending Donations', path: '/pending-donor', iconPath: 'pending-donations.png', count: pendingDonationsCount },
       { label: 'Requests History', path: '/donation-history', iconPath: 'donations-history.png' },
       { label: 'Users Feedback', path: '/user-feedback', iconPath: 'feedback.png' }
     ];
@@ -89,10 +110,13 @@ function AdminDashboard() {
     return (
       <div className="admin-nav-cards">
         {navOptions.map((option, index) => (
-          <div className="admin-nav-card" key={index}>
+          <div className="admin-nav-card" key={index} style={{ position: 'relative' }}>
             <Link to={option.path}>
               <img src={`${process.env.PUBLIC_URL}/icons/${option.iconPath}`} alt={option.label} className="admin-nav-icon" />
               <p className="admin-nav-label">{option.label}</p>
+              {option.count > 0 && (
+                <div className="counter-badge">{option.count}</div>
+              )}
             </Link>
           </div>
         ))}
