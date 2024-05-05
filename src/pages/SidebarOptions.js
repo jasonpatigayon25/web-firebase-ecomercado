@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { 
-  getDocs, 
-  collection,
-  where,
-  query
-} from 'firebase/firestore';
-import { db } from '../config/firebase'; 
-import { FaBell, FaCog, 
-        FaUser } from "react-icons/fa";
+import { getDocs, collection, where, query } from 'firebase/firestore';
+import { db } from '../config/firebase';
+import { FaBell, FaCog, FaUser } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
 import "../css/AdminOptions.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,7 +20,6 @@ const CustomToggle = React.forwardRef(({ firstName }, ref) => (
 ));
 
 function SidebarOptions() {
-
   const location = useLocation();
   const navigate = useNavigate();
   const [pendingProductsCount, setPendingProductsCount] = useState(0);
@@ -34,8 +27,9 @@ function SidebarOptions() {
   const [pendingSellersCount, setPendingSellersCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [firstName, setFirstName] = useState('');
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchAdminData = async () => {
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -53,57 +47,53 @@ function SidebarOptions() {
   useEffect(() => {
     const fetchPendingData = async () => {
       try {
-        // Pending sellers count
+        // Fetch pending sellers and their timestamps
         const pendingSellersSnapshot = await getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')));
         setPendingSellersCount(pendingSellersSnapshot.size);
         const pendingSellers = pendingSellersSnapshot.docs.map(doc => {
-          const { sellerName } = doc.data();
-          return `User ${sellerName} is pending for seller approval.`;
+          const { sellerName, registeredAt } = doc.data();
+          return { message: `User ${sellerName} is pending for seller approval.`, timestamp: registeredAt };
         });
 
-        // Pending products count
+        // Fetch pending products and their timestamps
         const pendingProductsSnapshot = await getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')));
         setPendingProductsCount(pendingProductsSnapshot.size);
 
         const pendingProducts = await Promise.all(
           pendingProductsSnapshot.docs.map(async (doc) => {
-            const { name, seller_email } = doc.data();
-
+            const { name, seller_email, createdAt } = doc.data();
             const sellerQuerySnapshot = await getDocs(
               query(collection(db, 'registeredSeller'), where('email', '==', seller_email))
             );
-
-            const sellerName = sellerQuerySnapshot.empty
-              ? 'Unknown Seller'
-              : sellerQuerySnapshot.docs[0].data().sellerName;
-
-            return `Product created '${name}' by '${sellerName}'.`;
+            const sellerName = sellerQuerySnapshot.empty ? 'Unknown Seller' : sellerQuerySnapshot.docs[0].data().sellerName;
+            return { message: `Product created '${name}' by '${sellerName}'.`, timestamp: createdAt };
           })
         );
 
-        // Pending donations count
+        // Fetch pending donations and their timestamps
         const pendingDonationsSnapshot = await getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')));
         setPendingDonationsCount(pendingDonationsSnapshot.size);
 
         const pendingDonations = await Promise.all(
           pendingDonationsSnapshot.docs.map(async (doc) => {
-            const { name, donor_email } = doc.data();
-
+            const { name, donor_email, createdAt } = doc.data();
             const userQuerySnapshot = await getDocs(
               query(collection(db, 'users'), where('email', '==', donor_email))
             );
-
             let fullName = 'Unknown Donor';
             if (!userQuerySnapshot.empty) {
               const userData = userQuerySnapshot.docs[0].data();
               fullName = `${userData.firstName} ${userData.lastName}`;
             }
-
-            return `Donation created '${name}' by '${fullName}'.`;
+            return { message: `Donation created '${name}' by '${fullName}'.`, timestamp: createdAt };
           })
         );
-        // notif pendings
-        setNotifications([...pendingSellers, ...pendingProducts, ...pendingDonations]);
+
+        // Combine and sort notifications based on the timestamp
+        const combinedNotifications = [...pendingSellers, ...pendingProducts, ...pendingDonations];
+        combinedNotifications.sort((a, b) => b.timestamp - a.timestamp);
+
+        setNotifications(combinedNotifications);
 
       } catch (err) {
         console.error("Error fetching pending counts: ", err);
@@ -119,29 +109,25 @@ function SidebarOptions() {
 
   const handleNotificationClick = (notification) => {
     setShowNotifications(false);
-    if (notification.includes("Product created")) {
+    if (notification.message.includes("Product created")) {
       navigate('/pending-seller');
-    } else if (notification.includes("Donation created")) {
+    } else if (notification.message.includes("Donation created")) {
       navigate('/pending-donor');
-    } else if (notification.includes("pending for seller approval")) {
+    } else if (notification.message.includes("pending for seller approval")) {
       navigate('/users-information');
     }
   };
-  
+
   const handleLogout = () => {
     const confirmLogout = window.confirm("Do you really want to logout?");
     if (confirmLogout) {
       signOut(auth).then(() => {
-
         window.location.href = "/";
       }).catch((error) => {
-
         console.error('Logout error:', error);
       });
     }
   };
-
-  const [firstName, setFirstName] = useState('');
 
   return (
     <div>
@@ -150,7 +136,7 @@ function SidebarOptions() {
           <img src={`${process.env.PUBLIC_URL}/ecomercado-logo-white.png`} alt="Logo" className="admin-logo" />
         </Link>
         <div className="notification-container">
-        <div onClick={toggleNotifications} className="notification-bell styled-bell">
+          <div onClick={toggleNotifications} className="notification-bell styled-bell">
             <FaBell />
             {notifications.length > 0 && <span className="notification-count">{notifications.length}</span>}
           </div>
@@ -158,7 +144,7 @@ function SidebarOptions() {
         </div>
       </div>
       <div className="admin-dashboard-sidebar">
-      <CustomToggle firstName={firstName} />
+        <CustomToggle firstName={firstName} />
         <div className="divider"></div>
         <ul className="admin-dashboard-nav">
           <li className={location.pathname === "/admin-dashboard" ? "active" : ""}>
@@ -169,9 +155,9 @@ function SidebarOptions() {
           </li>
           <li className={location.pathname === "/users-information" || location.pathname.startsWith("/user-activity/") ? "active" : ""}>
             <Link to="/users-information">
-            <span className="link-content">
-              <img src={`${process.env.PUBLIC_URL}/icons/user-information.png`} alt="Users Information" className="sidebar-icon" />
-              Users Information
+              <span className="link-content">
+                <img src={`${process.env.PUBLIC_URL}/icons/user-information.png`} alt="Users Information" className="sidebar-icon" />
+                Users Information
               </span>
               {pendingSellersCount > 0 && <span className="sidebar-counter">{pendingSellersCount}</span>}
             </Link>
@@ -183,7 +169,7 @@ function SidebarOptions() {
             </Link>
           </li>
           <li className={location.pathname === "/pending-seller" ? "active" : ""}>
-           <Link to="/pending-seller" className="sidebar-link">
+            <Link to="/pending-seller" className="sidebar-link">
               <span className="link-content">
                 <img src={`${process.env.PUBLIC_URL}/icons/pending-products.png`} alt="Pending for Approval - Seller" className="sidebar-icon" />
                 Pending Products
@@ -204,7 +190,7 @@ function SidebarOptions() {
             </Link>
           </li>
           <li className={location.pathname === "/pending-donor" ? "active" : ""}>
-             <Link to="/pending-donor" className="sidebar-link">
+            <Link to="/pending-donor" className="sidebar-link">
               <span className="link-content">
                 <img src={`${process.env.PUBLIC_URL}/icons/pending-donations.png`} alt="Pending for Approval - Donor" className="sidebar-icon" />
                 Pending Donations
@@ -231,14 +217,13 @@ function SidebarOptions() {
               <FaCog />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {/* <Dropdown.Item as={Link} to="/delete-profile">Ban User</Dropdown.Item> */}
               <Dropdown.Item as={Link} to="/admin-profile">Edit Profile</Dropdown.Item>
               <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
-    </div>
-    <div className={`notification-modal ${showNotifications ? 'show' : ''}`}>
+      </div>
+      <div className={`notification-modal ${showNotifications ? 'show' : ''}`}>
         <div className="notification-modal-content">
           <div className="notification-modal-header">
             <span>Notifications - Pending Approvals</span>
@@ -247,7 +232,7 @@ function SidebarOptions() {
           <ul className="notification-list">
             {notifications.length > 0 ? (
               notifications.map((notification, index) => (
-                <li key={index} onClick={() => handleNotificationClick(notification)}>{notification}</li>
+                <li key={index} onClick={() => handleNotificationClick(notification)}>{notification.message}</li>
               ))
             ) : (
               <li className="no-pending">No pending notifications.</li>
