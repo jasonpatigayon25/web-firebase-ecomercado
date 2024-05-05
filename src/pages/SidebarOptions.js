@@ -40,6 +40,7 @@ function SidebarOptions() {
 
    const [pendingProductsCount, setPendingProductsCount] = useState(0);
    const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
+   const [pendingSellersCount, setPendingSellersCount] = useState(0);
 
    useEffect(() => {
     const fetchAdminData = async () => {
@@ -58,6 +59,15 @@ function SidebarOptions() {
   }, []);
 
   useEffect(() => {
+
+     //Pending sellers count
+      getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')))
+          .then(snapshot => {
+            setPendingSellersCount(snapshot.size);
+          })
+          .catch(err => {
+            console.error("Error fetching pending products count: ", err);
+          });
 
       //Pending products count
       getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')))
@@ -313,8 +323,11 @@ function SidebarOptions() {
           </li>
           <li className={location.pathname === "/users-information" || location.pathname.startsWith("/user-activity/") ? "active" : ""}>
             <Link to="/users-information">
+            <span className="link-content">
               <img src={`${process.env.PUBLIC_URL}/icons/user-information.png`} alt="Users Information" className="sidebar-icon" />
               Users Information
+              </span>
+              {pendingSellersCount > 0 && <span className="sidebar-counter">{pendingSellersCount}</span>}
             </Link>
           </li>
           <li className={location.pathname === "/approved-seller" ? "active" : ""}>

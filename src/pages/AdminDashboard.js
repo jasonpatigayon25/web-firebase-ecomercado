@@ -15,6 +15,7 @@ function AdminDashboard() {
   const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
   const [pendingProductsCount, setPendingProductsCount] = useState(0);
   const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
+  const [pendingSellersCount, setPendingSellersCount] = useState(0);
   const [orderStatusCounts, setOrderStatusCounts] = useState({
     pending: 0,
     approved: 0,
@@ -77,6 +78,15 @@ function AdminDashboard() {
         console.error("Error fetching recent sellers: ", err);
       });
 
+       // pending sellers count
+      getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')))
+      .then(snapshot => {
+        setPendingSellersCount(snapshot.size);
+      })
+      .catch(err => {
+        console.error("Error fetching pending sellers count: ", err);
+      });
+
       //Pending products count
       getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')))
       .then(snapshot => {
@@ -126,6 +136,7 @@ function AdminDashboard() {
           seller.id === sellerId ? { ...seller, status: 'approved' } : seller
         ));
         alert("Seller approved successfully.");
+        setPendingSellersCount((count) => count - 1);
       } catch (error) {
         console.error('Error approving seller:', error);
         alert("Failed to approve seller.");
@@ -140,6 +151,7 @@ function AdminDashboard() {
         await deleteDoc(doc(db, 'registeredSeller', sellerId));
         setRecentFetchedSellers((prev) => prev.filter((seller) => seller.id !== sellerId));
         alert("Seller registration canceled successfully.");
+        setPendingSellersCount((count) => count - 1);
       } catch (error) {
         console.error('Error canceling seller:', error);
         alert("Failed to cancel seller registration.");
@@ -209,7 +221,7 @@ function AdminDashboard() {
     const requestStatusLabels = ['TO PAY', 'TO DELIVER', 'TO RECEIVE', 'COMPLETED', 'DECLINED'];
   
     const navOptions = [
-      { label: 'Users Information', path: '/users-information', iconPath: 'user-information.png' },
+      { label: 'Users Information', path: '/users-information', iconPath: 'user-information.png', count: pendingSellersCount },
       { label: 'Approved Products', path: '/approved-seller', iconPath: 'approved-products.png' },
       { label: 'Pending Products', path: '/pending-seller', iconPath: 'pending-products.png', count: pendingProductsCount },
       { label: 'Orders History', path: '/orders-history', iconPath: 'orders-history.png' },
@@ -237,6 +249,9 @@ function AdminDashboard() {
                 </div>
               )}
               {option.count > 0 && option.path !== '/orders-history' && option.path !== '/donation-history' && (
+                <div className="counter-badge">{option.count}</div>
+              )}
+               {option.count > 0 && (
                 <div className="counter-badge">{option.count}</div>
               )}
             </Link>
