@@ -3,16 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { 
   getDocs, 
-  deleteDoc, 
-  doc,
-  writeBatch,
-  updateDoc,
   collection,
   where,
   query
 } from 'firebase/firestore';
 import { db } from '../config/firebase'; 
-import { notificationForAdminCollection } from '../config/firebase'; 
 import { FaBell, FaCog, 
         FaUser } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
@@ -31,16 +26,14 @@ const CustomToggle = React.forwardRef(({ firstName }, ref) => (
 ));
 
 function SidebarOptions() {
-  const [notifications, setNotifications] = useState([]);
-  const [isMuted, setIsMuted] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
+
   const location = useLocation();
-
-   const [unreadCount, setUnreadCount] = useState(0);
-
-   const [pendingProductsCount, setPendingProductsCount] = useState(0);
-   const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
-   const [pendingSellersCount, setPendingSellersCount] = useState(0);
+  const navigate = useNavigate();
+  const [pendingProductsCount, setPendingProductsCount] = useState(0);
+  const [pendingDonationsCount, setPendingDonationsCount] = useState(0);
+  const [pendingSellersCount, setPendingSellersCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
    useEffect(() => {
     const fetchAdminData = async () => {
@@ -50,7 +43,6 @@ function SidebarOptions() {
         const querySnapshot = await getDocs(collection(db, "admin"));
         const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
         if (adminDoc) {
-          setIsMuted(adminDoc.data().isMuted || false);
           setFirstName(adminDoc.data().firstName || 'Admin');
         }
       }
@@ -59,193 +51,56 @@ function SidebarOptions() {
   }, []);
 
   useEffect(() => {
-
-     //Pending sellers count
-      getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')))
-          .then(snapshot => {
-            setPendingSellersCount(snapshot.size);
-          })
-          .catch(err => {
-            console.error("Error fetching pending products count: ", err);
-          });
-
-      //Pending products count
-      getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')))
-      .then(snapshot => {
-        setPendingProductsCount(snapshot.size);
-      })
-      .catch(err => {
-        console.error("Error fetching pending products count: ", err);
-      });
-
-       //Pending donations  count
-       getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')))
-       .then(snapshot => {
-        setPendingDonationsCount(snapshot.size);
-       })
-       .catch(err => {
-         console.error("Error fetching pending donation count: ", err);
-       });
-
-  }, []);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
+    const fetchPendingData = async () => {
       try {
-        if (!isMuted) {
-          const querySnapshot = await getDocs(notificationForAdminCollection);
-          const fetchedNotifications = [];
-          let unread = 0;
-  
-          querySnapshot.forEach((doc) => {
-            const notificationData = { id: doc.id, ...doc.data() };
-            fetchedNotifications.push(notificationData);
-            if (!notificationData.isRead) {
-              unread++;
-            }
-          });
-  
-          fetchedNotifications.sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
-  
-          setNotifications(fetchedNotifications);
-          setUnreadCount(unread);
-        } else {
-          setNotifications([]);
-          setShowNotifications(false);
-          setUnreadCount(0);
-        }
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
+        // Pending sellers count
+        const pendingSellersSnapshot = await getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')));
+        setPendingSellersCount(pendingSellersSnapshot.size);
+        const pendingSellers = pendingSellersSnapshot.docs.map(doc => {
+          const { firstName, lastName } = doc.data();
+          return `User ${firstName} ${lastName} pending for seller approval.`;
+        });
+
+        // Pending products count
+        const pendingProductsSnapshot = await getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')));
+        setPendingProductsCount(pendingProductsSnapshot.size);
+        const pendingProducts = pendingProductsSnapshot.docs.map(doc => {
+          const { name, sellerName } = doc.data();
+          return `Product created '${name}' by '${sellerName}'.`;
+        });
+
+        // Pending donations count
+        const pendingDonationsSnapshot = await getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')));
+        setPendingDonationsCount(pendingDonationsSnapshot.size);
+        const pendingDonations = pendingDonationsSnapshot.docs.map(doc => {
+          const { name, createdBy } = doc.data();
+          return `Donation created '${name}' by '${createdBy}'.`;
+        });
+
+        // notif pendings
+        setNotifications([...pendingSellers, ...pendingProducts, ...pendingDonations]);
+
+      } catch (err) {
+        console.error("Error fetching pending counts: ", err);
       }
     };
-  
-    fetchNotifications();
-  }, [isMuted]);
 
-  const toggleNotifications = async () => {
+    fetchPendingData();
+  }, []);
+
+  const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
+  };
 
-    if (!showNotifications) {
-      const batch = writeBatch(db);
-      let updatedNotifications = notifications.map(notif => {
-        if (!notif.isRead) {
-          const notifRef = doc(db, 'notificationForAdmin', notif.id);
-          batch.update(notifRef, { isRead: true });
-          return { ...notif, isRead: true };
-        }
-        return notif;
-      });
-
-      try {
-        await batch.commit();
-        setNotifications(updatedNotifications);
-        setUnreadCount(0); 
-      } catch (error) {
-        console.error('Error updating notifications:', error);
-      }
+  const handleNotificationClick = (notification) => {
+    setShowNotifications(false);
+    if (notification.includes("Product created")) {
+      navigate('/pending-seller');
+    } else if (notification.includes("Donation created")) {
+      navigate('/pending-donor');
+    } else if (notification.includes("pending for seller approval")) {
+      navigate('/users-information');
     }
-  };
-
-  const navigate = useNavigate();
-
-  const handleNotificationClick = (notifId) => {
-    markNotificationAsRead(notifId);
-    navigate('/user-feedback');
-  };
-
-  const markNotificationAsRead = async (notifId) => {
-    const notifRef = doc(db, 'notificationForAdmin', notifId);
-    await updateDoc(notifRef, {
-      isRead: true
-    });
-  
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notif => {
-        if (notif.id === notifId) {
-          return { ...notif, isRead: true };
-        }
-        return notif;
-      })
-    );
-  
-    const notification = notifications.find(notif => notif.id === notifId);
-    if (notification && !notification.isRead) {
-      setUnreadCount(prevUnreadCount => prevUnreadCount - 1);
-    }
-  };
-
-  const deleteNotification = async (notifId) => {
-    try {
-      await deleteDoc(doc(db, 'notificationForAdmin', notifId));
-      setNotifications(prevNotifications => 
-        prevNotifications.filter(notif => notif.id !== notifId)
-      );
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-    }
-  };
-
-  const deleteAllNotifications = async () => {
-    const batch = writeBatch(db);
-  
-    try {
-      const querySnapshot = await getDocs(notificationForAdminCollection);
-      querySnapshot.forEach((docSnapshot) => {
-        batch.delete(docSnapshot.ref);
-      });
-  
-      await batch.commit();
-      setNotifications([]);
-    } catch (error) {
-      console.error('Error deleting all notifications:', error);
-    }
-  };
-  
-
-  const muteNotificationsForCurrentUser = async () => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const adminEmail = currentUser.email;
-      const querySnapshot = await getDocs(collection(db, "admin"));
-
-      const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
-      
-      if (adminDoc) {
-        const adminDocRef = doc(db, "admin", adminDoc.id);
-        await updateDoc(adminDocRef, {
-          isMuted: true
-        });
-        setIsMuted(true);
-      }
-    }
-  };
-
-  const unmuteNotificationsForCurrentUser = async () => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const adminEmail = currentUser.email;
-      const querySnapshot = await getDocs(collection(db, "admin"));
-      
-      const adminDoc = querySnapshot.docs.find(doc => doc.data().email === adminEmail);
-      
-      if (adminDoc) {
-        const adminDocRef = doc(db, "admin", adminDoc.id);
-        await updateDoc(adminDocRef, {
-          isMuted: false
-        });
-        setIsMuted(false);
-      }
-    }
-  };
-
-  const handleMuteAllClick = () => {
-    muteNotificationsForCurrentUser();
-    setIsMuted(true); 
-  };
-  
-  const handleUnmuteAllClick = () => {
-    unmuteNotificationsForCurrentUser();
-    setIsMuted(false); 
   };
   
   const handleLogout = () => {
@@ -271,43 +126,9 @@ function SidebarOptions() {
         </Link>
         <div className="notification-container">
         <div onClick={toggleNotifications} className="notification-bell styled-bell">
-          <FaBell />
-          {unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
-          {showNotifications && (
-            <div className="notifications-list">
-              {isMuted ? (
-                <p style={{ color: 'black' }}>Muted</p>
-              ) : (
-                notifications.length === 0 ? (
-                  <p style={{ color: 'black' }}>No notifications yet</p>
-                ) : (
-                  notifications.map((notif, index) => (
-                    <div 
-                        key={notif.id} 
-                        className={`notification-item ${notif.isRead ? 'read' : 'unread'}`}
-                        onClick={() => handleNotificationClick(notif.id)}
-                      >
-                      <p style={{ color: '#000000', fontSize: '14px' }}>{notif.text}</p>
-                      <div>
-                        <button className="delete" onClick={() => deleteNotification(notif.id)}>Delete</button>
-                      </div>
-                    </div>
-                  ))
-                )
-              )}
-              <div className="notifications-actions">
-                {isMuted ? (
-                  <button className="mute-all" onClick={handleUnmuteAllClick}>Unmute All</button>
-                ) : (
-                  <>
-                    <button className="delete-all" onClick={deleteAllNotifications}>Delete All</button>
-                    <button className="mute-all" onClick={handleMuteAllClick}>Mute All</button>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+            <FaBell />
+            {notifications.length > 0 && <span className="notification-count">{notifications.length}</span>}
+          </div>
           <button onClick={handleLogout} className="logout-link">Logout</button>
         </div>
       </div>
@@ -392,6 +213,23 @@ function SidebarOptions() {
           </Dropdown>
         </div>
     </div>
+    <div className={`notification-modal ${showNotifications ? 'show' : ''}`}>
+        <div className="notification-modal-content">
+          <div className="notification-modal-header">
+            <span>Notifications - Pending Approvals</span>
+            <button className="notification-modal-close" onClick={toggleNotifications}>&times;</button>
+          </div>
+          <ul className="notification-list">
+            {notifications.length > 0 ? (
+              notifications.map((notification, index) => (
+                <li key={index} onClick={() => handleNotificationClick(notification)}>{notification}</li>
+              ))
+            ) : (
+              <li className="no-pending">No pending notifications.</li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
