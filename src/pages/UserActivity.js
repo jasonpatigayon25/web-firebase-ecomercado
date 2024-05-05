@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
-import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog } from 'react-icons/fa';
+import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog, FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
+import { faTimes} from '@fortawesome/free-solid-svg-icons';
 
 function UserActivity() {
   const { email } = useParams();  
@@ -21,6 +20,7 @@ function UserActivity() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [sellerStatus, setSellerStatus] = useState(null);
   const navigate = useNavigate();
 
   const [pendingDonations, setPendingDonations] = useState([]);
@@ -31,15 +31,17 @@ function UserActivity() {
     const fetchUserDetails = async () => {
       setIsLoading(true);
       try {
-        const q = query(collection(db, 'users'), where('email', '==', email));
+        const q = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
-        const userData = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              ...data,
-              dateRegistered: data.dateRegistered ? data.dateRegistered.toDate() : null,
-            };
-          })[0];
+        const userData = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            ...data,
+            dateRegistered: data.dateRegistered
+              ? data.dateRegistered.toDate()
+              : null,
+          };
+        })[0];
 
         setUserDetails(userData);
       } catch (err) {
@@ -50,8 +52,74 @@ function UserActivity() {
       }
     };
 
+    
+    const fetchSellerStatus = async () => {
+      const q = query(
+        collection(db, "registeredSeller"),
+        where("email", "==", email)
+      );
+      const querySnapshot = await getDocs(q);
+      const seller = querySnapshot.docs.map((doc) => doc.data())[0];
+
+      if (seller) {
+        setSellerStatus(seller.status);
+      } else {
+        setSellerStatus(null);
+      }
+    };
+
     fetchUserDetails();
+    fetchSellerStatus();
   }, [email]);
+
+  const handleApproveSeller = async (email) => {
+    const confirmApprove = window.confirm(
+      `Are you sure you want to approve this seller: ${email}?`
+    );
+    if (confirmApprove) {
+      try {
+        const q = query(
+          collection(db, "registeredSeller"),
+          where("email", "==", email)
+        );
+        const querySnapshot = await getDocs(q);
+        const sellerDoc = querySnapshot.docs[0];
+        if (sellerDoc) {
+          await updateDoc(sellerDoc.ref, { status: "approved" });
+          setSellerStatus("approved");
+          alert("Seller approved successfully.");
+        }
+      } catch (error) {
+        console.error("Error approving seller:", error);
+        alert("Failed to approve seller.");
+      }
+    }
+  };
+
+  const handleDeclineSeller = async (email) => {
+    const confirmDecline = window.confirm(
+      `Are you sure you want to decline this seller: ${email}?`
+    );
+    if (confirmDecline) {
+      try {
+        const q = query(
+          collection(db, "registeredSeller"),
+          where("email", "==", email)
+        );
+        const querySnapshot = await getDocs(q);
+        const sellerDoc = querySnapshot.docs[0];
+        if (sellerDoc) {
+          await deleteDoc(sellerDoc.ref);
+          setSellerStatus(null);
+          alert("Seller declined successfully.");
+        }
+      } catch (error) {
+        console.error("Error declining seller:", error);
+        alert("Failed to decline seller.");
+      }
+    }
+  };  
+
 
   useEffect(() => {
     const fetchProducts = async (status, userEmail) => {
@@ -551,7 +619,9 @@ function UserActivity() {
       <div className="admin-dashboard-content">
       <div className="user-details-card">
           {userDetails.banned ? (
-            <div className="card-ban-icon">BANNED <FaCog onClick={handleUnBanUser} /></div>
+            <div className="card-ban-icon">
+              BANNED <FaCog onClick={handleUnBanUser} />
+            </div>
           ) : (
             <FaBan className="card-ban-icon" onClick={handleBanUser} />
           )}
@@ -563,10 +633,39 @@ function UserActivity() {
             )}
           </div>
           <div className="card-info">
-            <h1><FaUserAlt className="info-icon" /> {userDetails.firstName} {userDetails.lastName}</h1>
-            <p><FaEnvelope className="info-icon" /> {userDetails.email}</p>
-            <p><FaMapMarkerAlt className="info-icon" /> {userDetails.address}</p>
-            <p><FaCalendarAlt className="info-icon" /> {userDetails.dateRegistered ? new Date(userDetails.dateRegistered).toLocaleDateString() : 'N/A'}</p>
+            <h1>
+              <FaUserAlt className="info-icon" />{" "}
+              {userDetails.firstName} {userDetails.lastName}{" "}
+              {sellerStatus === "approved" && <FaCheck className="check-icon" />}
+            </h1>
+            <p>
+              <FaEnvelope className="info-icon" /> {userDetails.email}
+            </p>
+            <p>
+              <FaMapMarkerAlt className="info-icon" /> {userDetails.address}
+            </p>
+            <p>
+              <FaCalendarAlt className="info-icon" />{" "}
+              {userDetails.dateRegistered
+                ? new Date(userDetails.dateRegistered).toLocaleDateString()
+                : "N/A"}
+            </p>
+            {sellerStatus === "pending" && (
+              <div className="seller-actions">
+                <button
+                  className="approve-button"
+                  onClick={() => handleApproveSeller(userDetails.email)}
+                >
+                  Approve
+                </button>
+                <button
+                  className="decline-button"
+                  onClick={() => handleDeclineSeller(userDetails.email)}
+                >
+                  Decline
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className="tabs">
