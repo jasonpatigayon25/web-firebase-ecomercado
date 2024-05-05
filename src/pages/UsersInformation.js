@@ -2,15 +2,15 @@ import React, {useState, useEffect} from "react";
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { db } from '../config/firebase';
-import { collection, getDocs, query, orderBy, limit, where  } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, where, updateDoc, deleteDoc, doc  } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
-import { FaUsers, FaStoreAlt, FaBan } from "react-icons/fa"; 
+import { FaUsers, FaStoreAlt, FaBan, FaCheck } from "react-icons/fa"; 
 
 function UsersInformation() {
   const navigate = useNavigate();
   const [recentFetchedUsers, setRecentFetchedUsers] = useState([]);
   const [recentFetchedSellers, setRecentFetchedSellers] = useState([]);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [userCurrentPage, setUserCurrentPage] = useState(1);
   const [sellerCurrentPage, setSellerCurrentPage] = useState(1);
   const [userCount, setUserCount] = useState(0);
@@ -54,25 +54,27 @@ function UsersInformation() {
       });
 
     // registered sellers
-    getDocs(query(collection(db, 'registeredSeller'), orderBy('registeredAt', 'desc'), limit(20)))
+    getDocs(query(collection(db, 'registeredSeller'), orderBy('registeredAt', 'desc')))
       .then(snapshot => {
         const fetchedSellers = snapshot.docs.map(doc => {
           const sellerData = doc.data();
           const registeredAt = sellerData.registeredAt.toDate().toLocaleString();
           return {
+            id: doc.id,
             profilePhotoUri: sellerData.profilePhotoUri,
             sellerName: sellerData.sellerName,
             registeredName: sellerData.registeredName,
             email: sellerData.email,
             type: sellerData.type,
-            registeredAt: registeredAt
+            status: sellerData.status || 'pending',
+            registeredAt: registeredAt,
           };
         });
-        setRecentFetchedSellers(fetchedSellers);
-      })
-      .catch(err => {
-        console.error("Error fetching recent sellers: ", err);
-      });
+      setRecentFetchedSellers(fetchedSellers);
+    })
+    .catch(err => {
+      console.error("Error fetching recent sellers: ", err);
+    });
   }, []);
 
   const totalUsersPages = Math.ceil(recentFetchedUsers.length / itemsPerPage);
@@ -127,6 +129,36 @@ function UsersInformation() {
         console.error("Error counting banned users: ", err);
       });
   }, []);
+
+  const handleApproveSeller = async (sellerId) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this seller?");
+    if (confirmApprove) {
+      try {
+        await updateDoc(doc(db, 'registeredSeller', sellerId), { status: 'approved' });
+        setRecentFetchedSellers((prev) => prev.map((seller) =>
+          seller.id === sellerId ? { ...seller, status: 'approved' } : seller
+        ));
+        alert("Seller approved successfully.");
+      } catch (error) {
+        console.error('Error approving seller:', error);
+        alert("Failed to approve seller.");
+      }
+    }
+  };
+  
+  const handleCancelSeller = async (sellerId) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this seller registration?");
+    if (confirmCancel) {
+      try {
+        await deleteDoc(doc(db, 'registeredSeller', sellerId));
+        setRecentFetchedSellers((prev) => prev.filter((seller) => seller.id !== sellerId));
+        alert("Seller registration canceled successfully.");
+      } catch (error) {
+        console.error('Error canceling seller:', error);
+        alert("Failed to cancel seller registration.");
+      }
+    }
+  };
 
   const UserCard = ({ count }) => (
     <div className="counter-card">
@@ -209,12 +241,12 @@ function UsersInformation() {
           </div>
           <h1>Recent Registered Sellers</h1>
           <div className="user-list-container">
-            {currentUserPageSellers.map((seller, index) => (
+          {currentUserPageSellers.map((seller, index) => (
               <div key={index} className="user-list-item" onClick={() => handleUserClick(seller.email)}>
                 <div className="user-info">
                   <div className="user-detail">
-                    <img 
-                      src={seller.profilePhotoUri ? seller.profilePhotoUri : `${process.env.PUBLIC_URL}/icons/user.png`} 
+                    <img
+                      src={seller.profilePhotoUri || `${process.env.PUBLIC_URL}/icons/user.png`}
                       alt={seller.sellerName}
                       className="user-list-photo"
                     />
@@ -224,6 +256,16 @@ function UsersInformation() {
                     </div>
                   </div>
                   <p className="user-date-registered">Registered At: {seller.registeredAt}</p>
+                  {seller.status === 'approved' ? (
+                    <div className="check-seller">
+                    <FaCheck className="big-check-icon" />
+                    </div>  
+                  ) : (
+                    <div className="modal-actions">
+                      <button className="approve-button" onClick={() => handleApproveSeller(seller.id)}>Approve</button>
+                      <button className="decline-button" onClick={() => handleCancelSeller(seller.id)}>Cancel</button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

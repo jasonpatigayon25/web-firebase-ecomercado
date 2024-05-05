@@ -1080,3 +1080,24 @@ body {
 .admin-nav-card:hover .order-status-counter {
   background-color: #000;
 }
+
+.big-check-icon {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: #ffffff; 
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.check-seller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
