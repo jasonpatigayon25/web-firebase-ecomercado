@@ -57,26 +57,51 @@ function SidebarOptions() {
         const pendingSellersSnapshot = await getDocs(query(collection(db, 'registeredSeller'), where('status', '==', 'pending')));
         setPendingSellersCount(pendingSellersSnapshot.size);
         const pendingSellers = pendingSellersSnapshot.docs.map(doc => {
-          const { firstName, lastName } = doc.data();
-          return `User ${firstName} ${lastName} pending for seller approval.`;
+          const { sellerName } = doc.data();
+          return `User ${sellerName} is pending for seller approval.`;
         });
 
         // Pending products count
         const pendingProductsSnapshot = await getDocs(query(collection(db, 'products'), where('publicationStatus', '==', 'pending')));
         setPendingProductsCount(pendingProductsSnapshot.size);
-        const pendingProducts = pendingProductsSnapshot.docs.map(doc => {
-          const { name, sellerName } = doc.data();
-          return `Product created '${name}' by '${sellerName}'.`;
-        });
+
+        const pendingProducts = await Promise.all(
+          pendingProductsSnapshot.docs.map(async (doc) => {
+            const { name, seller_email } = doc.data();
+
+            const sellerQuerySnapshot = await getDocs(
+              query(collection(db, 'registeredSeller'), where('email', '==', seller_email))
+            );
+
+            const sellerName = sellerQuerySnapshot.empty
+              ? 'Unknown Seller'
+              : sellerQuerySnapshot.docs[0].data().sellerName;
+
+            return `Product created '${name}' by '${sellerName}'.`;
+          })
+        );
 
         // Pending donations count
         const pendingDonationsSnapshot = await getDocs(query(collection(db, 'donation'), where('publicationStatus', '==', 'pending')));
         setPendingDonationsCount(pendingDonationsSnapshot.size);
-        const pendingDonations = pendingDonationsSnapshot.docs.map(doc => {
-          const { name, createdBy } = doc.data();
-          return `Donation created '${name}' by '${createdBy}'.`;
-        });
 
+        const pendingDonations = await Promise.all(
+          pendingDonationsSnapshot.docs.map(async (doc) => {
+            const { name, donor_email } = doc.data();
+
+            const userQuerySnapshot = await getDocs(
+              query(collection(db, 'users'), where('email', '==', donor_email))
+            );
+
+            let fullName = 'Unknown Donor';
+            if (!userQuerySnapshot.empty) {
+              const userData = userQuerySnapshot.docs[0].data();
+              fullName = `${userData.firstName} ${userData.lastName}`;
+            }
+
+            return `Donation created '${name}' by '${fullName}'.`;
+          })
+        );
         // notif pendings
         setNotifications([...pendingSellers, ...pendingProducts, ...pendingDonations]);
 
