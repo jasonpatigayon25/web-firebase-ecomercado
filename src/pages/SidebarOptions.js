@@ -52,7 +52,7 @@ function SidebarOptions() {
         setPendingSellersCount(pendingSellersSnapshot.size);
         const pendingSellers = pendingSellersSnapshot.docs.map(doc => {
           const { sellerName, registeredAt } = doc.data();
-          return { message: `User ${sellerName} is pending for seller approval.`, timestamp: registeredAt };
+          return { message: `User <b style="color:#000000">${sellerName}</b> is pending for seller approval.`, timestamp: registeredAt };
         });
 
         // Fetch pending products and their timestamps
@@ -66,7 +66,7 @@ function SidebarOptions() {
               query(collection(db, 'registeredSeller'), where('email', '==', seller_email))
             );
             const sellerName = sellerQuerySnapshot.empty ? 'Unknown Seller' : sellerQuerySnapshot.docs[0].data().sellerName;
-            return { message: `Product created '${name}' by '${sellerName}'.`, timestamp: createdAt };
+            return { message: `Product created <b style="color:#05652D">${name}</b> by <b style="color:#05652D">${sellerName}</b>.`, timestamp: createdAt };
           })
         );
 
@@ -85,7 +85,7 @@ function SidebarOptions() {
               const userData = userQuerySnapshot.docs[0].data();
               fullName = `${userData.firstName} ${userData.lastName}`;
             }
-            return { message: `Donation created '${name}' by '${fullName}'.`, timestamp: createdAt };
+            return { message: `Donation created <b style="color:#088F8F">${name}</b> by <b style="color:#088F8F">${fullName}</b>.`, timestamp: createdAt };
           })
         );
 
@@ -232,7 +232,7 @@ function SidebarOptions() {
           <ul className="notification-list">
             {notifications.length > 0 ? (
               notifications.map((notification, index) => (
-                <li key={index} onClick={() => handleNotificationClick(notification)}>{notification.message}</li>
+                <li key={index} onClick={() => handleNotificationClick(notification)} dangerouslySetInnerHTML={{ __html: notification.message }}></li>
               ))
             ) : (
               <li className="no-pending">No pending notifications.</li>
