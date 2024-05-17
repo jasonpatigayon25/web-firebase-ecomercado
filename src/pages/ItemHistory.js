@@ -5,6 +5,8 @@ import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firesto
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faTruck } from '@fortawesome/free-solid-svg-icons';
+
 
 Modal.setAppElement('#root');
 
@@ -15,6 +17,7 @@ function ItemHistory() {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [activeTab, setActiveTab] = useState('Pending');
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchProductDetails = async (productId) => {
@@ -109,6 +112,7 @@ function ItemHistory() {
             sellerLastName: sellerDetails.lastName,
             sellerAddress: sellerRegisteredDetails.sellerAddress,
             dateOrdered: orderData.dateOrdered?.toDate() ? orderData.dateOrdered.toDate() : new Date(),
+            deliveredStatus: orderData.deliveredStatus,
           });
         }
 
@@ -161,7 +165,12 @@ function ItemHistory() {
       <div className="tabs">
         <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Orders</div>
         <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Orders</div>
-        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>To Receive Orders</div>
+        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>
+          To Receive Orders
+          {filteredOrders.some(order => order.deliveredStatus === 'Processing' || order.deliveredStatus === 'Waiting') && (
+            <FontAwesomeIcon icon={faClock} className="icon-indicator" />
+          )}
+        </div>
         <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Orders</div>
         <div className={`tab ${activeTab === 'Cancelled' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Cancelled')}>Cancelled Orders</div>
       </div>
@@ -175,6 +184,12 @@ function ItemHistory() {
                 <div className="order-header">
                   <div className="order-id">{`#${order.id}`.toUpperCase()}</div>
                   <div className="product-published-date">Date Ordered: {order.dateOrdered.toLocaleDateString()}</div>
+                  {activeTab === 'Receiving' && (
+                  <div className="delivery-status-icon">
+                    {order.deliveredStatus === 'Processing' && <FontAwesomeIcon icon={faClock} className="order-status-icon processing" />}
+                    {order.deliveredStatus === 'Waiting' && <FontAwesomeIcon icon={faTruck} className="order-status-icon waiting" />}
+                  </div>
+                )}
                 </div>
                 <div className="order-cards-container">
                   {order.productDetails.map((product, index) => (
@@ -201,6 +216,7 @@ function ItemHistory() {
                   <div className="payment-label">
                     Total Payment: <span className="payment-value">₱{order.orderTotalPrice}</span>
                   </div>
+                  
                 </div>
               </div>
             </li>
@@ -246,6 +262,8 @@ function ItemHistory() {
             <p><strong>Delivery Fee:</strong> ₱{currentOrder?.shippingFee}</p>
             <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
+            <br/>
+            <p><strong>STATUS: </strong>{currentOrder?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentOrder?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentOrder?.deliveredStatus}</p>
            
             <div className="order-cards-container">
               {currentOrder?.productDetails.map((product, index) => (

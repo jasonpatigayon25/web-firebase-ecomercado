@@ -1183,3 +1183,18 @@ body {
   font-size: 14px;
   color: #888;
 }
+
+.order-status-icon {
+  font-size: 18px;
+  color: var(--icon-color);
+  margin-left: 10px;
+  transition: color 0.3s ease;
+}
+
+.order-status-icon.processing {
+  color: var(--active-color); 
+}
+
+.order-status-icon.waiting {
+  color: #05652D; 
+}
