@@ -263,8 +263,10 @@ function ItemHistory() {
             <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
             <br/>
-            <p><strong>STATUS: </strong>{currentOrder?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentOrder?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentOrder?.deliveredStatus}</p>
-           
+
+            {activeTab === 'Receiving' && (
+            <p><strong>DELIVERY STATUS: </strong>{currentOrder?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentOrder?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentOrder?.deliveredStatus}</p>
+            )}
             <div className="order-cards-container">
               {currentOrder?.productDetails.map((product, index) => (
                 <div className="order-card" key={index}>

@@ -244,7 +244,9 @@ function RequestHistory() {
             <p><strong>Total Fee:</strong> ₱{currentRequest?.totalFee}</p>
             <p><strong>Date Requested:</strong> {currentRequest?.dateRequested?.toLocaleDateString()}</p>
             <br/>
-            <p><strong>STATUS: </strong>{currentRequest?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentRequest?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentRequest?.deliveredStatus}</p>
+            {activeTab === 'Receiving' && (
+            <p><strong>DELIVERY STATUS: </strong>{currentRequest?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentRequest?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentRequest?.deliveredStatus}</p>
+            )}
             <div className="order-cards-container">
               {currentRequest?.donationDetails.map((donation, index) => (
                 <div className="order-card" key={index}>
