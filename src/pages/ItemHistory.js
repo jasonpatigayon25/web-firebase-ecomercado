@@ -35,6 +35,44 @@ function ItemHistory() {
       }
     };
 
+    const fetchUserDetails = async (email) => {
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+    
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          return userData;
+        } else {
+          console.error('No user with the given email:', email);
+          return {};
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+        return {};
+      }
+    };
+
+    const fetchSellerDetails = async (email) => {
+      try {
+        const sellersRef = collection(db, "registeredSeller");
+        const q = query(sellersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+    
+        if (!querySnapshot.empty) {
+          const sellerData = querySnapshot.docs[0].data();
+          return sellerData;
+        } else {
+          console.error('No seller with the given email:', email);
+          return {};
+        }
+      } catch (error) {
+        console.error("Error fetching seller details:", error);
+        return {};
+      }
+    };
+
     const fetchOrdersByStatus = async () => {
       setIsLoading(true);
       try {
@@ -45,6 +83,9 @@ function ItemHistory() {
 
         for (let doc of querySnapshot.docs) {
           const orderData = doc.data();
+          const buyerDetails = await fetchUserDetails(orderData.buyerEmail);
+          const sellerDetails = await fetchUserDetails(orderData.sellerEmail);
+          const sellerRegisteredDetails = await fetchSellerDetails(orderData.sellerEmail);
           const productDetailsPromises = orderData.productDetails.map(
             async (product) => {
               const details = await fetchProductDetails(product.productId);
@@ -60,6 +101,13 @@ function ItemHistory() {
             id: doc.id,
             ...orderData,
             productDetails,
+            buyerContactNumber: buyerDetails.contactNumber,
+            sellerContactNumber: sellerDetails.contactNumber,
+            buyerFirstName: buyerDetails.firstName,
+            sellerFirstName: sellerDetails.firstName,
+            buyerLastName: buyerDetails.lastName,
+            sellerLastName: sellerDetails.lastName,
+            sellerAddress: sellerRegisteredDetails.sellerAddress,
             dateOrdered: orderData.dateOrdered?.toDate() ? orderData.dateOrdered.toDate() : new Date(),
           });
         }
@@ -183,12 +231,22 @@ function ItemHistory() {
           </button>
           <h2>#{currentOrder?.id.toUpperCase()}</h2>
           <div className="modal-details">
-            <p><strong>Buyer Email:</strong> {currentOrder?.buyerEmail}</p>
+            <p><strong>BUYER</strong></p>
+            <p><strong>Name:</strong> {currentOrder?.buyerFirstName} {currentOrder?.buyerLastName}</p>
+            <p><strong>Email:</strong> {currentOrder?.buyerEmail}</p>
+            <p><strong>Contact Number:</strong> 0{currentOrder?.buyerContactNumber}</p>
+            <p><strong>Delivery Address:</strong> {currentOrder?.deliveryAddress}</p>
+            <br/>
+            <p><strong>SELLER</strong></p>
+            <p><strong>Name:</strong> {currentOrder?.sellerFirstName} {currentOrder?.sellerLastName}</p>
             <p><strong>Seller Email:</strong> {currentOrder?.sellerEmail}</p>
+            <p><strong>Contact Number:</strong> 0{currentOrder?.sellerContactNumber}</p>
+            <p><strong>Seller Address:</strong> {currentOrder?.sellerAddress}</p>
+            <br/>
             <p><strong>Delivery Fee:</strong> ₱{currentOrder?.shippingFee}</p>
             <p><strong>Total Price:</strong> ₱{currentOrder?.orderTotalPrice}</p>
             <p><strong>Date Ordered:</strong> {currentOrder?.dateOrdered?.toLocaleDateString()}</p>
-            <p><strong>Delivery Address:</strong> {currentOrder?.deliveryAddress}</p>
+           
             <div className="order-cards-container">
               {currentOrder?.productDetails.map((product, index) => (
                 <div className="order-card" key={index}>
