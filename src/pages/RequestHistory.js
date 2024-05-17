@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firesto
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faTruck } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -93,6 +94,7 @@ function RequestHistory() {
             donorLastName: donorDetails.lastName,
             donorAddress: donorDetails.address,
             dateRequested: requestData.dateRequested?.toDate() || new Date(),
+            deliveredStatus: requestData.deliveredStatus,
           });
         }
   
@@ -145,7 +147,10 @@ function RequestHistory() {
       <div className="tabs">
         <div className={`tab ${activeTab === 'Pending' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Pending')}>Pending Requests</div>
         <div className={`tab ${activeTab === 'Approved' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Approved')}>Approved Requests</div>
-        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivery Process Requests</div>
+        <div className={`tab ${activeTab === 'Receiving' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Receiving')}>Delivery Process Requests
+        {filteredRequests.some(request => request.deliveredStatus === 'Processing' || request.deliveredStatus === 'Waiting') && (
+            <FontAwesomeIcon icon={faClock} className="icon-indicator" />
+          )}</div>
         <div className={`tab ${activeTab === 'Completed' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Completed')}>Completed Requests</div>
         <div className={`tab ${activeTab === 'Declined' ? 'active-tab' : ''}`} onClick={() => handleTabClick('Declined')}>Declined Requests</div>
       </div>
@@ -159,6 +164,12 @@ function RequestHistory() {
               <div className="order-header">
                 <div className="order-id">{`#${request.id}`.toUpperCase()}</div>
                 <div className="product-published-date">Date Requested: {request.dateRequested.toLocaleDateString()}</div>
+                {activeTab === 'Receiving' && (
+                  <div className="delivery-status-icon">
+                    {request.deliveredStatus === 'Processing' && <FontAwesomeIcon icon={faClock} className="order-status-icon processing" />}
+                    {request.deliveredStatus === 'Waiting' && <FontAwesomeIcon icon={faTruck} className="order-status-icon waiting" />}
+                  </div>
+                )}
               </div>
                 <div className="order-cards-container">
                 {request.donationDetails.map((donation, index) => (
@@ -232,7 +243,8 @@ function RequestHistory() {
             <p><strong>Disposal Fee:</strong> ₱{currentRequest?.disposalFee}</p>
             <p><strong>Total Fee:</strong> ₱{currentRequest?.totalFee}</p>
             <p><strong>Date Requested:</strong> {currentRequest?.dateRequested?.toLocaleDateString()}</p>
-            
+            <br/>
+            <p><strong>STATUS: </strong>{currentRequest?.deliveredStatus === 'Processing' ? 'Pending for Courier' : currentRequest?.deliveredStatus === 'Waiting' ? 'Courier Delivering' : currentRequest?.deliveredStatus}</p>
             <div className="order-cards-container">
               {currentRequest?.donationDetails.map((donation, index) => (
                 <div className="order-card" key={index}>
