@@ -33,6 +33,25 @@ function RequestHistory() {
         return null;
       }
     };
+
+    const fetchUserDetails = async (email) => {
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+    
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          return userData;
+        } else {
+          console.error('No user with the given email:', email);
+          return {};
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+        return {};
+      }
+    };
   
     const fetchRequestsByStatus = async () => {
       setIsLoading(true);
@@ -47,6 +66,8 @@ function RequestHistory() {
           const requestData = docSnapshot.data();
 
           const totalFee = (requestData.deliveryFee || 0) + (requestData.disposalFee || 0);
+          const requesterDetails = await fetchUserDetails(requestData.requesterEmail);
+          const donorDetails = await fetchUserDetails(requestData.donorEmail);
 
           const donationDetailsPromises = requestData.donorDetails.map(
             (donation) => fetchDonationDetails(donation.donationId)
@@ -64,6 +85,13 @@ function RequestHistory() {
             ...requestData,
             donationDetails,
             totalFee,
+            requesterContactNumber: requesterDetails.contactNumber,
+            donorContactNumber: donorDetails.contactNumber,
+            requesterFirstName: requesterDetails.firstName,
+            donorFirstName: donorDetails.firstName,
+            requesterLastName: requesterDetails.lastName,
+            donorLastName: donorDetails.lastName,
+            donorAddress: donorDetails.address,
             dateRequested: requestData.dateRequested?.toDate() || new Date(),
           });
         }
@@ -188,13 +216,23 @@ function RequestHistory() {
           </button>
           <h2>#{currentRequest?.id.toUpperCase()}</h2>
           <div className="modal-details">
+          <p><strong>REQUESTER</strong></p>
+            <p><strong>Name:</strong> {currentRequest?.requesterFirstName} {currentRequest?.requesterLastName}</p>
             <p><strong>Requester Email:</strong> {currentRequest?.requesterEmail}</p>
+            <p><strong>Contact Number:</strong> 0{currentRequest?.requesterContactNumber}</p>
+            <p><strong>Delivery Address:</strong> {currentRequest?.address}</p>
+            <br/>
+            <p><strong>DONOR</strong></p>
+            <p><strong>Name:</strong> {currentRequest?.donorFirstName} {currentRequest?.donorLastName}</p>
             <p><strong>Donor Email:</strong> {currentRequest?.donorEmail}</p>
+            <p><strong>Contact Number:</strong> 0{currentRequest?.donorContactNumber}</p>
+            <p><strong>Donor Address:</strong> {currentRequest?.donorAddress}</p>
+            <br/>
             <p><strong>Delivery Fee:</strong> ₱{currentRequest?.deliveryFee}</p>
             <p><strong>Disposal Fee:</strong> ₱{currentRequest?.disposalFee}</p>
             <p><strong>Total Fee:</strong> ₱{currentRequest?.totalFee}</p>
             <p><strong>Date Requested:</strong> {currentRequest?.dateRequested?.toLocaleDateString()}</p>
-            <p><strong>Delivery Address:</strong> {currentRequest?.address}</p>
+            
             <div className="order-cards-container">
               {currentRequest?.donationDetails.map((donation, index) => (
                 <div className="order-card" key={index}>

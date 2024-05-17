@@ -239,7 +239,7 @@ function ItemHistory() {
             <br/>
             <p><strong>SELLER</strong></p>
             <p><strong>Name:</strong> {currentOrder?.sellerFirstName} {currentOrder?.sellerLastName}</p>
-            <p><strong>Seller Email:</strong> {currentOrder?.sellerEmail}</p>
+            <p><strong>Email:</strong> {currentOrder?.sellerEmail}</p>
             <p><strong>Contact Number:</strong> 0{currentOrder?.sellerContactNumber}</p>
             <p><strong>Seller Address:</strong> {currentOrder?.sellerAddress}</p>
             <br/>
