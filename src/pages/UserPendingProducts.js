@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -68,7 +68,19 @@ function UserPendingProducts() {
     if (confirmApprove) {
       setLoading(true);
       try {
-        await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
+        const productRef = doc(db, "products", productId);
+        await updateDoc(productRef, { publicationStatus: "approved" });
+
+        const productDoc = await getDoc(productRef);
+        const productData = productDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: productData.seller_email,
+          productId,
+          text: `Your product '${productData.name}' has been approved.`,
+          timestamp: serverTimestamp(),
+          type: 'approved_product'
+        });
+
         await fetchPendingProducts();
         closeModal(); 
       } catch (error) {
@@ -84,7 +96,19 @@ function UserPendingProducts() {
     if (confirmDecline) {
       setLoading(true);
       try {
-        await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
+        const productRef = doc(db, "products", productId);
+        await updateDoc(productRef, { publicationStatus: "declined" });
+
+        const productDoc = await getDoc(productRef);
+        const productData = productDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: productData.seller_email,
+          productId,
+          text: `Your product '${productData.name}' has been declined.`,
+          timestamp: serverTimestamp(),
+          type: 'declined_product'
+        });
+
         await fetchPendingProducts();
         closeModal(); 
       } catch (error) {

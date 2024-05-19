@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc, getDoc, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import SidebarOptions from "./SidebarOptions";
 import "../css/Admin.css";
 import { FaBan, FaUser, FaUserAlt, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt, FaCog, FaCheck } from 'react-icons/fa';
@@ -213,9 +213,21 @@ function UserActivity() {
     if (confirmApprove) {
       setIsLoading(true);
       try {
-        await updateDoc(doc(db, "products", productId), { publicationStatus: "approved" });
+        const productRef = doc(db, "products", productId);
+        await updateDoc(productRef, { publicationStatus: "approved" });
+
+        const productDoc = await getDoc(productRef);
+        const productData = productDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: productData.seller_email,
+          productId,
+          text: `Your product '${productData.name}' has been approved.`,
+          timestamp: serverTimestamp(),
+          type: 'approved_product'
+        });
+
         await fetchPendingProducts();
-        closeModal(); 
+        closeModal();
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
@@ -223,15 +235,27 @@ function UserActivity() {
       }
     }
   };
-  
+
   const handleDecline = async (productId) => {
     const confirmDecline = window.confirm("Are you sure you want to decline this product?");
     if (confirmDecline) {
       setIsLoading(true);
       try {
-        await updateDoc(doc(db, "products", productId), { publicationStatus: "declined" });
+        const productRef = doc(db, "products", productId);
+        await updateDoc(productRef, { publicationStatus: "declined" });
+
+        const productDoc = await getDoc(productRef);
+        const productData = productDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: productData.seller_email,
+          productId,
+          text: `Your product '${productData.name}' has been declined.`,
+          timestamp: serverTimestamp(),
+          type: 'declined_product'
+        });
+
         await fetchPendingProducts();
-        closeModal(); 
+        closeModal();
       } catch (error) {
         console.error("Error updating document: ", error);
       } finally {
@@ -239,6 +263,7 @@ function UserActivity() {
       }
     }
   };
+
 
   const renderPendingProductsContent = () => {
     return (
