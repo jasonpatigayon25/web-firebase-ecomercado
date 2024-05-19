@@ -306,7 +306,19 @@ function UserActivity() {
     if (confirmApprove) {
       setIsLoading(true);
       try {
-        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
+        const donationRef = doc(db, "donation", donationId);
+        await updateDoc(donationRef, { publicationStatus: "approved" });
+
+        const donationDoc = await getDoc(donationRef);
+        const donationData = donationDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: donationData.donor_email,
+          donationId,
+          text: `Your donation '${donationData.name}' has been approved.`,
+          timestamp: serverTimestamp(),
+          type: 'approved_donation'
+        });
+
         setPendingDonations(prevDonations => prevDonations.filter(donation => donation.id !== donationId));
         await fetchApprovedDonations();
         closeModal();
@@ -317,13 +329,25 @@ function UserActivity() {
       }
     }
   };
-  
+
   const handleDeclineDonation = async (donationId) => {
     const confirmDecline = window.confirm("Are you sure you want to decline this donation?");
     if (confirmDecline) {
       setIsLoading(true);
       try {
-        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
+        const donationRef = doc(db, "donation", donationId);
+        await updateDoc(donationRef, { publicationStatus: "declined" });
+
+        const donationDoc = await getDoc(donationRef);
+        const donationData = donationDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: donationData.donor_email,
+          donationId,
+          text: `Your donation '${donationData.name}' has been declined.`,
+          timestamp: serverTimestamp(),
+          type: 'declined_donation'
+        });
+
         setPendingDonations(prevDonations => prevDonations.filter(donation => donation.id !== donationId));
         await fetchDeclinedDonations();
         closeModal();

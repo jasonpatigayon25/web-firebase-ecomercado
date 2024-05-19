@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../css/Products.css";
 import { db } from '../config/firebase';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -63,11 +63,23 @@ function UserPendingDonation() {
   };
 
   const handleApprove = async (donationId) => {
-    const confirmApprove = window.confirm("Are you sure you want to approve this product?");
+    const confirmApprove = window.confirm("Are you sure you want to approve this donation?");
     if (confirmApprove) {
       setLoading(true);
       try {
-        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "approved" });
+        const donationRef = doc(db, "donation", donationId);
+        await updateDoc(donationRef, { publicationStatus: "approved" });
+
+        const donationDoc = await getDoc(donationRef);
+        const donationData = donationDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: donationData.donor_email,
+          donationId,
+          text: `Your donation '${donationData.name}' has been approved.`,
+          timestamp: serverTimestamp(),
+          type: 'approved_donation'
+        });
+
         await fetchPendingProducts();
         closeModal(); 
       } catch (error) {
@@ -77,13 +89,25 @@ function UserPendingDonation() {
       }
     }
   };
-  
+
   const handleDecline = async (donationId) => {
-    const confirmDecline = window.confirm("Are you sure you want to decline this product?");
+    const confirmDecline = window.confirm("Are you sure you want to decline this donation?");
     if (confirmDecline) {
       setLoading(true);
       try {
-        await updateDoc(doc(db, "donation", donationId), { publicationStatus: "declined" });
+        const donationRef = doc(db, "donation", donationId);
+        await updateDoc(donationRef, { publicationStatus: "declined" });
+
+        const donationDoc = await getDoc(donationRef);
+        const donationData = donationDoc.data();
+        await addDoc(collection(db, "notifications"), {
+          email: donationData.donor_email,
+          donationId,
+          text: `Your donation '${donationData.name}' has been declined.`,
+          timestamp: serverTimestamp(),
+          type: 'declined_donation'
+        });
+
         await fetchPendingProducts();
         closeModal(); 
       } catch (error) {
