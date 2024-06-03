@@ -1,4 +1,9 @@
-// import './App.css'
+
+/* 
+ECOMercado
+Programmer/Designer: PATIGAYON, JASON B.
+ */
+
 import Welcome from "./pages/Welcome"
 import Login from "./pages/Login"
 //import Signup from "./pages/Signup"           <Route path="/signup" element={<Signup/>}/>
